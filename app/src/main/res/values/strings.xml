@@ -1,0 +1,34 @@
+<resources>
+    <string name="app_name">Swyftr</string>
+    
+    <!--nav drawer names -->
+    <string name="nav_active_deliveries">Active Deliveries</string>
+    <string name="nav_delivery_history">Delivery History</string>
+    <string name="nav_invite_friends">Invite Friends</string>
+    <string name="nav_schedule_basket">Scheduled Basket</string>
+    <string name="nav_profile_settings">Profile Settings</string>
+    <string name="nav_logout">Logout</string>
+
+    <!-- Toolbar titles when navigation menu item is selected -->
+    <string-array name="nav_item_activity_titles">
+        <item>Active Deliveries</item>
+        <item>Delivery History</item>
+        <item>Invite Friends</item>
+        <item>Scheduled Basket</item>
+        <item>Profile Settings</item>
+        <item>Logout</item>
+    </string-array>
+
+    <string name="openDrawer">open_drawer</string>
+    <string name="closeDrawer">close_drawer</string>
+
+    <string name="signup_text">Need an Account? Sign up</string>
+    <string name="login">Login</string>
+    <string name="forgot_password">Forgot Password?</string>
+    
+    <string name="reset_code_message">Password reset code will be sent to your email account</string>
+    <string name="email_address">Email Address</string>
+    <string name="reset_password">Reset My Password</string>
+    <string name="back_login">Back To Login</string>
+
+</resources>

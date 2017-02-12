@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_active_deliveries"
+            android:title="@string/nav_active_deliveries" />
+        <item
+            android:id="@+id/nav_delivery_history"
+            android:title="@string/nav_delivery_history" />
+        <item
+            android:id="@+id/nav_invite_friends"
+            android:title="@string/nav_invite_friends" />
+
+        <item
+            android:id="@+id/nav_schedule_basket"
+            android:title="@string/nav_schedule_basket" />
+
+        <item
+            android:id="@+id/nav_profile_settings"
+            android:title="@string/nav_profile_settings" />
+
+        <item
+            android:id="@+id/nav_logout"
+            android:title="@string/nav_logout" />
+    </group><!--
+
+    <item android:title="Other">
+        <menu>
+            <item
+                android:id="@+id/nav_about_us"
+                android:title="@string/nav_about_us" />
+            <item
+                android:id="@+id/nav_privacy_policy"
+                android:title="@string/privacy_policy" />
+        </menu>
+    </item>-->
+
+</menu>
