@@ -5,4 +5,5 @@
     <color name="colorAccent">#f0263a</color>
     <color name="colorHint">#ededed</color>
     <color name="colorView">#6c818c</color>
+    <color name="colorViewTransparent">#996c818c</color>
 </resources>

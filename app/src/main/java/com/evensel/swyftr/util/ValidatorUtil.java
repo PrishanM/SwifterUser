@@ -1,13 +1,12 @@
 package com.evensel.swyftr.util;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 /**
  * Created by Prishan Maduka on 2/12/2017.
  */
 public class ValidatorUtil {
-
-    public static boolean isEmptyText(String text){
-        return text.isEmpty();
-    }
 
     public static String isValidPassword(String text){
 
@@ -16,7 +15,13 @@ public class ValidatorUtil {
         boolean hasUppercase = !text.equals(text.toLowerCase());
         boolean hasLowercase = !text.equals(text.toUpperCase());
         boolean hasSpecial   = !text.matches("[A-Za-z0-9 ]*");
-        boolean hasNumber = text.matches(".*\\\\d.*");
+
+
+        String regex = "(.)*(\\d)(.)*";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(text);
+
+        boolean hasNumber = matcher.matches();
 
         if(text.length()<8){
             message = "Password should contain at least 8 characters";
