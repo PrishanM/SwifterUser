@@ -11,6 +11,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.evensel.swyftr.MainActivity;
 import com.evensel.swyftr.R;
 import com.evensel.swyftr.util.Notifications;
 import com.evensel.swyftr.util.ValidatorUtil;
@@ -75,7 +76,8 @@ public class LoginActivity extends Activity implements View.OnClickListener {
                 if(!message.equalsIgnoreCase("Success")){
                     Notifications.showToastMessage(layout,getApplicationContext(),message).show();
                 }else{
-                    Notifications.showToastMessage(layout,getApplicationContext(),"Login Successful").show();
+                    //Notifications.showToastMessage(layout,getApplicationContext(),"Login Successful").show();
+                    logUser();
                 }
             }
         }else if(view.getId()==R.id.btnFacebook){
@@ -85,5 +87,10 @@ public class LoginActivity extends Activity implements View.OnClickListener {
         }else if(view.getId()==R.id.btnGoogle){
 
         }
+    }
+
+    private void logUser(){
+        Intent loggedIntent = new Intent(this, MainActivity.class);
+        startActivity(loggedIntent);
     }
 }

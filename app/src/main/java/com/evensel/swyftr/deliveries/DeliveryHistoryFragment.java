@@ -10,11 +10,11 @@ import android.view.ViewGroup;
 import com.evensel.swyftr.R;
 
 /**
- * Created by Ravi on 29/07/15.
+ * Created by Prishan Maduka on 2/12/2017.
  */
-public class FriendsFragment extends Fragment {
+public class DeliveryHistoryFragment extends Fragment {
 
-    public FriendsFragment() {
+    public DeliveryHistoryFragment() {
         // Required empty public constructor
     }
 

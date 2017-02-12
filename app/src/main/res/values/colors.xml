@@ -6,4 +6,5 @@
     <color name="colorHint">#ededed</color>
     <color name="colorView">#6c818c</color>
     <color name="colorViewTransparent">#996c818c</color>
+    <color name="colorViewTransparent2">#666c818c</color>
 </resources>
