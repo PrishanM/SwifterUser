@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.evensel.swyftr.deliveries.ActiveDeliveriesFragment;
+import com.evensel.swyftr.profile.ProfileFragment;
 
 /**
  * Created by Prishan Maduka on 2/11/2017.
@@ -86,7 +87,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                 break;
             case 4:
                 title = getString(R.string.nav_profile_settings);
-                fragment = new ActiveDeliveriesFragment();
+                fragment = new ProfileFragment();
                 break;
             case 5:
                 title = getString(R.string.nav_logout);
@@ -98,7 +99,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 
 
 
-        if (fragment != null && position!=3) {
+        if (fragment != null) {
             setFragment(fragment,title);
         }
     }
