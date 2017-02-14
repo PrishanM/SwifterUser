@@ -1,7 +1,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:gravity="center"
     android:weightSum="1">
@@ -9,136 +8,124 @@
     <LinearLayout
         android:id="@+id/nav_header_container"
         android:layout_width="match_parent"
-        android:layout_height="180dp"
+        android:layout_height="100dp"
         android:paddingTop="@dimen/space_large"
         android:layout_alignParentTop="true"
         android:gravity="center"
         android:orientation="vertical"
-        android:background="@drawable/side_menu">
-
-        <com.mikhaellopez.circularimageview.CircularImageView
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:src="@drawable/ic_empty_user"
-            app:civ_border_color="@color/colorAccent"
-            app:civ_border_width="2dp"/>
-
-        <TextView
-            android:id="@+id/name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Test"
-            android:paddingTop="@dimen/nav_header_vertical_spacing"
-            android:paddingBottom="@dimen/nav_header_vertical_spacing"
-            android:textColor="@android:color/white"
-            android:textSize="@dimen/font_xlarge"
-            android:gravity="center"
-            android:textStyle="bold"/>
+        android:background="@drawable/card_details_background">
 
     </LinearLayout>
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:layout_weight="1">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical"
-            android:background="@android:color/white">
+            android:background="@android:color/white"
+            android:weightSum="1">
 
             <EditText
-                android:id="@+id/txtFullName"
+                android:id="@+id/txtCardNumber"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
+                android:inputType="number"
                 android:gravity="center_vertical"
                 android:background="@drawable/tab_bar_border"
                 android:padding="@dimen/space_normal"
                 android:layout_marginLeft="@dimen/activity_horizontal_margin"
                 android:layout_marginTop="@dimen/activity_horizontal_margin"
                 android:layout_marginRight="@dimen/activity_horizontal_margin"
-                android:hint="@string/full_name"/>
-
-            <EditText
-                android:id="@+id/txtEmailAddress"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:gravity="center_vertical"
-                android:inputType="textEmailAddress"
-                android:background="@drawable/tab_bar_border"
-                android:padding="@dimen/space_normal"
-                android:layout_marginLeft="@dimen/activity_horizontal_margin"
-                android:layout_marginTop="@dimen/activity_horizontal_margin"
-                android:layout_marginRight="@dimen/activity_horizontal_margin"
-                android:hint="@string/email_address"/>
-
-            <EditText
-                android:id="@+id/txtMobileNumber"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:gravity="center_vertical"
-                android:inputType="phone"
-                android:background="@drawable/tab_bar_border"
-                android:padding="@dimen/space_normal"
-                android:layout_marginLeft="@dimen/activity_horizontal_margin"
-                android:layout_marginTop="@dimen/activity_horizontal_margin"
-                android:layout_marginRight="@dimen/activity_horizontal_margin"
-                android:hint="@string/mobile_no"/>
-
-            <EditText
-                android:id="@+id/txtAddress"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:gravity="center_vertical"
-                android:background="@drawable/tab_bar_border"
-                android:padding="@dimen/space_normal"
-                android:layout_marginLeft="@dimen/activity_horizontal_margin"
-                android:layout_marginTop="@dimen/activity_horizontal_margin"
-                android:layout_marginRight="@dimen/activity_horizontal_margin"
-                android:hint="@string/fixed_address"/>
-
-
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:layout_marginLeft="@dimen/activity_horizontal_margin"
-                android:layout_marginTop="@dimen/activity_horizontal_margin"
-                android:layout_marginRight="@dimen/activity_horizontal_margin"
-                android:text="Add your swyftdresses"
-                android:textSize="@dimen/font_large"/>
-
-            <EditText
-                android:id="@+id/txtSwyftName"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:gravity="center_vertical"
-                android:inputType="textEmailAddress"
-                android:background="@drawable/tab_bar_border"
-                android:padding="@dimen/space_normal"
-                android:layout_marginLeft="@dimen/activity_horizontal_margin"
-                android:layout_marginTop="@dimen/activity_horizontal_margin"
-                android:layout_marginRight="@dimen/activity_horizontal_margin"
-                android:hint="@string/swyftdress"/>
-
-            <EditText
-                android:id="@+id/txtSwyftAddress"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:gravity="center_vertical"
-                android:background="@drawable/tab_bar_border"
-                android:padding="@dimen/space_normal"
-                android:layout_marginLeft="@dimen/activity_horizontal_margin"
-                android:layout_marginTop="@dimen/activity_horizontal_margin"
-                android:layout_marginRight="@dimen/activity_horizontal_margin"
-                android:hint="@string/address"/>
+                android:hint="@string/card_number"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_marginTop="@dimen/activity_horizontal_margin"
+                android:layout_marginRight="@dimen/activity_horizontal_margin"
+                android:weightSum="1"
+                android:gravity="center">
+
+                <EditText
+                    android:id="@+id/txtExp"
+                    android:layout_width="0dp"
+                    android:layout_weight="0.5"
+                    android:layout_height="50dp"
+                    android:gravity="center_vertical"
+                    android:inputType="date"
+                    android:background="@drawable/tab_bar_border"
+                    android:padding="@dimen/space_normal"
+                    android:hint="@string/exp_date"/>
+
+                <EditText
+                    android:id="@+id/txtCvv"
+                    android:layout_width="0dp"
+                    android:layout_weight="0.5"
+                    android:layout_height="50dp"
+                    android:gravity="center_vertical"
+                    android:inputType="number"
+                    android:background="@drawable/tab_bar_border"
+                    android:padding="@dimen/space_normal"
+                    android:hint="@string/cvv_code"/>
+
+            </LinearLayout>
+
+            <EditText
+                android:id="@+id/txtCardHolder"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:gravity="center_vertical"
+                android:inputType="text"
+                android:background="@drawable/tab_bar_border"
+                android:padding="@dimen/space_normal"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_marginTop="@dimen/activity_horizontal_margin"
+                android:layout_marginRight="@dimen/activity_horizontal_margin"
+                android:hint="@string/card_holder"/>
+
+            <EditText
+                android:id="@+id/txtZipCode"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:gravity="center_vertical"
+                android:inputType="number"
+                android:background="@drawable/tab_bar_border"
+                android:padding="@dimen/space_normal"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_marginTop="@dimen/activity_horizontal_margin"
+                android:layout_marginRight="@dimen/activity_horizontal_margin"
+                android:hint="@string/zip_code"/>
+
+            <EditText
+                android:id="@+id/txtStreetAddress"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:gravity="center_vertical"
+                android:background="@drawable/tab_bar_border"
+                android:padding="@dimen/space_normal"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_marginTop="@dimen/activity_horizontal_margin"
+                android:layout_marginRight="@dimen/activity_horizontal_margin"
+                android:hint="@string/street_address"/>
+
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/space_large" />
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
                 android:orientation="vertical"
+                android:gravity="bottom"
                 android:background="@android:color/transparent"
                 android:layout_margin="@dimen/activity_horizontal_margin"
                 android:paddingLeft="@dimen/space_large"
@@ -158,6 +145,7 @@
 
 
         </LinearLayout>
+
 
     </ScrollView>
 

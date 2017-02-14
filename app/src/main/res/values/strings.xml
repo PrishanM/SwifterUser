@@ -35,4 +35,17 @@
     <string name="repeat_password">Repeat password</string>
     <string name="sign_up">Sign Up</string>
 
+
+    <string name="full_name">Full Name</string>
+    <string name="fixed_address">Fixed Address</string>
+    <string name="swyftdress">Swyftdress Name</string>
+    <string name="address">Address</string>
+    
+    <string name="card_number">Card Number</string>
+    <string name="exp_date">EXP</string>
+    <string name="cvv_code">CVV</string>
+    <string name="card_holder">Card Holder</string>
+    <string name="zip_code">Zip Code</string>
+    <string name="street_address">Street Address</string>
+
 </resources>

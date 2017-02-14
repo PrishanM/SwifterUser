@@ -23,4 +23,16 @@
         <item name="android:textSize">@dimen/font_xlarge</item>
     </style>
 
+    <!-- Button Common -->
+    <style name="AppButtonHollow" parent="android:Widget.Button">
+        <item name="android:background">@drawable/button_hollow</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textSize">@dimen/font_xlarge</item>
+    </style>
+
+    <style name="MyDatePickerDialogTheme" parent="Theme.AppCompat.Light.Dialog">
+        <!-- this is new -->
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
 </resources>
