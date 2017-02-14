@@ -26,6 +26,11 @@ dependencies {
     compile 'com.android.support:design:24.2.1'
     compile 'com.android.support:support-v4:24.2.1'
     compile 'com.mikhaellopez:circularimageview:3.0.2'
+    compile 'com.mcxiaoke.volley:library-aar:1.0.0'
+    compile 'com.fasterxml.jackson.core:jackson-core:2.5.0'
+    compile 'com.fasterxml.jackson.core:jackson-annotations:2.5.0'
+    compile 'com.fasterxml.jackson.core:jackson-databind:2.5.0'
+    compile 'com.google.code.gson:gson:2.2.4'
 
     // Glide image library
     compile 'com.github.bumptech.glide:glide:3.7.0'
