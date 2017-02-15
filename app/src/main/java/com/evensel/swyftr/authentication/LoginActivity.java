@@ -1,6 +1,7 @@
 package com.evensel.swyftr.authentication;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -13,7 +14,10 @@ import android.widget.TextView;
 
 import com.evensel.swyftr.MainActivity;
 import com.evensel.swyftr.R;
+import com.evensel.swyftr.util.AppURL;
+import com.evensel.swyftr.util.JsonRequestManager;
 import com.evensel.swyftr.util.Notifications;
+import com.evensel.swyftr.util.ResponseModel;
 import com.evensel.swyftr.util.ValidatorUtil;
 
 /**
@@ -27,6 +31,7 @@ public class LoginActivity extends Activity implements View.OnClickListener {
     private ImageView btnFacebook,btnTwitter,btnGooglePlus;
     private LayoutInflater inflate;
     private View layout;
+    private ProgressDialog progress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,7 +81,9 @@ public class LoginActivity extends Activity implements View.OnClickListener {
                 if(!message.equalsIgnoreCase("Success")){
                     Notifications.showToastMessage(layout,getApplicationContext(),message).show();
                 }else{
-                    //Notifications.showToastMessage(layout,getApplicationContext(),"Login Successful").show();
+                    progress = ProgressDialog.show(LoginActivity.this, null,
+                            "Authenticating...", true);
+                    JsonRequestManager.getInstance(LoginActivity.this).loginUserRequest(AppURL.APPLICATION_BASE_URL+AppURL.USER_LOGIN_URL, txtUserName.getText().toString(),txtPassword.getText().toString(), requestCallback);
                     logUser();
                 }
             }
@@ -88,6 +95,36 @@ public class LoginActivity extends Activity implements View.OnClickListener {
 
         }
     }
+
+    //Response callback for "User Login"
+    private final JsonRequestManager.registerUser requestCallback = new JsonRequestManager.registerUser() {
+
+        @Override
+        public void onSuccess(ResponseModel model) {
+
+            if(progress!=null)
+                progress.dismiss();
+
+            if(model.getStatus().equalsIgnoreCase("success")){
+                logUser();
+            }else{
+                String message = "";
+                for (int i=0;i<model.getDetails().size();i++){
+                    message = message + "\n";
+                }
+                Notifications.showGeneralDialog(LoginActivity.this,message).show();
+            }
+
+
+        }
+
+        @Override
+        public void onError(String status) {
+            if(progress!=null)
+                progress.dismiss();
+            Notifications.showGeneralDialog(LoginActivity.this,status).show();
+        }
+    };
 
     private void logUser(){
         Intent loggedIntent = new Intent(this, MainActivity.class);

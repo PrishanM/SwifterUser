@@ -28,7 +28,7 @@ public class Notifications {
 
 
     //General alert dialog
-    public AlertDialog showGeneralDialog(Context context, String message){
+    public static AlertDialog showGeneralDialog(Context context, String message){
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setMessage(message);
         builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {

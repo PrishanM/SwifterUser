@@ -2,8 +2,18 @@ package com.evensel.swyftr.util;
 
 import android.content.Context;
 
+import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.Request;
 import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import org.json.JSONObject;
+
+import java.util.HashMap;
 
 /**
  * @author prishanm 02/14/2017
@@ -43,6 +53,120 @@ public class JsonRequestManager {
 	}
 
 	/******************************************************************************************************************************************/
+
+	/**
+	 * Register User
+	 **/
+	public interface registerUser{
+		void onSuccess(ResponseModel model);
+
+		void onError(String status);
+	}
+
+	public void registerUserRequest(String url, final String email,String password,String conPassword,String phoneNo,
+							   final registerUser callback) {
+
+		//Log.d("test Request", image);
+		String finalUrl = url+"email="+email+"&password="+password+"&password_confirmation="+conPassword+"&phone_no="+phoneNo;
+		HashMap<String, String> params = new HashMap<>();
+
+		JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST,
+				finalUrl, new JSONObject(params),
+				new Response.Listener<JSONObject>() {
+
+					@Override
+					public void onResponse(JSONObject response) {
+
+						ObjectMapper mapper = new ObjectMapper();
+
+						try {
+							if(response!=null){
+								ResponseModel responseModel = mapper.readValue(response.toString(), ResponseModel.class);
+								callback.onSuccess(responseModel);
+							}else{
+								callback.onError("Error occured");
+							}
+
+						} catch (Exception e) {
+							e.printStackTrace();
+							callback.onError("Error occured");
+						}
+					}
+				}, new Response.ErrorListener() {
+
+			@Override
+			public void onErrorResponse(VolleyError error) {
+				callback.onError("Error");
+			}
+		});
+
+		jsonObjReq.setRetryPolicy(new DefaultRetryPolicy(30000,
+				DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+				DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+		// Adding request to request queue
+		AppController.getInstance().addToRequestQueue(jsonObjReq,
+				tag_json_arry);
+
+	}
+
+	/******************************************************************************************************************************************/
+
+	/**
+	 * Login User
+	 **/
+	public interface loginUser{
+		void onSuccess(ResponseModel model);
+
+		void onError(String status);
+	}
+
+	public void loginUserRequest(String url, final String email,String password,
+									final registerUser callback) {
+
+		//Log.d("test Request", image);
+		String finalUrl = url+"email="+email+"&password="+password+"&user=user";
+		HashMap<String, String> params = new HashMap<>();
+
+		JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST,
+				finalUrl, new JSONObject(params),
+				new Response.Listener<JSONObject>() {
+
+					@Override
+					public void onResponse(JSONObject response) {
+
+						ObjectMapper mapper = new ObjectMapper();
+
+						try {
+							if(response!=null){
+								ResponseModel responseModel = mapper.readValue(response.toString(), ResponseModel.class);
+								callback.onSuccess(responseModel);
+							}else{
+								callback.onError("Error occured");
+							}
+
+						} catch (Exception e) {
+							e.printStackTrace();
+							callback.onError("Error occured");
+						}
+					}
+				}, new Response.ErrorListener() {
+
+			@Override
+			public void onErrorResponse(VolleyError error) {
+				callback.onError("Error");
+			}
+		});
+
+		jsonObjReq.setRetryPolicy(new DefaultRetryPolicy(30000,
+				DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+				DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+		// Adding request to request queue
+		AppController.getInstance().addToRequestQueue(jsonObjReq,
+				tag_json_arry);
+
+	}
 
 	
 }
