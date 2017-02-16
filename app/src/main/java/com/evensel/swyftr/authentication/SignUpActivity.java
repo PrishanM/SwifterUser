@@ -106,11 +106,7 @@ public class SignUpActivity extends Activity implements View.OnClickListener {
                 });
                 alertDialog.show();
             }else{
-                String message = "";
-                for (int i=0;i<model.getDetails().size();i++){
-                    message = message + "\n";
-                }
-                Notifications.showGeneralDialog(SignUpActivity.this,message).show();
+                Notifications.showToastMessage(layout,getApplicationContext(),model.getMessage()).show();
             }
 
 
@@ -120,7 +116,19 @@ public class SignUpActivity extends Activity implements View.OnClickListener {
         public void onError(String status) {
             if(progress!=null)
                 progress.dismiss();
-            Notifications.showGeneralDialog(SignUpActivity.this,status).show();
+            Notifications.showToastMessage(layout,getApplicationContext(),status).show();
+        }
+
+        @Override
+        public void onError(ResponseModel model) {
+            if(progress!=null)
+                progress.dismiss();
+            String message = "";
+            for (int i=0;i<model.getDetails().size();i++){
+                message = message + "\n" + model.getDetails().get(i);
+            }
+
+            Notifications.showToastMessage(layout,getApplicationContext(),message).show();
         }
     };
 }

@@ -2,7 +2,9 @@ package com.evensel.swyftr.authentication;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +17,7 @@ import android.widget.TextView;
 import com.evensel.swyftr.MainActivity;
 import com.evensel.swyftr.R;
 import com.evensel.swyftr.util.AppURL;
+import com.evensel.swyftr.util.Constants;
 import com.evensel.swyftr.util.JsonRequestManager;
 import com.evensel.swyftr.util.Notifications;
 import com.evensel.swyftr.util.ResponseModel;
@@ -84,7 +87,6 @@ public class LoginActivity extends Activity implements View.OnClickListener {
                     progress = ProgressDialog.show(LoginActivity.this, null,
                             "Authenticating...", true);
                     JsonRequestManager.getInstance(LoginActivity.this).loginUserRequest(AppURL.APPLICATION_BASE_URL+AppURL.USER_LOGIN_URL, txtUserName.getText().toString(),txtPassword.getText().toString(), requestCallback);
-                    logUser();
                 }
             }
         }else if(view.getId()==R.id.btnFacebook){
@@ -97,7 +99,7 @@ public class LoginActivity extends Activity implements View.OnClickListener {
     }
 
     //Response callback for "User Login"
-    private final JsonRequestManager.registerUser requestCallback = new JsonRequestManager.registerUser() {
+    private final JsonRequestManager.loginUser requestCallback = new JsonRequestManager.loginUser() {
 
         @Override
         public void onSuccess(ResponseModel model) {
@@ -106,23 +108,32 @@ public class LoginActivity extends Activity implements View.OnClickListener {
                 progress.dismiss();
 
             if(model.getStatus().equalsIgnoreCase("success")){
+                SharedPreferences sharedPref = LoginActivity.this.getSharedPreferences(Constants.LOGIN_SHARED_PREF, Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPref.edit();
+                editor.putString(Constants.LOGIN_SHARED_PREF_USERNAME, txtUserName.getText().toString());
+                editor.putString(Constants.LOGIN_SHARED_PREF_PASSWORD, txtPassword.getText().toString());
+                editor.putString(Constants.LOGIN_ACCESS_TOKEN, model.getToken());
+                editor.commit();
                 logUser();
             }else{
-                String message = "";
-                for (int i=0;i<model.getDetails().size();i++){
-                    message = message + "\n";
-                }
-                Notifications.showGeneralDialog(LoginActivity.this,message).show();
+                Notifications.showToastMessage(layout,getApplicationContext(),model.getMessage()).show();
             }
 
 
         }
 
         @Override
+        public void onError(ResponseModel model) {
+            if(progress!=null)
+                progress.dismiss();
+            Notifications.showToastMessage(layout,getApplicationContext(),model.getMessage()).show();
+        }
+
+        @Override
         public void onError(String status) {
             if(progress!=null)
                 progress.dismiss();
-            Notifications.showGeneralDialog(LoginActivity.this,status).show();
+            Notifications.showToastMessage(layout,getApplicationContext(),status).show();
         }
     };
 

@@ -17,6 +17,7 @@
         android:background="@drawable/side_menu">
 
         <com.mikhaellopez.circularimageview.CircularImageView
+            android:id="@+id/imgProfilePic"
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:src="@drawable/ic_empty_user"

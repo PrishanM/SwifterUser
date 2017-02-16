@@ -7,6 +7,7 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -61,14 +62,22 @@ public class JsonRequestManager {
 		void onSuccess(ResponseModel model);
 
 		void onError(String status);
+
+		void onError(ResponseModel model);
+
+
 	}
 
 	public void registerUserRequest(String url, final String email,String password,String conPassword,String phoneNo,
 							   final registerUser callback) {
 
 		//Log.d("test Request", image);
-		String finalUrl = url+"email="+email+"&password="+password+"&password_confirmation="+conPassword+"&phone_no="+phoneNo;
+		String finalUrl = url;
 		HashMap<String, String> params = new HashMap<>();
+		params.put("email",email);
+		params.put("password",password);
+		params.put("password_confirmation",conPassword);
+		params.put("phone_no",phoneNo);
 
 		JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST,
 				finalUrl, new JSONObject(params),
@@ -96,7 +105,7 @@ public class JsonRequestManager {
 
 			@Override
 			public void onErrorResponse(VolleyError error) {
-				callback.onError("Error");
+				callback.onError(errorResponse(error.networkResponse.data,HttpHeaderParser.parseCharset(error.networkResponse.headers)));
 			}
 		});
 
@@ -118,15 +127,20 @@ public class JsonRequestManager {
 	public interface loginUser{
 		void onSuccess(ResponseModel model);
 
-		void onError(String status);
+		void onError(ResponseModel model);
+
+		void onError(String s);
 	}
 
 	public void loginUserRequest(String url, final String email,String password,
-									final registerUser callback) {
+									final loginUser callback) {
 
 		//Log.d("test Request", image);
-		String finalUrl = url+"email="+email+"&password="+password+"&user=user";
+		String finalUrl = url;
 		HashMap<String, String> params = new HashMap<>();
+		params.put("email",email);
+		params.put("password",password);
+		params.put("user","user");
 
 		JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST,
 				finalUrl, new JSONObject(params),
@@ -154,7 +168,7 @@ public class JsonRequestManager {
 
 			@Override
 			public void onErrorResponse(VolleyError error) {
-				callback.onError("Error");
+				callback.onError(errorResponse(error.networkResponse.data,HttpHeaderParser.parseCharset(error.networkResponse.headers)));
 			}
 		});
 
@@ -168,5 +182,30 @@ public class JsonRequestManager {
 
 	}
 
-	
+	/******************************************************************************************************************************************/
+
+
+	/**
+	 * Method to convert 400,401,500 error to response model class
+	 * @param bytes
+	 * @param charset
+     * @return ResponseModel
+     */
+	private ResponseModel errorResponse(byte[] bytes,String charset){
+		ResponseModel responseModel = new ResponseModel();
+		responseModel.setMessage("Error Occured.");
+		responseModel.setStatus("error");
+		ObjectMapper mapper = new ObjectMapper();
+		try {
+			String json = new String(bytes, charset);
+			JSONObject errorResponse = new JSONObject(json);
+			if(errorResponse!=null){
+				responseModel = mapper.readValue(errorResponse.toString(),ResponseModel.class);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return responseModel;
+	}
 }

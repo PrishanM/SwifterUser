@@ -1,6 +1,10 @@
 package com.evensel.swyftr;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -11,8 +15,10 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.TextView;
 
+import com.evensel.swyftr.authentication.LoginActivity;
 import com.evensel.swyftr.deliveries.ActiveDeliveriesFragment;
 import com.evensel.swyftr.profile.ProfileFragment;
+import com.evensel.swyftr.util.Constants;
 
 /**
  * Created by Prishan Maduka on 2/11/2017.
@@ -90,8 +96,29 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                 fragment = new ProfileFragment();
                 break;
             case 5:
-                title = getString(R.string.nav_logout);
-                fragment = new ActiveDeliveriesFragment();
+                AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this).create();
+                alertDialog.setMessage("Are you sure want to logout?");
+                alertDialog.setButton("No", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+                // Setting OK Button
+                alertDialog.setButton("Logout", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        SharedPreferences loginPref = context.getSharedPreferences(Constants.LOGIN_SHARED_PREF, Context.MODE_PRIVATE);
+                        SharedPreferences.Editor loginEditor = loginPref.edit();
+                        loginEditor.clear();
+                        loginEditor.commit();
+
+                        Intent mainActivity = new Intent(MainActivity.this, LoginActivity.class);
+                        startActivity(mainActivity);
+                        finish();
+                    }
+                });
+
+                alertDialog.show();
+
                 break;
             default:
                 break;
