@@ -10,6 +10,7 @@ public class Constants {
     public static final String LOGIN_SHARED_PREF_PASSWORD = "PASSWORD";
     public static final String LOGIN_ACCESS_TOKEN = "TOKEN";
     public static final String IMAGE_DIRECTORY_NAME = "Swyftr";
+    public static final String PROFILE_PREF = "PROFILE_PREFERENCE";
 
     public static final String GOOGLE_MAP_SERVER_KEY = "AIzaSyCPHa2QftYqHjIfj7o5WqRLVs9mpHBSlMk";
 }
