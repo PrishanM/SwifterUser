@@ -9,7 +9,7 @@ android {
     defaultConfig {
         applicationId "com.evensel.swyftr"
         minSdkVersion 17
-        targetSdkVersion 24
+        targetSdkVersion 23
         versionCode 1
         versionName "1.0"
     }

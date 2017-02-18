@@ -184,6 +184,266 @@ public class JsonRequestManager {
 
 	/******************************************************************************************************************************************/
 
+	/**
+	 * Update User Info
+	 **/
+	public interface updateUser{
+		void onSuccess(ResponseModel model);
+
+		void onError(String status);
+
+		void onError(ResponseModel model);
+
+
+	}
+
+	public void updateUserRequest(String url, String token, String name,String email,String mobile ,String home_address,String office_address,
+									final updateUser callback) {
+
+		//Log.d("test Request", image);
+		String finalUrl = url+"?token="+token;
+		HashMap<String, String> params = new HashMap<>();
+		params.put("email",email);
+		params.put("name",name);
+		params.put("phone_no",mobile);
+		params.put("home_address",home_address);
+		params.put("office_address",office_address);
+
+		JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST,
+				finalUrl, new JSONObject(params),
+				new Response.Listener<JSONObject>() {
+
+					@Override
+					public void onResponse(JSONObject response) {
+
+						ObjectMapper mapper = new ObjectMapper();
+
+						try {
+							if(response!=null){
+								ResponseModel responseModel = mapper.readValue(response.toString(), ResponseModel.class);
+								callback.onSuccess(responseModel);
+							}else{
+								callback.onError("Error occured");
+							}
+
+						} catch (Exception e) {
+							e.printStackTrace();
+							callback.onError("Error occured");
+						}
+					}
+				}, new Response.ErrorListener() {
+
+			@Override
+			public void onErrorResponse(VolleyError error) {
+				callback.onError(errorResponse(error.networkResponse.data,HttpHeaderParser.parseCharset(error.networkResponse.headers)));
+			}
+		});
+
+		jsonObjReq.setRetryPolicy(new DefaultRetryPolicy(30000,
+				DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+				DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+		// Adding request to request queue
+		AppController.getInstance().addToRequestQueue(jsonObjReq,
+				tag_json_arry);
+
+	}
+
+
+	/******************************************************************************************************************************************/
+
+	/**
+	 * Send password reset code
+	 **/
+	public interface sendResetCode{
+		void onSuccess(ResponseModel model);
+
+		void onError(String status);
+
+		void onError(ResponseModel model);
+
+
+	}
+
+	public void sendResetCodeRequest(String url,String email,
+								  final sendResetCode callback) {
+
+		//Log.d("test Request", image);
+		String finalUrl = url;
+		HashMap<String, String> params = new HashMap<>();
+		params.put("email",email);
+		params.put("user","user");
+
+		JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST,
+				finalUrl, new JSONObject(params),
+				new Response.Listener<JSONObject>() {
+
+					@Override
+					public void onResponse(JSONObject response) {
+
+						ObjectMapper mapper = new ObjectMapper();
+
+						try {
+							if(response!=null){
+								ResponseModel responseModel = mapper.readValue(response.toString(), ResponseModel.class);
+								callback.onSuccess(responseModel);
+							}else{
+								callback.onError("Error occured");
+							}
+
+						} catch (Exception e) {
+							e.printStackTrace();
+							callback.onError("Error occured");
+						}
+					}
+				}, new Response.ErrorListener() {
+
+			@Override
+			public void onErrorResponse(VolleyError error) {
+				callback.onError(errorResponse(error.networkResponse.data,HttpHeaderParser.parseCharset(error.networkResponse.headers)));
+			}
+		});
+
+		jsonObjReq.setRetryPolicy(new DefaultRetryPolicy(30000,
+				DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+				DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+		// Adding request to request queue
+		AppController.getInstance().addToRequestQueue(jsonObjReq,
+				tag_json_arry);
+
+	}
+
+	/******************************************************************************************************************************************/
+
+	/**
+	 * Validate reset code
+	 **/
+	public interface validateResetCode{
+		void onSuccess(ResponseModel model);
+
+		void onError(String status);
+
+		void onError(ResponseModel model);
+
+
+	}
+
+	public void validateResetCodeRequest(String url,String code,
+									 final validateResetCode callback) {
+
+		//Log.d("test Request", image);
+		String finalUrl = url;
+		HashMap<String, String> params = new HashMap<>();
+		params.put("code",code);
+
+		JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST,
+				finalUrl, new JSONObject(params),
+				new Response.Listener<JSONObject>() {
+
+					@Override
+					public void onResponse(JSONObject response) {
+
+						ObjectMapper mapper = new ObjectMapper();
+
+						try {
+							if(response!=null){
+								ResponseModel responseModel = mapper.readValue(response.toString(), ResponseModel.class);
+								callback.onSuccess(responseModel);
+							}else{
+								callback.onError("Error occured");
+							}
+
+						} catch (Exception e) {
+							e.printStackTrace();
+							callback.onError("Error occured");
+						}
+					}
+				}, new Response.ErrorListener() {
+
+			@Override
+			public void onErrorResponse(VolleyError error) {
+				callback.onError(errorResponse(error.networkResponse.data,HttpHeaderParser.parseCharset(error.networkResponse.headers)));
+			}
+		});
+
+		jsonObjReq.setRetryPolicy(new DefaultRetryPolicy(30000,
+				DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+				DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+		// Adding request to request queue
+		AppController.getInstance().addToRequestQueue(jsonObjReq,
+				tag_json_arry);
+
+	}
+
+	/******************************************************************************************************************************************/
+
+	/**
+	 * Reset password
+	 **/
+	public interface resetPassword{
+		void onSuccess(ResponseModel model);
+
+		void onError(String status);
+
+		void onError(ResponseModel model);
+
+
+	}
+
+	public void resetPasswordRequest(String url,String password,
+										 final resetPassword callback) {
+
+		//Log.d("test Request", image);
+		String finalUrl = url;
+		HashMap<String, String> params = new HashMap<>();
+		params.put("password",password);
+		params.put("password_confirmation",password);
+		params.put("user","user");
+
+		JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST,
+				finalUrl, new JSONObject(params),
+				new Response.Listener<JSONObject>() {
+
+					@Override
+					public void onResponse(JSONObject response) {
+
+						ObjectMapper mapper = new ObjectMapper();
+
+						try {
+							if(response!=null){
+								ResponseModel responseModel = mapper.readValue(response.toString(), ResponseModel.class);
+								callback.onSuccess(responseModel);
+							}else{
+								callback.onError("Error occured");
+							}
+
+						} catch (Exception e) {
+							e.printStackTrace();
+							callback.onError("Error occured");
+						}
+					}
+				}, new Response.ErrorListener() {
+
+			@Override
+			public void onErrorResponse(VolleyError error) {
+				callback.onError(errorResponse(error.networkResponse.data,HttpHeaderParser.parseCharset(error.networkResponse.headers)));
+			}
+		});
+
+		jsonObjReq.setRetryPolicy(new DefaultRetryPolicy(30000,
+				DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+				DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+		// Adding request to request queue
+		AppController.getInstance().addToRequestQueue(jsonObjReq,
+				tag_json_arry);
+
+	}
+
+	/******************************************************************************************************************************************/
+
 
 	/**
 	 * Method to convert 400,401,500 error to response model class
@@ -208,4 +468,6 @@ public class JsonRequestManager {
 
 		return responseModel;
 	}
+
+
 }

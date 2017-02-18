@@ -12,7 +12,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 
 import com.evensel.swyftr.R;
 import com.evensel.swyftr.util.AppURL;
@@ -24,11 +23,10 @@ import com.evensel.swyftr.util.ValidatorUtil;
 /**
  * Created by Prishan Maduka on 2/12/2017.
  */
-public class ForgotPasswordActivity extends Activity implements View.OnClickListener {
+public class ResetPasswordActivity extends Activity implements View.OnClickListener {
 
-    private TextView txtBackToLogin;
-    private Button btnReset;
-    private EditText txtEmailAddress;
+    private Button btnDone;
+    private EditText txtPassword,txtRepeatPassword;
     private LayoutInflater inflate;
     private View layout;
     private ProgressDialog progress;
@@ -37,42 +35,47 @@ public class ForgotPasswordActivity extends Activity implements View.OnClickList
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_reset_password);
+        setContentView(R.layout.activity_reset_password_new_password);
 
         //Initialize UI components
         context = this;
-        txtBackToLogin = (TextView)findViewById(R.id.txtBackToLogin);
-        txtEmailAddress = (EditText)findViewById(R.id.txtEmailAddress);
-        btnReset = (Button)findViewById(R.id.btnReset);
+        txtPassword = (EditText)findViewById(R.id.txtNewPassword);
+        txtRepeatPassword = (EditText)findViewById(R.id.txtReType);
+        btnDone = (Button)findViewById(R.id.btnReset);
 
         inflate = getLayoutInflater();
         layout = inflate.inflate(R.layout.custom_toast_layout,(ViewGroup) findViewById(R.id.toast_layout_root));
 
         //Assign click listeners
-        txtBackToLogin.setOnClickListener(this);
-        btnReset.setOnClickListener(this);
+        btnDone.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View view) {
-        if(view.getId()==R.id.txtBackToLogin){
-            finish();
-        }else if(view.getId()==R.id.btnReset){
-            if(txtEmailAddress.getText().toString().isEmpty()){
-                Notifications.showToastMessage(layout,getApplicationContext(),"Sorry!!! Username cannot be empty.").show();
-            }else if(!ValidatorUtil.isValidEmailAddress(txtEmailAddress.getText().toString())){
-                Notifications.showToastMessage(layout,getApplicationContext(),"Sorry!!! Invalid email address.").show();
+        if(view.getId()==R.id.btnReset){
+            if(txtPassword.getText().toString().isEmpty()){
+                Notifications.showToastMessage(layout,getApplicationContext(),"Sorry!!! Password cannot be empty.").show();
             }else{
-                progress = ProgressDialog.show(context, null,
-                        "Authenticating...", true);
-                JsonRequestManager.getInstance(context).sendResetCodeRequest(AppURL.APPLICATION_BASE_URL+AppURL.SEND_RESET_CODE_URL, txtEmailAddress.getText().toString(), requestCallback);
+                String message = ValidatorUtil.isValidPassword(txtPassword.getText().toString());
+                if(!message.equalsIgnoreCase("Success")){
+                    Notifications.showToastMessage(layout,getApplicationContext(),message).show();
+                }else{
+                    if(txtPassword.getText().toString().equalsIgnoreCase(txtRepeatPassword.getText().toString())){
+                        progress = ProgressDialog.show(context, null,
+                                "Resetting Password...", true);
+                        JsonRequestManager.getInstance(context).resetPasswordRequest(AppURL.APPLICATION_BASE_URL+AppURL.RESET_PASSWORD_URL, txtPassword.getText().toString(), requestCallback);
+                    }else{
+                        Notifications.showToastMessage(layout,getApplicationContext(),"Repeat password does not match.").show();
+                    }
+                }
+
 
             }
         }
     }
 
-    //Response callback for "User Login"
-    private final JsonRequestManager.sendResetCode requestCallback = new JsonRequestManager.sendResetCode() {
+    //Response callback for "Reset Password"
+    private final JsonRequestManager.resetPassword requestCallback = new JsonRequestManager.resetPassword() {
 
         @Override
         public void onSuccess(ResponseModel model) {
@@ -81,14 +84,12 @@ public class ForgotPasswordActivity extends Activity implements View.OnClickList
                 progress.dismiss();
 
             if(model.getStatus().equalsIgnoreCase("success")){
-                AlertDialog alertDialog = new AlertDialog.Builder(ForgotPasswordActivity.this).create();
-                alertDialog.setTitle("SENT");
-                // Setting Dialog Message
-                alertDialog.setMessage("Password reset code has been sent successfully");
+                AlertDialog alertDialog = new AlertDialog.Builder(ResetPasswordActivity.this).create();
+                alertDialog.setMessage("Password reset successfully");
                 // Setting OK Button
-                alertDialog.setButton("Enter code now", new DialogInterface.OnClickListener() {
+                alertDialog.setButton("Back to login", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        Intent intent = new Intent(context,ForgotPasswordSendResetCodeActivity.class);
+                        Intent intent = new Intent(context,LoginActivity.class);
                         startActivity(intent);
                         finish();
                     }

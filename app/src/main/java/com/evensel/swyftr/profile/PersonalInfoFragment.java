@@ -20,6 +20,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
 
 import com.android.volley.NetworkResponse;
 import com.android.volley.NoConnectionError;
@@ -28,10 +31,13 @@ import com.android.volley.Response;
 import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.evensel.swyftr.R;
+import com.evensel.swyftr.util.AppController;
 import com.evensel.swyftr.util.AppURL;
 import com.evensel.swyftr.util.Constants;
+import com.evensel.swyftr.util.JsonRequestManager;
 import com.evensel.swyftr.util.Notifications;
 import com.evensel.swyftr.util.ResponseModel;
+import com.evensel.swyftr.util.ValidatorUtil;
 import com.evensel.swyftr.util.VolleyMultipartRequest;
 import com.evensel.swyftr.util.VolleySingleton;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -54,15 +60,21 @@ import java.util.Map;
 public class PersonalInfoFragment extends Fragment {
 
     private static final int CAMERA_CAPTURE_IMAGE_REQUEST_CODE = 100;
+    private static final int PICK_IMAGE_REQUEST = 120;
     public static final int MEDIA_TYPE_IMAGE = 1;
 
     private CircularImageView circularImageView;
     private Uri fileUri;
-    private long total = 0;
     private View layout;
     private LayoutInflater inflate;
+    private SharedPreferences profilePref,sharedPref;
+    private EditText txtFirstName,mail,mobileNumber,fixedAddress,swyftrName,officeAddress;
+    private TextView name;
+    private Button btnSave;
 
     private ProgressDialog progress;
+
+    private String token;
 
 
 
@@ -80,9 +92,59 @@ public class PersonalInfoFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.personal_info_fragment, container, false);
+        profilePref = getActivity().getSharedPreferences(Constants.PROFILE_PREF, Context.MODE_PRIVATE);
+        sharedPref = getActivity().getSharedPreferences(Constants.LOGIN_SHARED_PREF, Context.MODE_PRIVATE);
+        token = sharedPref.getString(Constants.LOGIN_ACCESS_TOKEN, "");
+
         inflate = inflater;
         layout = inflate.inflate(R.layout.custom_toast_layout,(ViewGroup) rootView.findViewById(R.id.toast_layout_root));
         circularImageView = (CircularImageView)rootView.findViewById(R.id.imgProfilePic);
+
+        txtFirstName = (EditText)rootView.findViewById(R.id.txtFullName);
+        mail = (EditText)rootView.findViewById(R.id.txtEmailAddress);
+        mobileNumber = (EditText)rootView.findViewById(R.id.txtMobileNumber);
+        fixedAddress = (EditText)rootView.findViewById(R.id.txtAddress);
+        swyftrName = (EditText)rootView.findViewById(R.id.txtSwyftName);
+        officeAddress = (EditText)rootView.findViewById(R.id.txtSwyftAddress);
+        name = (TextView) rootView.findViewById(R.id.name);
+
+        txtFirstName.setText(profilePref.getString(Constants.PROFILE_NAME,""));
+        mail.setText(profilePref.getString(Constants.PROFILE_EMAIL,""));
+        mobileNumber.setText(profilePref.getString(Constants.PROFILE_PHONE,""));
+        fixedAddress.setText(profilePref.getString(Constants.PROFILE_ADDRESS,""));
+        swyftrName.setText(profilePref.getString(Constants.PROFILE_SWYFTR_NAME,""));
+        officeAddress.setText(profilePref.getString(Constants.PROFILE_OFFICE,""));
+        name.setText(profilePref.getString(Constants.PROFILE_NAME,""));
+
+
+
+        btnSave = (Button)rootView.findViewById(R.id.btnSave);
+
+        btnSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(txtFirstName.getText().toString().isEmpty()){
+                    Notifications.showToastMessage(layout,getActivity(),"Sorry!!! Full Name cannot be empty.").show();
+                }else if(mail.getText().toString().isEmpty()){
+                    Notifications.showToastMessage(layout,getActivity(),"Sorry!!! Email cannot be empty.").show();
+                }else if(!ValidatorUtil.isValidEmailAddress(mail.getText().toString())){
+                    Notifications.showToastMessage(layout,getActivity(),"Sorry!!! Invalid email address.").show();
+                }else if(mobileNumber.getText().toString().isEmpty()){
+                    Notifications.showToastMessage(layout,getActivity(),"Sorry!!! Mobile number cannot be empty.").show();
+                }else if(fixedAddress.getText().toString().isEmpty()){
+                    Notifications.showToastMessage(layout,getActivity(),"Sorry!!! Fixed address cannot be empty.").show();
+                }else if(officeAddress.getText().toString().isEmpty()){
+                    Notifications.showToastMessage(layout,getActivity(),"Sorry!!! Office address cannot be empty.").show();
+                }else{
+                    progress = ProgressDialog.show(getActivity(), null,
+                            "Creating user...", true);
+                    JsonRequestManager.getInstance(getActivity()).updateUserRequest(AppURL.APPLICATION_BASE_URL+AppURL.USER_UPDATE_URL, token,txtFirstName.getText().toString(),mail.getText().toString(),mobileNumber.getText().toString(),fixedAddress.getText().toString(),officeAddress.getText().toString(), requestCallback);
+                }
+            }
+        });
+        if(profilePref.getString(Constants.PROFILE_PIC,"")!=null || !profilePref.getString(Constants.PROFILE_PIC,"").isEmpty()){
+            circularImageView.setImageBitmap(profileImage(profilePref.getString(Constants.PROFILE_PIC,"")));
+        }
         circularImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -109,8 +171,10 @@ public class PersonalInfoFragment extends Fragment {
         builderSingle.setTitle("Change profile image");
 
         final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1);
+        //arrayAdapter.add("View Image");
         arrayAdapter.add("Capture Now");
-        arrayAdapter.add("Upload");
+        arrayAdapter.add("Select from Gallery");
+
 
         builderSingle.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             @Override
@@ -125,13 +189,14 @@ public class PersonalInfoFragment extends Fragment {
                 String strName = arrayAdapter.getItem(which);
                 if(strName.equalsIgnoreCase("Capture Now")){
                     Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-
                     fileUri = getOutputMediaFileUri(MEDIA_TYPE_IMAGE);
-
                     intent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri);
-
-                    // start the image capture Intent
                     startActivityForResult(intent, CAMERA_CAPTURE_IMAGE_REQUEST_CODE);
+                }else if(strName.equalsIgnoreCase("Select from Gallery")){
+                    Intent intent = new Intent();
+                    intent.setType("image/*");
+                    intent.setAction(Intent.ACTION_GET_CONTENT);
+                    startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
                 }
             }
         });
@@ -184,47 +249,66 @@ public class PersonalInfoFragment extends Fragment {
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    public void onActivityResult(int requestCode, int resultCode, final Intent data) {
         if (requestCode == CAMERA_CAPTURE_IMAGE_REQUEST_CODE) {
             if (resultCode == -1) {
-
                 AlertDialog.Builder builderSingle = new AlertDialog.Builder(getActivity());
                 builderSingle.setMessage("Are you sure want to upload image?");
-
                 builderSingle.setNegativeButton("No", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
                     }
                 });
-
                 builderSingle.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        saveProfileAccount();
+                        saveProfileAccount(true);
                     }
                 });
-
                 builderSingle.show();
-
-
+            }
+        }else if (requestCode == PICK_IMAGE_REQUEST){
+            Log.d("xxxxxxx",resultCode+"");
+            if (resultCode == -1) {
+                AlertDialog.Builder builderSingle = new AlertDialog.Builder(getActivity());
+                builderSingle.setMessage("Are you sure want to upload image?");
+                builderSingle.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+                builderSingle.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        File newFile = new File(AppController.getPath(getActivity(),data.getData()));
+                        fileUri = Uri.fromFile(newFile);
+                        saveProfileAccount(false);
+                    }
+                });
+                builderSingle.show();
             }
         }
     }
 
-    private void saveProfileAccount() {
+    private Bitmap profileImage(String path){
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inSampleSize = 2;
+        Bitmap realPhoto = BitmapFactory.decodeFile(path, options);
+        return realPhoto;
+    }
+
+    private void saveProfileAccount(final boolean isFromCamera) {
 
         progress = ProgressDialog.show(getActivity(), null,
                 "Uploading image...", true);
-        SharedPreferences sharedPref = getActivity().getSharedPreferences(Constants.LOGIN_SHARED_PREF, Context.MODE_PRIVATE);
-        String token = sharedPref.getString(Constants.LOGIN_ACCESS_TOKEN, "");
+
         String url = AppURL.APPLICATION_BASE_URL+AppURL.FILE_UPLOAD_URL+"?token="+token;
 
-        BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inSampleSize = 8;
-        final Bitmap photo = BitmapFactory.decodeFile(fileUri.getPath(), options);
+        final Bitmap photo = profileImage(fileUri.getPath());
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        photo.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+        photo.compress(Bitmap.CompressFormat.JPEG, 70, byteArrayOutputStream);
         final byte[] byteArray = byteArrayOutputStream.toByteArray();
 
         VolleyMultipartRequest multipartRequest = new VolleyMultipartRequest(Request.Method.POST, url, new Response.Listener<NetworkResponse>() {
@@ -240,18 +324,18 @@ public class PersonalInfoFragment extends Fragment {
                     if(result!=null){
                         ResponseModel responseModel = mapper.readValue(result.toString(), ResponseModel.class);
                         Notifications.showToastMessage(layout,getActivity(),responseModel.getMessage()).show();
-                        Matrix matrix = new Matrix();
-                        matrix.postRotate(90);
-                        Bitmap resizedBitmap = Bitmap.createBitmap(photo, 0, 0,
-                                photo.getWidth(), photo.getHeight(), matrix, true);
-                        circularImageView.setImageBitmap(resizedBitmap);
-
-                        /*SharedPreferences sharedPref = getActivity().getSharedPreferences(Constants.PROFILE_PREF, Context.MODE_PRIVATE);
-                        SharedPreferences.Editor editor = sharedPref.edit();
-                        editor.putString(Constants.LOGIN_SHARED_PREF_USERNAME, txtUserName.getText().toString());
-                        editor.putString(Constants.LOGIN_SHARED_PREF_PASSWORD, txtPassword.getText().toString());
-                        editor.putString(Constants.LOGIN_ACCESS_TOKEN, model.getToken());
-                        editor.commit();*/
+                        if(isFromCamera){
+                            Matrix matrix = new Matrix();
+                            matrix.postRotate(90);
+                            Bitmap resizedBitmap = Bitmap.createBitmap(photo, 0, 0,
+                                    photo.getWidth(), photo.getHeight(), matrix, true);
+                            circularImageView.setImageBitmap(resizedBitmap);
+                        }else{
+                            circularImageView.setImageBitmap(photo);
+                        }
+                        SharedPreferences.Editor editor = profilePref.edit();
+                        editor.putString(Constants.PROFILE_PIC, fileUri.getPath().toString());
+                        editor.commit();
 
                     }else{
                         Notifications.showToastMessage(layout,getActivity(),"Error uploading image").show();
@@ -311,7 +395,7 @@ public class PersonalInfoFragment extends Fragment {
             protected Map<String, DataPart> getByteData() {
                 Map<String, DataPart> params = new HashMap<>();
 
-                params.put("profile_image", new DataPart("profile_pic.png", byteArray, "image/png"));
+                params.put("profile_image", new DataPart("profile_pic.jpg", byteArray, "image/jpg"));
 
                 return params;
             }
@@ -320,5 +404,66 @@ public class PersonalInfoFragment extends Fragment {
         VolleySingleton.getInstance(getActivity()).addToRequestQueue(multipartRequest);
     }
 
+    //Response callback for "User Profile Update"
+    private final JsonRequestManager.updateUser requestCallback = new JsonRequestManager.updateUser() {
 
+        @Override
+        public void onSuccess(ResponseModel model) {
+
+            if(progress!=null)
+                progress.dismiss();
+
+            if(model.getStatus().equalsIgnoreCase("success")){
+                final AlertDialog alertDialog = new AlertDialog.Builder(getActivity()).create();
+                // Setting Dialog Message
+                alertDialog.setMessage("User information updated successfully");
+                // Setting OK Button
+                alertDialog.setButton("Ok", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        setSharedPrefData();
+                        alertDialog.dismiss();
+                    }
+                });
+                alertDialog.show();
+            }else{
+                Notifications.showToastMessage(layout,getActivity(),model.getMessage()).show();
+            }
+
+
+        }
+
+        @Override
+        public void onError(String status) {
+            if(progress!=null)
+                progress.dismiss();
+            Notifications.showToastMessage(layout,getActivity(),status).show();
+        }
+
+        @Override
+        public void onError(ResponseModel model) {
+            if(progress!=null)
+                progress.dismiss();
+            String message = "";
+            for (int i=0;i<model.getDetails().size();i++){
+                message = message + "\n" + model.getDetails().get(i);
+            }
+
+            Notifications.showToastMessage(layout,getActivity(),message).show();
+        }
+    };
+
+    private void setSharedPrefData(){
+        SharedPreferences.Editor editor = profilePref.edit();
+        editor.putString(Constants.PROFILE_NAME, txtFirstName.getText().toString());
+        editor.putString(Constants.PROFILE_EMAIL, mail.getText().toString());
+        editor.putString(Constants.PROFILE_ADDRESS, fixedAddress.getText().toString());
+        editor.putString(Constants.PROFILE_PHONE, mobileNumber.getText().toString());
+        if(!swyftrName.getText().toString().isEmpty()){
+            editor.putString(Constants.PROFILE_SWYFTR_NAME, swyftrName.getText().toString());
+        }
+        editor.putString(Constants.PROFILE_OFFICE, officeAddress.getText().toString());
+        editor.commit();
+
+        name.setText(txtFirstName.getText().toString());
+    }
 }
