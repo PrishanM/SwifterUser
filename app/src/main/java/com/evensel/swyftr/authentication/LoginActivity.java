@@ -2,10 +2,9 @@ package com.evensel.swyftr.authentication;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,12 +15,18 @@ import android.widget.TextView;
 
 import com.evensel.swyftr.MainActivity;
 import com.evensel.swyftr.R;
+import com.evensel.swyftr.util.AppController;
 import com.evensel.swyftr.util.AppURL;
-import com.evensel.swyftr.util.Constants;
 import com.evensel.swyftr.util.JsonRequestManager;
+import com.evensel.swyftr.util.LoginResponse;
 import com.evensel.swyftr.util.Notifications;
-import com.evensel.swyftr.util.ResponseModel;
 import com.evensel.swyftr.util.ValidatorUtil;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.FacebookSdk;
+import com.facebook.login.LoginResult;
+import com.facebook.login.widget.LoginButton;
 
 /**
  * Created by Prishan Maduka on 2/11/2017.
@@ -35,11 +40,15 @@ public class LoginActivity extends Activity implements View.OnClickListener {
     private LayoutInflater inflate;
     private View layout;
     private ProgressDialog progress;
+    private CallbackManager callbackManager;
+    private LoginButton loginButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        facebookSDKInitialize();
 
         //Initializing UI components
         txtForgotPassword = (TextView)findViewById(R.id.txtForgotPassword);
@@ -50,6 +59,9 @@ public class LoginActivity extends Activity implements View.OnClickListener {
         btnFacebook = (ImageView)findViewById(R.id.btnFacebook);
         btnTwitter = (ImageView)findViewById(R.id.btnTwitter);
         btnGooglePlus = (ImageView)findViewById(R.id.btnGoogle);
+        loginButton = (LoginButton) findViewById(R.id.login_button);
+        //loginButton.setReadPermissions("email");
+        getLoginDetails(loginButton);
 
         inflate = getLayoutInflater();
         layout = inflate.inflate(R.layout.custom_toast_layout,(ViewGroup) findViewById(R.id.toast_layout_root));
@@ -64,6 +76,29 @@ public class LoginActivity extends Activity implements View.OnClickListener {
 
     }
 
+    protected void facebookSDKInitialize() {
+        FacebookSdk.sdkInitialize(getApplicationContext());
+        callbackManager = CallbackManager.Factory.create();
+    }
+
+    protected void getLoginDetails(LoginButton login_button) {
+    // Callback registration
+        login_button.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+            @Override
+            public void onSuccess (LoginResult loginResult){
+                Log.d("xxxxx",loginResult.getAccessToken()
+                        .getToken());
+            }
+            @Override
+            public void onCancel () {
+                Log.d("xxxxx","vccvcv");
+            }
+            @Override
+            public void onError (FacebookException exception){
+                Log.d("xxxxx",exception.getMessage());
+            }
+        });
+    }
     @Override
     public void onClick(View view) {
         if(view.getId()==R.id.txtForgotPassword){
@@ -90,7 +125,7 @@ public class LoginActivity extends Activity implements View.OnClickListener {
                 }
             }
         }else if(view.getId()==R.id.btnFacebook){
-
+            loginButton.performClick();
         }else if(view.getId()==R.id.btnTwitter){
 
         }else if(view.getId()==R.id.btnGoogle){
@@ -102,18 +137,14 @@ public class LoginActivity extends Activity implements View.OnClickListener {
     private final JsonRequestManager.loginUser requestCallback = new JsonRequestManager.loginUser() {
 
         @Override
-        public void onSuccess(ResponseModel model) {
+        public void onSuccess(LoginResponse model) {
 
             if(progress!=null)
                 progress.dismiss();
 
             if(model.getStatus().equalsIgnoreCase("success")){
-                SharedPreferences sharedPref = LoginActivity.this.getSharedPreferences(Constants.LOGIN_SHARED_PREF, Context.MODE_PRIVATE);
-                SharedPreferences.Editor editor = sharedPref.edit();
-                editor.putString(Constants.LOGIN_SHARED_PREF_USERNAME, txtUserName.getText().toString());
-                editor.putString(Constants.LOGIN_SHARED_PREF_PASSWORD, txtPassword.getText().toString());
-                editor.putString(Constants.LOGIN_ACCESS_TOKEN, model.getToken());
-                editor.commit();
+                AppController.setLoginPreference(LoginActivity.this,txtUserName.getText().toString(),txtPassword.getText().toString(),model.getToken());
+                AppController.setProfilePreference(LoginActivity.this,model.getDetails());
                 logUser();
             }else{
                 Notifications.showToastMessage(layout,getApplicationContext(),model.getMessage()).show();
@@ -123,7 +154,7 @@ public class LoginActivity extends Activity implements View.OnClickListener {
         }
 
         @Override
-        public void onError(ResponseModel model) {
+        public void onError(LoginResponse model) {
             if(progress!=null)
                 progress.dismiss();
             Notifications.showToastMessage(layout,getApplicationContext(),model.getMessage()).show();
@@ -142,4 +173,13 @@ public class LoginActivity extends Activity implements View.OnClickListener {
         startActivity(loggedIntent);
         finish();
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int responseCode,
+                                    Intent data) {
+        super.onActivityResult(requestCode, responseCode, data);
+        callbackManager.onActivityResult(requestCode, responseCode, data);
+    }
+
+
 }

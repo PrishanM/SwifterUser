@@ -2,6 +2,7 @@ package com.evensel.swyftr.util;
 
 import android.content.Context;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -15,6 +16,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.json.JSONObject;
 
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author prishanm 02/14/2017
@@ -125,9 +127,9 @@ public class JsonRequestManager {
 	 * Login User
 	 **/
 	public interface loginUser{
-		void onSuccess(ResponseModel model);
+		void onSuccess(LoginResponse model);
 
-		void onError(ResponseModel model);
+		void onError(LoginResponse model);
 
 		void onError(String s);
 	}
@@ -153,7 +155,7 @@ public class JsonRequestManager {
 
 						try {
 							if(response!=null){
-								ResponseModel responseModel = mapper.readValue(response.toString(), ResponseModel.class);
+								LoginResponse responseModel = mapper.readValue(response.toString(), LoginResponse.class);
 								callback.onSuccess(responseModel);
 							}else{
 								callback.onError("Error occured");
@@ -168,7 +170,7 @@ public class JsonRequestManager {
 
 			@Override
 			public void onErrorResponse(VolleyError error) {
-				callback.onError(errorResponse(error.networkResponse.data,HttpHeaderParser.parseCharset(error.networkResponse.headers)));
+				callback.onError(errorLoginResponse(error.networkResponse.data,HttpHeaderParser.parseCharset(error.networkResponse.headers)));
 			}
 		});
 
@@ -392,12 +394,13 @@ public class JsonRequestManager {
 
 	}
 
-	public void resetPasswordRequest(String url,String password,
+	public void resetPasswordRequest(String url,String email,String password,
 										 final resetPassword callback) {
 
 		//Log.d("test Request", image);
 		String finalUrl = url;
 		HashMap<String, String> params = new HashMap<>();
+		params.put("email",email);
 		params.put("password",password);
 		params.put("password_confirmation",password);
 		params.put("user","user");
@@ -467,6 +470,106 @@ public class JsonRequestManager {
 		}
 
 		return responseModel;
+	}
+
+	/**
+	 * Method to convert 400,401,500 error to response model class
+	 * @param bytes
+	 * @param charset
+	 * @return ResponseModel
+	 */
+	private LoginResponse errorLoginResponse(byte[] bytes,String charset){
+		LoginResponse responseModel = new LoginResponse();
+		responseModel.setMessage("Error Occured.");
+		responseModel.setStatus("error");
+		ObjectMapper mapper = new ObjectMapper();
+		try {
+			String json = new String(bytes, charset);
+			JSONObject errorResponse = new JSONObject(json);
+			if(errorResponse!=null){
+				responseModel = mapper.readValue(errorResponse.toString(),LoginResponse.class);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return responseModel;
+	}
+
+	/**
+	 * Validate reset code
+	 **/
+	public interface test{
+		void onSuccess(ResponseModel model);
+
+		void onError(String status);
+
+		void onError(ResponseModel model);
+
+
+	}
+
+	public void testRequest(String url,String email,String password,String conPassword,
+										 final test callback) {
+
+		//Log.d("test Request", image);
+		String finalUrl = "http://api.swyftr.com/api/v1/password/reset";
+		HashMap<String, String> params = new HashMap<>();
+		params.put("email",email);
+		params.put("user","user");
+		params.put("password",password);
+		params.put("password_confirmation",conPassword);
+
+		JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST,
+				finalUrl, new JSONObject(params),
+				new Response.Listener<JSONObject>() {
+
+					@Override
+					public void onResponse(JSONObject response) {
+
+						ObjectMapper mapper = new ObjectMapper();
+
+						try {
+							if(response!=null){
+								ResponseModel responseModel = mapper.readValue(response.toString(), ResponseModel.class);
+								callback.onSuccess(responseModel);
+							}else{
+								callback.onError("Error occured");
+							}
+
+						} catch (Exception e) {
+							e.printStackTrace();
+							callback.onError("Error occured");
+						}
+					}
+				}, new Response.ErrorListener() {
+
+			@Override
+			public void onErrorResponse(VolleyError error) {
+				callback.onError(errorResponse(error.networkResponse.data,HttpHeaderParser.parseCharset(error.networkResponse.headers)));
+			}
+		}){
+
+			/**
+			 * Passing some request headers
+			 * */
+			@Override
+			public Map<String, String> getHeaders() throws AuthFailureError {
+				HashMap<String, String> headers = new HashMap<>();
+				headers.put("Content-Type", "application/json;charset=utf-8");
+				return headers;
+			}
+
+		};
+
+		jsonObjReq.setRetryPolicy(new DefaultRetryPolicy(30000,
+				DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+				DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+		// Adding request to request queue
+		AppController.getInstance().addToRequestQueue(jsonObjReq,
+				tag_json_arry);
+
 	}
 
 

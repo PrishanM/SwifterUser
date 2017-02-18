@@ -89,8 +89,9 @@ public class ForgotPasswordActivity extends Activity implements View.OnClickList
                 alertDialog.setButton("Enter code now", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         Intent intent = new Intent(context,ForgotPasswordSendResetCodeActivity.class);
+                        intent.putExtra("EMAIL",txtEmailAddress.getText().toString());
                         startActivity(intent);
-                        finish();
+                        //finish();
                     }
                 });
                 // Showing Alert Message

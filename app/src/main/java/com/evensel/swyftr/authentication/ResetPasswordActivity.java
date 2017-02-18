@@ -63,7 +63,7 @@ public class ResetPasswordActivity extends Activity implements View.OnClickListe
                     if(txtPassword.getText().toString().equalsIgnoreCase(txtRepeatPassword.getText().toString())){
                         progress = ProgressDialog.show(context, null,
                                 "Resetting Password...", true);
-                        JsonRequestManager.getInstance(context).resetPasswordRequest(AppURL.APPLICATION_BASE_URL+AppURL.RESET_PASSWORD_URL, txtPassword.getText().toString(), requestCallback);
+                        JsonRequestManager.getInstance(context).testRequest(AppURL.APPLICATION_BASE_URL+AppURL.RESET_PASSWORD_URL,getIntent().getStringExtra("EMAIL"), txtPassword.getText().toString(),txtRepeatPassword.getText().toString(), requestCallback);
                     }else{
                         Notifications.showToastMessage(layout,getApplicationContext(),"Repeat password does not match.").show();
                     }
@@ -75,7 +75,7 @@ public class ResetPasswordActivity extends Activity implements View.OnClickListe
     }
 
     //Response callback for "Reset Password"
-    private final JsonRequestManager.resetPassword requestCallback = new JsonRequestManager.resetPassword() {
+    private final JsonRequestManager.test requestCallback = new JsonRequestManager.test() {
 
         @Override
         public void onSuccess(ResponseModel model) {
@@ -117,4 +117,5 @@ public class ResetPasswordActivity extends Activity implements View.OnClickListe
             Notifications.showToastMessage(layout,getApplicationContext(),status).show();
         }
     };
+
 }

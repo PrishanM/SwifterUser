@@ -30,6 +30,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.ImageLoader;
 import com.evensel.swyftr.R;
 import com.evensel.swyftr.util.AppController;
 import com.evensel.swyftr.util.AppURL;
@@ -142,9 +143,31 @@ public class PersonalInfoFragment extends Fragment {
                 }
             }
         });
-        if(profilePref.getString(Constants.PROFILE_PIC,"")!=null || !profilePref.getString(Constants.PROFILE_PIC,"").isEmpty()){
-            circularImageView.setImageBitmap(profileImage(profilePref.getString(Constants.PROFILE_PIC,"")));
+
+        String imageUrl = profilePref.getString(Constants.PROFILE_PIC_URL, "");
+        String imageUri = profilePref.getString(Constants.PROFILE_PIC,"");
+
+        if(!imageUrl.isEmpty()){
+            ImageLoader imageLoader = AppController.getInstance().getImageLoader();
+            imageLoader.get(imageUrl, new ImageLoader.ImageListener() {
+
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Log.e("ERR", "Image Load Error: " + error.getMessage());
+                }
+
+                @Override
+                public void onResponse(ImageLoader.ImageContainer response, boolean arg1) {
+                    if (response.getBitmap() != null) {
+                        // load image into imageview
+                        circularImageView.setImageBitmap(response.getBitmap());
+                    }
+                }
+            });
+        }else if(!imageUri.isEmpty()){
+            circularImageView.setImageBitmap(profileImage(imageUri));
         }
+
         circularImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -269,7 +292,6 @@ public class PersonalInfoFragment extends Fragment {
                 builderSingle.show();
             }
         }else if (requestCode == PICK_IMAGE_REQUEST){
-            Log.d("xxxxxxx",resultCode+"");
             if (resultCode == -1) {
                 AlertDialog.Builder builderSingle = new AlertDialog.Builder(getActivity());
                 builderSingle.setMessage("Are you sure want to upload image?");
@@ -335,7 +357,13 @@ public class PersonalInfoFragment extends Fragment {
                         }
                         SharedPreferences.Editor editor = profilePref.edit();
                         editor.putString(Constants.PROFILE_PIC, fileUri.getPath().toString());
+                        editor.putString(Constants.PROFILE_PIC_URL, "");
                         editor.commit();
+
+                        Intent intent = getActivity().getIntent();
+                        intent.putExtra("FRAGMENT",4);
+                        getActivity().finish();
+                        startActivity(intent);
 
                     }else{
                         Notifications.showToastMessage(layout,getActivity(),"Error uploading image").show();
@@ -458,9 +486,7 @@ public class PersonalInfoFragment extends Fragment {
         editor.putString(Constants.PROFILE_EMAIL, mail.getText().toString());
         editor.putString(Constants.PROFILE_ADDRESS, fixedAddress.getText().toString());
         editor.putString(Constants.PROFILE_PHONE, mobileNumber.getText().toString());
-        if(!swyftrName.getText().toString().isEmpty()){
-            editor.putString(Constants.PROFILE_SWYFTR_NAME, swyftrName.getText().toString());
-        }
+        editor.putString(Constants.PROFILE_SWYFTR_NAME, swyftrName.getText().toString());
         editor.putString(Constants.PROFILE_OFFICE, officeAddress.getText().toString());
         editor.commit();
 

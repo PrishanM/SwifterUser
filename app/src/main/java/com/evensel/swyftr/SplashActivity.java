@@ -12,10 +12,11 @@ import android.os.Handler;
 import android.support.annotation.NonNull;
 
 import com.evensel.swyftr.authentication.LoginActivity;
+import com.evensel.swyftr.util.AppController;
 import com.evensel.swyftr.util.AppURL;
 import com.evensel.swyftr.util.Constants;
 import com.evensel.swyftr.util.JsonRequestManager;
-import com.evensel.swyftr.util.ResponseModel;
+import com.evensel.swyftr.util.LoginResponse;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -107,13 +108,14 @@ public class SplashActivity extends Activity {
     private final JsonRequestManager.loginUser requestCallback = new JsonRequestManager.loginUser() {
 
         @Override
-        public void onSuccess(ResponseModel model) {
+        public void onSuccess(LoginResponse model) {
 
             if(model.getStatus().equalsIgnoreCase("success")){
                 SharedPreferences sharedPref =context.getSharedPreferences(Constants.LOGIN_SHARED_PREF, Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedPref.edit();
                 editor.putString(Constants.LOGIN_ACCESS_TOKEN, model.getToken());
                 editor.commit();
+                AppController.setProfilePreference(context,model.getDetails());
 
                 Intent loggedIntent = new Intent(context, MainActivity.class);
                 startActivity(loggedIntent);
@@ -126,7 +128,7 @@ public class SplashActivity extends Activity {
         }
 
         @Override
-        public void onError(ResponseModel model) {
+        public void onError(LoginResponse model) {
             navigateLogin();
         }
 

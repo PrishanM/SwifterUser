@@ -23,17 +23,12 @@
             android:orientation="vertical">
 
             <com.mikhaellopez.circularimageview.CircularImageView
+                android:id="@+id/imgUser"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:src="@drawable/ic_empty_user"
                 app:civ_border_color="@color/colorAccent"
                 app:civ_border_width="2dp"/>
-
-            <!--<ImageView
-                android:id="@+id/img_profile"
-                android:layout_width="wrap_content"
-                android:layout_height="@dimen/profile_height"
-                app:srcCompat="@drawable/test_pic" />-->
 
             <TextView
                 android:id="@+id/name"

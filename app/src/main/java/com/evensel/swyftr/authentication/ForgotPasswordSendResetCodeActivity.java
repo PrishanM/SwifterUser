@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -84,7 +85,9 @@ public class ForgotPasswordSendResetCodeActivity extends Activity implements Vie
                 // Setting OK Button
                 alertDialog.setButton("Set new password", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        //finish();
+                        Intent intent = new Intent(context,ResetPasswordActivity.class);
+                        intent.putExtra("EMAIL",getIntent().getStringExtra("EMAIL"));
+                        startActivity(intent);
                     }
                 });
                 // Showing Alert Message

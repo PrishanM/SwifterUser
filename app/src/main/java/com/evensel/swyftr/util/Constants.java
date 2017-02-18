@@ -5,13 +5,18 @@ package com.evensel.swyftr.util;
  */
 public class Constants {
 
+    public static final String IMAGE_DIRECTORY_NAME = "Swyftr";
+
+    //Login Preference
     public static final String LOGIN_SHARED_PREF = "SWYFTR_USER_PREFERENCE";
     public static final String LOGIN_SHARED_PREF_USERNAME = "USERNAME";
     public static final String LOGIN_SHARED_PREF_PASSWORD = "PASSWORD";
     public static final String LOGIN_ACCESS_TOKEN = "TOKEN";
-    public static final String IMAGE_DIRECTORY_NAME = "Swyftr";
+
+    //Profile Preference
     public static final String PROFILE_PREF = "PROFILE_PREFERENCE";
     public static final String PROFILE_PIC = "PROFILE_PICTURE";
+    public static final String PROFILE_PIC_URL = "PROFILE_PICTURE_URL";
     public static final String PROFILE_NAME = "PROFILE_NAME";
     public static final String PROFILE_EMAIL = "PROFILE_EMAIL";
     public static final String PROFILE_PHONE = "PROFILE_PHONE";

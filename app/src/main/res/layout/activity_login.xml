@@ -119,11 +119,27 @@
                 android:orientation="horizontal"
                 android:gravity="center">
 
-                <ImageView
-                    android:id="@+id/btnFacebook"
+                <LinearLayout
                     android:layout_width="70dp"
                     android:layout_height="match_parent"
-                    android:src="@drawable/ic_facebook"/>
+                    android:orientation="horizontal">
+
+                    <com.facebook.login.widget.LoginButton
+                        android:id="@+id/login_button"
+                        android:layout_width="70dp"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/ic_facebook"
+                        android:visibility="gone"/>
+
+                    <ImageView
+                        android:id="@+id/btnFacebook"
+                        android:layout_width="70dp"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/ic_facebook"/>
+
+                </LinearLayout>
+
+
 
                 <ImageView
                     android:id="@+id/btnTwitter"

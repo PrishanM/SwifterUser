@@ -3,6 +3,7 @@ package com.evensel.swyftr.util;
 import android.app.Application;
 import android.content.ContentUris;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
@@ -39,6 +40,15 @@ public class AppController extends Application {
  
     public static synchronized AppController getInstance() {
         return mInstance;
+    }
+
+    public ImageLoader getImageLoader() {
+        getRequestQueue();
+        if (mImageLoader == null) {
+            mImageLoader = new ImageLoader(this.mRequestQueue,
+                    new BitmapCache());
+        }
+        return this.mImageLoader;
     }
  
     private RequestQueue getRequestQueue() {
@@ -192,6 +202,32 @@ public class AppController extends Application {
      */
     public static boolean isGooglePhotosUri(Uri uri) {
         return "com.google.android.apps.photos.content".equals(uri.getAuthority());
+    }
+
+    public static void setProfilePreference(Context context,Details details){
+        SharedPreferences sharedPref = context.getSharedPreferences(Constants.PROFILE_PREF, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString(Constants.PROFILE_NAME, details.getName());
+        editor.putString(Constants.PROFILE_EMAIL, details.getEmail());
+        editor.putString(Constants.PROFILE_ADDRESS, details.getHomeAddress());
+        editor.putString(Constants.PROFILE_PHONE, details.getPhoneNo());
+        editor.putString(Constants.PROFILE_PIC_URL, details.getProfileImage());
+        editor.putString(Constants.PROFILE_PIC, "");
+        editor.putString(Constants.PROFILE_SWYFTR_NAME, details.getName());
+        /*if(!details.get.isEmpty()){
+            editor.putString(Constants.PROFILE_SWYFTR_NAME, swyftrName.getText().toString());
+        }*/
+        editor.putString(Constants.PROFILE_OFFICE, details.getOfficeAddress());
+        editor.commit();
+    }
+
+    public static void setLoginPreference(Context context,String username, String password, String token){
+        SharedPreferences sharedPref = context.getSharedPreferences(Constants.LOGIN_SHARED_PREF, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString(Constants.LOGIN_SHARED_PREF_USERNAME, username);
+        editor.putString(Constants.LOGIN_SHARED_PREF_PASSWORD, password);
+        editor.putString(Constants.LOGIN_ACCESS_TOKEN, token);
+        editor.commit();
     }
 
 }
