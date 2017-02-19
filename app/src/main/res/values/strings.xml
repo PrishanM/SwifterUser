@@ -48,6 +48,8 @@
     <string name="zip_code">Zip Code</string>
     <string name="street_address">Street Address</string>
 
+    <string name="no_network_error">No internet connection.Please connect to proceed</string>
+
     <string name="facebook_app_id">189229754894006</string>
 
 </resources>

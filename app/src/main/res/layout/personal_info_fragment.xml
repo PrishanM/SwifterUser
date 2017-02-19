@@ -14,13 +14,13 @@
         android:layout_alignParentTop="true"
         android:gravity="center"
         android:orientation="vertical"
-        android:background="@drawable/side_menu">
+        android:background="@drawable/profile_background">
 
         <com.mikhaellopez.circularimageview.CircularImageView
             android:id="@+id/imgProfilePic"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:src="@drawable/ic_empty_user"
+            android:src="@drawable/empty_user"
             app:civ_border_color="@color/colorAccent"
             app:civ_border_width="2dp"/>
 
@@ -139,10 +139,11 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="80dp"
                 android:orientation="vertical"
-                android:background="@android:color/transparent"
-                android:layout_margin="@dimen/activity_horizontal_margin"
+                android:gravity="center"
+                android:background="@drawable/background_image"
+                android:layout_marginTop="@dimen/activity_horizontal_margin"
                 android:paddingLeft="@dimen/space_large"
                 android:paddingRight="@dimen/space_large">
 

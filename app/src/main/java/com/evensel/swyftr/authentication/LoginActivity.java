@@ -17,6 +17,7 @@ import com.evensel.swyftr.MainActivity;
 import com.evensel.swyftr.R;
 import com.evensel.swyftr.util.AppController;
 import com.evensel.swyftr.util.AppURL;
+import com.evensel.swyftr.util.DetectApplicationFunctionsAvailability;
 import com.evensel.swyftr.util.JsonRequestManager;
 import com.evensel.swyftr.util.LoginResponse;
 import com.evensel.swyftr.util.Notifications;
@@ -119,9 +120,15 @@ public class LoginActivity extends Activity implements View.OnClickListener {
                 if(!message.equalsIgnoreCase("Success")){
                     Notifications.showToastMessage(layout,getApplicationContext(),message).show();
                 }else{
-                    progress = ProgressDialog.show(LoginActivity.this, null,
-                            "Authenticating...", true);
-                    JsonRequestManager.getInstance(LoginActivity.this).loginUserRequest(AppURL.APPLICATION_BASE_URL+AppURL.USER_LOGIN_URL, txtUserName.getText().toString(),txtPassword.getText().toString(), requestCallback);
+                    DetectApplicationFunctionsAvailability.setmContext(LoginActivity.this);
+                    if(!DetectApplicationFunctionsAvailability.isConnected()){
+                        Notifications.showGeneralDialog(LoginActivity.this,getResources().getString(R.string.no_network_error)).show();
+                    }else{
+                        progress = ProgressDialog.show(LoginActivity.this, null,
+                                "Authenticating...", true);
+                        JsonRequestManager.getInstance(LoginActivity.this).loginUserRequest(AppURL.APPLICATION_BASE_URL+AppURL.USER_LOGIN_URL, txtUserName.getText().toString(),txtPassword.getText().toString(), requestCallback);
+                    }
+
                 }
             }
         }else if(view.getId()==R.id.btnFacebook){

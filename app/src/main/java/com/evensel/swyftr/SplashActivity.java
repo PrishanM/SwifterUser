@@ -2,7 +2,9 @@ package com.evensel.swyftr;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -15,6 +17,7 @@ import com.evensel.swyftr.authentication.LoginActivity;
 import com.evensel.swyftr.util.AppController;
 import com.evensel.swyftr.util.AppURL;
 import com.evensel.swyftr.util.Constants;
+import com.evensel.swyftr.util.DetectApplicationFunctionsAvailability;
 import com.evensel.swyftr.util.JsonRequestManager;
 import com.evensel.swyftr.util.LoginResponse;
 
@@ -76,7 +79,23 @@ public class SplashActivity extends Activity {
                 String password = sharedPref.getString(Constants.LOGIN_SHARED_PREF_PASSWORD, "");
 
                 if(username!=null && !username.isEmpty() && password!=null && !password.isEmpty()){
-                    JsonRequestManager.getInstance(context).loginUserRequest(AppURL.APPLICATION_BASE_URL+AppURL.USER_LOGIN_URL, username,password, requestCallback);
+                    DetectApplicationFunctionsAvailability.setmContext(context);
+                    if(!DetectApplicationFunctionsAvailability.isConnected()){
+                        AlertDialog alertDialog = new AlertDialog.Builder(context).create();
+                        // Setting Dialog Message
+                        alertDialog.setMessage(getResources().getString(R.string.no_network_error));
+                        // Setting OK Button
+                        alertDialog.setButton("Ok", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                finish();
+                            }
+                        });
+                        alertDialog.show();
+                        //Notifications.showGeneralDialog(context,getResources().getString(R.string.no_network_error)).show();
+                    }else{
+                        JsonRequestManager.getInstance(context).loginUserRequest(AppURL.APPLICATION_BASE_URL+AppURL.USER_LOGIN_URL, username,password, requestCallback);
+                    }
+
                 }else{
                     navigateLogin();
                 }
