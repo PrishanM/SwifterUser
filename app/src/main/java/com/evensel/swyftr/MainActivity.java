@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -77,13 +78,25 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                 @Override
                 public void onResponse(ImageLoader.ImageContainer response, boolean arg1) {
                     if (response.getBitmap() != null) {
-                        // load image into imageview
-                        imageView.setImageBitmap(response.getBitmap());
+                        if(response.getBitmap().getWidth()>response.getBitmap().getHeight()){
+                            Matrix matrix = new Matrix();
+                            matrix.postRotate(90);
+                            Bitmap rotatedBitmap = Bitmap.createBitmap(response.getBitmap(), 0, 0, response.getBitmap().getWidth(),
+                                    response.getBitmap().getHeight(), matrix, true);
+                            imageView.setImageBitmap(rotatedBitmap);
+                        }else{
+                            imageView.setImageBitmap(response.getBitmap());
+                        }
+                        //imageView.setImageBitmap(response.getBitmap());
                     }
                 }
             });
         }else if(!imageUri.isEmpty()){
-            imageView.setImageBitmap(profileImage(imageUri));
+            Matrix matrix = new Matrix();
+            matrix.postRotate(AppController.getImageOrientation(imageUri));
+            Bitmap rotatedBitmap = Bitmap.createBitmap(profileImage(imageUri), 0, 0, profileImage(imageUri).getWidth(),
+                    profileImage(imageUri).getHeight(), matrix, true);
+            imageView.setImageBitmap(rotatedBitmap);
         }
 
 

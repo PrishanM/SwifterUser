@@ -159,13 +159,25 @@ public class PersonalInfoFragment extends Fragment {
                 @Override
                 public void onResponse(ImageLoader.ImageContainer response, boolean arg1) {
                     if (response.getBitmap() != null) {
-                        // load image into imageview
-                        circularImageView.setImageBitmap(response.getBitmap());
+                        if(response.getBitmap().getWidth()>response.getBitmap().getHeight()){
+                            Matrix matrix = new Matrix();
+                            matrix.postRotate(90);
+                            Bitmap rotatedBitmap = Bitmap.createBitmap(response.getBitmap(), 0, 0, response.getBitmap().getWidth(),
+                                    response.getBitmap().getHeight(), matrix, true);
+                            circularImageView.setImageBitmap(rotatedBitmap);
+                        }else{
+                            circularImageView.setImageBitmap(response.getBitmap());
+                        }
+
                     }
                 }
             });
         }else if(!imageUri.isEmpty()){
-            circularImageView.setImageBitmap(profileImage(imageUri));
+            Matrix matrix = new Matrix();
+            matrix.postRotate(AppController.getImageOrientation(imageUri));
+            Bitmap rotatedBitmap = Bitmap.createBitmap(profileImage(imageUri), 0, 0, profileImage(imageUri).getWidth(),
+                    profileImage(imageUri).getHeight(), matrix, true);
+            circularImageView.setImageBitmap(rotatedBitmap);
         }
 
         circularImageView.setOnClickListener(new View.OnClickListener() {
@@ -328,10 +340,13 @@ public class PersonalInfoFragment extends Fragment {
 
         String url = AppURL.APPLICATION_BASE_URL+AppURL.FILE_UPLOAD_URL+"?token="+token;
 
+        Bitmap rotatedBitmap = null;
+
         final Bitmap photo = profileImage(fileUri.getPath());
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         photo.compress(Bitmap.CompressFormat.JPEG, 70, byteArrayOutputStream);
         final byte[] byteArray = byteArrayOutputStream.toByteArray();
+
 
         VolleyMultipartRequest multipartRequest = new VolleyMultipartRequest(Request.Method.POST, url, new Response.Listener<NetworkResponse>() {
             @Override
