@@ -2,7 +2,9 @@ package com.evensel.swyftr.authentication;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,6 +19,7 @@ import com.evensel.swyftr.MainActivity;
 import com.evensel.swyftr.R;
 import com.evensel.swyftr.util.AppController;
 import com.evensel.swyftr.util.AppURL;
+import com.evensel.swyftr.util.Constants;
 import com.evensel.swyftr.util.DetectApplicationFunctionsAvailability;
 import com.evensel.swyftr.util.JsonRequestManager;
 import com.evensel.swyftr.util.LoginResponse;
@@ -43,6 +46,7 @@ public class LoginActivity extends Activity implements View.OnClickListener {
     private ProgressDialog progress;
     private CallbackManager callbackManager;
     private LoginButton loginButton;
+    private String fbToken;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +65,7 @@ public class LoginActivity extends Activity implements View.OnClickListener {
         btnTwitter = (ImageView)findViewById(R.id.btnTwitter);
         btnGooglePlus = (ImageView)findViewById(R.id.btnGoogle);
         loginButton = (LoginButton) findViewById(R.id.login_button);
-        //loginButton.setReadPermissions("email");
+        loginButton.setReadPermissions("email");
         getLoginDetails(loginButton);
 
         inflate = getLayoutInflater();
@@ -87,8 +91,10 @@ public class LoginActivity extends Activity implements View.OnClickListener {
         login_button.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess (LoginResult loginResult){
-                Log.d("xxxxx",loginResult.getAccessToken()
-                        .getToken());
+                fbToken = loginResult.getAccessToken().getToken();
+                progress = ProgressDialog.show(LoginActivity.this, null,
+                        "Authenticating...", true);
+                JsonRequestManager.getInstance(LoginActivity.this).socialLoginRequest(AppURL.APPLICATION_BASE_URL+AppURL.SOCIAL_LOGIN_URL, fbToken,"facebook", socialRequestCallback);
             }
             @Override
             public void onCancel () {
@@ -187,6 +193,42 @@ public class LoginActivity extends Activity implements View.OnClickListener {
         super.onActivityResult(requestCode, responseCode, data);
         callbackManager.onActivityResult(requestCode, responseCode, data);
     }
+
+    //Response callback for "User Login"
+    private final JsonRequestManager.socialLogin socialRequestCallback = new JsonRequestManager.socialLogin() {
+        @Override
+        public void onSuccess(LoginResponse model) {
+            if(progress!=null)
+                progress.dismiss();
+
+            if(model.getStatus().equalsIgnoreCase("success")){
+                //AppController.setLoginPreference(LoginActivity.this,txtUserName.getText().toString(),txtPassword.getText().toString(),model.getToken());
+                SharedPreferences sharedPref = LoginActivity.this.getSharedPreferences(Constants.LOGIN_SHARED_PREF, Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPref.edit();
+                editor.putString(Constants.LOGIN_ACCESS_TOKEN, model.getToken());
+                editor.commit();
+
+                AppController.setProfilePreference(LoginActivity.this,model.getDetails());
+                logUser();
+            }else{
+                Notifications.showToastMessage(layout,getApplicationContext(),model.getMessage()).show();
+            }
+        }
+
+        @Override
+        public void onError(String status) {
+            if(progress!=null)
+                progress.dismiss();
+            Notifications.showToastMessage(layout,getApplicationContext(),status).show();
+        }
+
+        @Override
+        public void onError(LoginResponse model) {
+            if(progress!=null)
+                progress.dismiss();
+            Notifications.showToastMessage(layout,getApplicationContext(),model.getMessage()).show();
+        }
+    };
 
 
 }

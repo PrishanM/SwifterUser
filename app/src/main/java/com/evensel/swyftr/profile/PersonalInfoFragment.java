@@ -358,8 +358,6 @@ public class PersonalInfoFragment extends Fragment implements OnMapReadyCallback
 
         String url = AppURL.APPLICATION_BASE_URL+AppURL.FILE_UPLOAD_URL+"?token="+token;
 
-        Bitmap rotatedBitmap = null;
-
         final Bitmap photo = profileImage(fileUri.getPath());
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         photo.compress(Bitmap.CompressFormat.JPEG, 70, byteArrayOutputStream);
@@ -574,7 +572,7 @@ public class PersonalInfoFragment extends Fragment implements OnMapReadyCallback
             btnOk.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    dialog1.dismiss();
                 }
             });
 
@@ -587,9 +585,7 @@ public class PersonalInfoFragment extends Fragment implements OnMapReadyCallback
 
 
 
-        }/*else if(v.getId()==R.id.imgOfcMap){
-
-        }*/
+        }
     }
 
     private void setMap() {
@@ -611,6 +607,7 @@ public class PersonalInfoFragment extends Fragment implements OnMapReadyCallback
                 @Override
                 public void onMapClick(LatLng latLng) {
                     tapFixedAddress = latLng;
+                    addMarkers(latLng,googleMapFixed);
                 }
             });
         }else{
@@ -621,6 +618,7 @@ public class PersonalInfoFragment extends Fragment implements OnMapReadyCallback
                 @Override
                 public void onMapClick(LatLng latLng) {
                     tapOfficeAddress = latLng;
+                    addMarkers(latLng,googleMapOffice);
                 }
             });
         }
@@ -665,5 +663,12 @@ public class PersonalInfoFragment extends Fragment implements OnMapReadyCallback
 
         }
 
+    }
+
+    private void addMarkers(LatLng latLng,GoogleMap map){
+        map.clear();
+        map.addMarker(new MarkerOptions()
+                .position(latLng)
+                .title("My Address"));
     }
 }

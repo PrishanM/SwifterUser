@@ -2,24 +2,13 @@ package com.evensel.swyftr;
 
 import android.Manifest;
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
-
-import com.evensel.swyftr.authentication.LoginActivity;
-import com.evensel.swyftr.util.AppController;
-import com.evensel.swyftr.util.AppURL;
-import com.evensel.swyftr.util.Constants;
-import com.evensel.swyftr.util.DetectApplicationFunctionsAvailability;
-import com.evensel.swyftr.util.JsonRequestManager;
-import com.evensel.swyftr.util.LoginResponse;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -73,32 +62,10 @@ public class SplashActivity extends Activity {
 
             @Override
             public void run() {
-                //Start next activity
-                SharedPreferences sharedPref = getSharedPreferences(Constants.LOGIN_SHARED_PREF, Context.MODE_PRIVATE);
-                String username = sharedPref.getString(Constants.LOGIN_SHARED_PREF_USERNAME, "");
-                String password = sharedPref.getString(Constants.LOGIN_SHARED_PREF_PASSWORD, "");
 
-                if(username!=null && !username.isEmpty() && password!=null && !password.isEmpty()){
-                    DetectApplicationFunctionsAvailability.setmContext(context);
-                    if(!DetectApplicationFunctionsAvailability.isConnected()){
-                        AlertDialog alertDialog = new AlertDialog.Builder(context).create();
-                        // Setting Dialog Message
-                        alertDialog.setMessage(getResources().getString(R.string.no_network_error));
-                        // Setting OK Button
-                        alertDialog.setButton("Ok", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                finish();
-                            }
-                        });
-                        alertDialog.show();
-                        //Notifications.showGeneralDialog(context,getResources().getString(R.string.no_network_error)).show();
-                    }else{
-                        JsonRequestManager.getInstance(context).loginUserRequest(AppURL.APPLICATION_BASE_URL+AppURL.USER_LOGIN_URL, username,password, requestCallback);
-                    }
-
-                }else{
-                    navigateLogin();
-                }
+                Intent videoIntent = new Intent(SplashActivity.this,IntroActivity.class);
+                startActivity(videoIntent);
+                finish();
 
 
             }
@@ -121,45 +88,5 @@ public class SplashActivity extends Activity {
                 System.exit(1);
                 break;
         }
-    }
-
-    //Response callback for "User Login"
-    private final JsonRequestManager.loginUser requestCallback = new JsonRequestManager.loginUser() {
-
-        @Override
-        public void onSuccess(LoginResponse model) {
-
-            if(model.getStatus().equalsIgnoreCase("success")){
-                SharedPreferences sharedPref =context.getSharedPreferences(Constants.LOGIN_SHARED_PREF, Context.MODE_PRIVATE);
-                SharedPreferences.Editor editor = sharedPref.edit();
-                editor.putString(Constants.LOGIN_ACCESS_TOKEN, model.getToken());
-                editor.commit();
-                AppController.setProfilePreference(context,model.getDetails());
-
-                Intent loggedIntent = new Intent(context, MainActivity.class);
-                startActivity(loggedIntent);
-                finish();
-            }else{
-                navigateLogin();
-            }
-
-
-        }
-
-        @Override
-        public void onError(LoginResponse model) {
-            navigateLogin();
-        }
-
-        @Override
-        public void onError(String status) {
-            navigateLogin();
-        }
-    };
-
-    private void navigateLogin(){
-        Intent mainActivity = new Intent(SplashActivity.this, LoginActivity.class);
-        startActivity(mainActivity);
-        finish();
     }
 }
