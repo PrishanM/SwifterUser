@@ -24,5 +24,5 @@ public class Constants {
     public static final String PROFILE_SWYFTR_NAME = "PROFILE_SWYFTR_NAME";
     public static final String PROFILE_OFFICE = "PROFILE_OFFICE";
 
-    public static final String GOOGLE_MAP_SERVER_KEY = "AIzaSyCPHa2QftYqHjIfj7o5WqRLVs9mpHBSlMk";
+    public static final String GOOGLE_MAP_SERVER_KEY = "AIzaSyCJRX5aIStL86_8H2YjBSlkBTROIkM83fI"; //Outstation
 }

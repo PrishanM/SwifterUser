@@ -146,14 +146,16 @@
                     android:layout_width="70dp"
                     android:padding="6dp"
                     android:layout_height="match_parent"
-                    android:src="@drawable/social_twitter"/>
+                    android:src="@drawable/social_twitter"
+                    android:visibility="gone"/>
 
                 <ImageView
                     android:id="@+id/btnGoogle"
                     android:layout_width="70dp"
                     android:padding="6dp"
                     android:layout_height="match_parent"
-                    android:src="@drawable/social_google"/>
+                    android:src="@drawable/social_google"
+                    android:visibility="gone"/>
             </LinearLayout>
         </LinearLayout>
 

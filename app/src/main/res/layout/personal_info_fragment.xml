@@ -88,54 +88,72 @@
                 android:layout_marginRight="@dimen/activity_horizontal_margin"
                 android:hint="@string/mobile_no"/>
 
-            <EditText
-                android:id="@+id/txtAddress"
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:gravity="center_vertical"
-                android:background="@drawable/tab_bar_border"
-                android:padding="@dimen/space_normal"
-                android:layout_marginLeft="@dimen/activity_horizontal_margin"
-                android:layout_marginTop="@dimen/activity_horizontal_margin"
-                android:layout_marginRight="@dimen/activity_horizontal_margin"
-                android:hint="@string/fixed_address"/>
+                android:gravity="center"
+                android:weightSum="1"
+                android:orientation="horizontal"
+                android:layout_marginTop="@dimen/activity_horizontal_margin">
+
+                <EditText
+                    android:id="@+id/txtAddress"
+                    android:layout_width="0dp"
+                    android:layout_weight="0.85"
+                    android:layout_height="50dp"
+                    android:gravity="center_vertical"
+                    android:background="@drawable/tab_bar_border"
+                    android:padding="@dimen/space_normal"
+                    android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                    android:layout_marginRight="@dimen/activity_horizontal_margin"
+                    android:hint="@string/fixed_address"/>
+
+                <ImageView
+                    android:id="@+id/imgFxdMap"
+                    android:layout_width="0dp"
+                    android:layout_weight="0.15"
+                    android:layout_height="50dp"
+                    android:src="@drawable/ic_map_icon"
+                    android:padding="@dimen/space_normal"
+                    android:layout_marginRight="@dimen/activity_horizontal_margin"/>
 
 
+            </LinearLayout>
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:layout_marginLeft="@dimen/activity_horizontal_margin"
-                android:layout_marginTop="@dimen/activity_horizontal_margin"
-                android:layout_marginRight="@dimen/activity_horizontal_margin"
-                android:text="Add your swyftdresses"
-                android:textSize="@dimen/font_large"/>
-
-            <EditText
-                android:id="@+id/txtSwyftName"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:gravity="center_vertical"
-                android:inputType="textEmailAddress"
-                android:background="@drawable/tab_bar_border"
-                android:padding="@dimen/space_normal"
-                android:layout_marginLeft="@dimen/activity_horizontal_margin"
-                android:layout_marginTop="@dimen/activity_horizontal_margin"
-                android:layout_marginRight="@dimen/activity_horizontal_margin"
-                android:hint="@string/swyftdress"/>
-
-            <EditText
-                android:id="@+id/txtSwyftAddress"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:gravity="center_vertical"
-                android:background="@drawable/tab_bar_border"
-                android:padding="@dimen/space_normal"
-                android:layout_marginLeft="@dimen/activity_horizontal_margin"
-                android:layout_marginTop="@dimen/activity_horizontal_margin"
-                android:layout_marginRight="@dimen/activity_horizontal_margin"
-                android:hint="@string/address"/>
+                android:gravity="center"
+                android:weightSum="1"
+                android:orientation="horizontal"
+                android:layout_marginTop="@dimen/activity_horizontal_margin">
+
+                <EditText
+                    android:id="@+id/txtSwyftAddress"
+                    android:layout_width="0dp"
+                    android:layout_weight="0.85"
+                    android:layout_height="50dp"
+                    android:gravity="center_vertical"
+                    android:background="@drawable/tab_bar_border"
+                    android:padding="@dimen/space_normal"
+                    android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                    android:layout_marginRight="@dimen/activity_horizontal_margin"
+                    android:hint="Office Address"/>
+
+                <ImageView
+                    android:id="@+id/imgOfcMap"
+                    android:layout_width="0dp"
+                    android:layout_weight="0.15"
+                    android:layout_height="50dp"
+                    android:src="@drawable/ic_map_icon"
+                    android:padding="@dimen/space_normal"
+                    android:layout_marginRight="@dimen/activity_horizontal_margin"/>
+
+
+            </LinearLayout>
+
+
 
             <LinearLayout
                 android:layout_width="match_parent"

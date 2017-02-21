@@ -1,27 +1,37 @@
 package com.evensel.swyftr.profile;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
+import android.location.Location;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.android.volley.NetworkResponse;
@@ -42,6 +52,15 @@ import com.evensel.swyftr.util.ValidatorUtil;
 import com.evensel.swyftr.util.VolleyMultipartRequest;
 import com.evensel.swyftr.util.VolleySingleton;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapsInitializer;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.mikhaellopez.circularimageview.CircularImageView;
 
 import org.json.JSONException;
@@ -52,31 +71,39 @@ import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
 /**
  * Created by Prishan Maduka on 2/12/2017.
  */
-public class PersonalInfoFragment extends Fragment {
+public class PersonalInfoFragment extends Fragment implements OnMapReadyCallback, View.OnClickListener {
 
     private static final int CAMERA_CAPTURE_IMAGE_REQUEST_CODE = 100;
     private static final int PICK_IMAGE_REQUEST = 120;
+    private static final int LOCATION_PERMISSION_REQUEST_CODE = 140;
     public static final int MEDIA_TYPE_IMAGE = 1;
 
     private CircularImageView circularImageView;
     private Uri fileUri;
     private View layout;
     private LayoutInflater inflate;
-    private SharedPreferences profilePref,sharedPref;
-    private EditText txtFirstName,mail,mobileNumber,fixedAddress,swyftrName,officeAddress;
+    private SharedPreferences profilePref, sharedPref;
+    private EditText txtFirstName, mail, mobileNumber, fixedAddress, officeAddress;
     private TextView name;
+    private ImageView imgMapFixedAddress, imgMapOfficeAddress;
     private Button btnSave;
+    private GoogleMap googleMapFixed,googleMapOffice;
 
     private ProgressDialog progress;
 
     private String token;
-
+    private double currentLatitude, currentLongitude;
+    private SupportMapFragment mapFragment;
+    private FragmentManager myFragmentManager;
+    private LatLng tapFixedAddress,tapOfficeAddress;
+    private boolean isFixedAddress = true;
 
 
     public PersonalInfoFragment() {
@@ -98,56 +125,34 @@ public class PersonalInfoFragment extends Fragment {
         token = sharedPref.getString(Constants.LOGIN_ACCESS_TOKEN, "");
 
         inflate = inflater;
-        layout = inflate.inflate(R.layout.custom_toast_layout,(ViewGroup) rootView.findViewById(R.id.toast_layout_root));
-        circularImageView = (CircularImageView)rootView.findViewById(R.id.imgProfilePic);
+        layout = inflate.inflate(R.layout.custom_toast_layout, (ViewGroup) rootView.findViewById(R.id.toast_layout_root));
+        circularImageView = (CircularImageView) rootView.findViewById(R.id.imgProfilePic);
 
-        txtFirstName = (EditText)rootView.findViewById(R.id.txtFullName);
-        mail = (EditText)rootView.findViewById(R.id.txtEmailAddress);
-        mobileNumber = (EditText)rootView.findViewById(R.id.txtMobileNumber);
-        fixedAddress = (EditText)rootView.findViewById(R.id.txtAddress);
-        swyftrName = (EditText)rootView.findViewById(R.id.txtSwyftName);
-        officeAddress = (EditText)rootView.findViewById(R.id.txtSwyftAddress);
+        txtFirstName = (EditText) rootView.findViewById(R.id.txtFullName);
+        mail = (EditText) rootView.findViewById(R.id.txtEmailAddress);
+        mobileNumber = (EditText) rootView.findViewById(R.id.txtMobileNumber);
+        fixedAddress = (EditText) rootView.findViewById(R.id.txtAddress);
+        officeAddress = (EditText) rootView.findViewById(R.id.txtSwyftAddress);
         name = (TextView) rootView.findViewById(R.id.name);
+        imgMapFixedAddress = (ImageView) rootView.findViewById(R.id.imgFxdMap);
+        imgMapOfficeAddress = (ImageView) rootView.findViewById(R.id.imgOfcMap);
 
-        txtFirstName.setText(profilePref.getString(Constants.PROFILE_NAME,""));
-        mail.setText(profilePref.getString(Constants.PROFILE_EMAIL,""));
-        mobileNumber.setText(profilePref.getString(Constants.PROFILE_PHONE,""));
-        fixedAddress.setText(profilePref.getString(Constants.PROFILE_ADDRESS,""));
-        swyftrName.setText(profilePref.getString(Constants.PROFILE_SWYFTR_NAME,""));
-        officeAddress.setText(profilePref.getString(Constants.PROFILE_OFFICE,""));
-        name.setText(profilePref.getString(Constants.PROFILE_NAME,""));
+        txtFirstName.setText(profilePref.getString(Constants.PROFILE_NAME, ""));
+        mail.setText(profilePref.getString(Constants.PROFILE_EMAIL, ""));
+        mobileNumber.setText(profilePref.getString(Constants.PROFILE_PHONE, ""));
+        fixedAddress.setText(profilePref.getString(Constants.PROFILE_ADDRESS, ""));
+        officeAddress.setText(profilePref.getString(Constants.PROFILE_OFFICE, ""));
+        name.setText(profilePref.getString(Constants.PROFILE_NAME, ""));
+        btnSave = (Button) rootView.findViewById(R.id.btnSave);
 
-
-
-        btnSave = (Button)rootView.findViewById(R.id.btnSave);
-
-        btnSave.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(txtFirstName.getText().toString().isEmpty()){
-                    Notifications.showToastMessage(layout,getActivity(),"Sorry!!! Full Name cannot be empty.").show();
-                }else if(mail.getText().toString().isEmpty()){
-                    Notifications.showToastMessage(layout,getActivity(),"Sorry!!! Email cannot be empty.").show();
-                }else if(!ValidatorUtil.isValidEmailAddress(mail.getText().toString())){
-                    Notifications.showToastMessage(layout,getActivity(),"Sorry!!! Invalid email address.").show();
-                }else if(mobileNumber.getText().toString().isEmpty()){
-                    Notifications.showToastMessage(layout,getActivity(),"Sorry!!! Mobile number cannot be empty.").show();
-                }else if(fixedAddress.getText().toString().isEmpty()){
-                    Notifications.showToastMessage(layout,getActivity(),"Sorry!!! Fixed address cannot be empty.").show();
-                }else if(officeAddress.getText().toString().isEmpty()){
-                    Notifications.showToastMessage(layout,getActivity(),"Sorry!!! Office address cannot be empty.").show();
-                }else{
-                    progress = ProgressDialog.show(getActivity(), null,
-                            "Creating user...", true);
-                    JsonRequestManager.getInstance(getActivity()).updateUserRequest(AppURL.APPLICATION_BASE_URL+AppURL.USER_UPDATE_URL, token,txtFirstName.getText().toString(),mail.getText().toString(),mobileNumber.getText().toString(),fixedAddress.getText().toString(),officeAddress.getText().toString(), requestCallback);
-                }
-            }
-        });
+        btnSave.setOnClickListener(this);
+        imgMapFixedAddress.setOnClickListener(this);
+        imgMapOfficeAddress.setOnClickListener(this);
 
         String imageUrl = profilePref.getString(Constants.PROFILE_PIC_URL, "");
-        String imageUri = profilePref.getString(Constants.PROFILE_PIC,"");
+        String imageUri = profilePref.getString(Constants.PROFILE_PIC, "");
 
-        if(!imageUrl.isEmpty()){
+        if (!imageUrl.isEmpty()) {
             ImageLoader imageLoader = AppController.getInstance().getImageLoader();
             imageLoader.get(imageUrl, new ImageLoader.ImageListener() {
 
@@ -159,20 +164,20 @@ public class PersonalInfoFragment extends Fragment {
                 @Override
                 public void onResponse(ImageLoader.ImageContainer response, boolean arg1) {
                     if (response.getBitmap() != null) {
-                        if(response.getBitmap().getWidth()>response.getBitmap().getHeight()){
+                        if (response.getBitmap().getWidth() > response.getBitmap().getHeight()) {
                             Matrix matrix = new Matrix();
                             matrix.postRotate(90);
                             Bitmap rotatedBitmap = Bitmap.createBitmap(response.getBitmap(), 0, 0, response.getBitmap().getWidth(),
                                     response.getBitmap().getHeight(), matrix, true);
                             circularImageView.setImageBitmap(rotatedBitmap);
-                        }else{
+                        } else {
                             circularImageView.setImageBitmap(response.getBitmap());
                         }
 
                     }
                 }
             });
-        }else if(!imageUri.isEmpty()){
+        } else if (!imageUri.isEmpty()) {
             Matrix matrix = new Matrix();
             matrix.postRotate(AppController.getImageOrientation(imageUri));
             Bitmap rotatedBitmap = Bitmap.createBitmap(profileImage(imageUri), 0, 0, profileImage(imageUri).getWidth(),
@@ -189,6 +194,19 @@ public class PersonalInfoFragment extends Fragment {
 
         // Inflate the layout for this fragment
         return rootView;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode){
+            case 1100:
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                }
+                break;
+            default:
+                break;
+        }
     }
 
     @Override
@@ -501,10 +519,151 @@ public class PersonalInfoFragment extends Fragment {
         editor.putString(Constants.PROFILE_EMAIL, mail.getText().toString());
         editor.putString(Constants.PROFILE_ADDRESS, fixedAddress.getText().toString());
         editor.putString(Constants.PROFILE_PHONE, mobileNumber.getText().toString());
-        editor.putString(Constants.PROFILE_SWYFTR_NAME, swyftrName.getText().toString());
         editor.putString(Constants.PROFILE_OFFICE, officeAddress.getText().toString());
         editor.commit();
 
         name.setText(txtFirstName.getText().toString());
+    }
+
+
+    @Override
+    public void onClick(View v) {
+        if(v.getId()==R.id.btnSave){
+            if (txtFirstName.getText().toString().isEmpty()) {
+                Notifications.showToastMessage(layout, getActivity(), "Sorry!!! Full Name cannot be empty.").show();
+            } else if (mail.getText().toString().isEmpty()) {
+                Notifications.showToastMessage(layout, getActivity(), "Sorry!!! Email cannot be empty.").show();
+            } else if (!ValidatorUtil.isValidEmailAddress(mail.getText().toString())) {
+                Notifications.showToastMessage(layout, getActivity(), "Sorry!!! Invalid email address.").show();
+            } else if (mobileNumber.getText().toString().isEmpty()) {
+                Notifications.showToastMessage(layout, getActivity(), "Sorry!!! Mobile number cannot be empty.").show();
+            } else if (fixedAddress.getText().toString().isEmpty()) {
+                Notifications.showToastMessage(layout, getActivity(), "Sorry!!! Fixed address cannot be empty.").show();
+            } else if (officeAddress.getText().toString().isEmpty()) {
+                Notifications.showToastMessage(layout, getActivity(), "Sorry!!! Office address cannot be empty.").show();
+            } else {
+                progress = ProgressDialog.show(getActivity(), null,
+                        "Creating user...", true);
+                JsonRequestManager.getInstance(getActivity()).updateUserRequest(AppURL.APPLICATION_BASE_URL + AppURL.USER_UPDATE_URL, token, txtFirstName.getText().toString(), mail.getText().toString(), mobileNumber.getText().toString(), fixedAddress.getText().toString(), officeAddress.getText().toString(), requestCallback);
+            }
+        }else if(v.getId()==R.id.imgFxdMap || v.getId()==R.id.imgOfcMap){
+
+            if (v.getId()==R.id.imgFxdMap)
+                isFixedAddress = true;
+            else
+                isFixedAddress = false;
+
+            final Dialog dialog1 = new Dialog(getActivity());
+            dialog1.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            dialog1.setContentView(R.layout.custom_map);
+            dialog1.show();
+            setMap();
+
+            dialog1.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                @Override
+                public void onDismiss(DialogInterface dialog) {
+                    if(mapFragment.getView()!=null){
+                        myFragmentManager.beginTransaction().remove(mapFragment).commit();
+
+                    }
+                }
+            });
+
+            Button btnOk = (Button)dialog1.findViewById(R.id.btnOk);
+            Button btnCancel = (Button)dialog1.findViewById(R.id.btnCancel);
+            btnOk.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                }
+            });
+
+            btnCancel.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialog1.dismiss();
+                }
+            });
+
+
+
+        }/*else if(v.getId()==R.id.imgOfcMap){
+
+        }*/
+    }
+
+    private void setMap() {
+        myFragmentManager = getActivity().getSupportFragmentManager();
+        mapFragment = (SupportMapFragment) myFragmentManager
+                .findFragmentById(R.id.mapView);
+        MapsInitializer.initialize(getActivity());
+        mapFragment.getMapAsync(this);
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+
+        if(isFixedAddress){
+            this.googleMapFixed = googleMap;
+            this.googleMapFixed.getUiSettings().setZoomControlsEnabled(true);
+            this.googleMapFixed.getUiSettings().setMyLocationButtonEnabled(true);
+            this.googleMapFixed.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+                @Override
+                public void onMapClick(LatLng latLng) {
+                    tapFixedAddress = latLng;
+                }
+            });
+        }else{
+            this.googleMapOffice = googleMap;
+            this.googleMapOffice.getUiSettings().setZoomControlsEnabled(true);
+            this.googleMapOffice.getUiSettings().setMyLocationButtonEnabled(true);
+            this.googleMapOffice.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+                @Override
+                public void onMapClick(LatLng latLng) {
+                    tapOfficeAddress = latLng;
+                }
+            });
+        }
+
+        enableLocation(googleMap);
+
+
+    }
+
+    private void enableLocation(GoogleMap googleMap) {
+        if (googleMap != null) {
+            if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+                requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION},LOCATION_PERMISSION_REQUEST_CODE);
+                return;
+            }else{
+                googleMap.setMyLocationEnabled(true);
+                LocationManager lm = (LocationManager)getActivity().getSystemService(Context.LOCATION_SERVICE);
+                List<String> providers = lm.getProviders(true);
+                Location l;
+
+                for (int i = 0; i < providers.size(); i++) {
+                    l = lm.getLastKnownLocation(providers.get(i));
+                    if (l != null) {
+                        currentLatitude = l.getLatitude();
+                        currentLongitude = l.getLongitude();
+                        break;
+                    }
+                }
+                MarkerOptions marker = new MarkerOptions().position(
+                        new LatLng(currentLatitude, currentLongitude)).title("My Location").snippet("");
+                marker.icon(BitmapDescriptorFactory
+                        .defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
+                CameraPosition cameraPosition = new CameraPosition.Builder()
+                        .target(new LatLng(currentLatitude, currentLongitude)).zoom(15).build();
+
+                googleMap.animateCamera(CameraUpdateFactory
+                        .newCameraPosition(cameraPosition));
+
+                googleMap.addMarker(marker);
+            }
+
+        }
+
     }
 }

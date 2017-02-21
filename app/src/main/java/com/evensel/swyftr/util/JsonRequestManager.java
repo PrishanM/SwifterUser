@@ -2,7 +2,6 @@ package com.evensel.swyftr.util;
 
 import android.content.Context;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -16,7 +15,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.json.JSONObject;
 
 import java.util.HashMap;
-import java.util.Map;
 
 /**
  * @author prishanm 02/14/2017
@@ -515,10 +513,10 @@ public class JsonRequestManager {
 		//Log.d("test Request", image);
 		String finalUrl = "http://api.swyftr.com/api/v1/password/reset";
 		HashMap<String, String> params = new HashMap<>();
-		params.put("email",email);
+		params.put("email","prishanmaduka@outlook.com");
 		params.put("user","user");
-		params.put("password",password);
-		params.put("password_confirmation",conPassword);
+		params.put("password","Prishan@1234");
+		params.put("password_confirmation","Prishan@1234");
 
 		JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST,
 				finalUrl, new JSONObject(params),
@@ -548,19 +546,7 @@ public class JsonRequestManager {
 			public void onErrorResponse(VolleyError error) {
 				callback.onError(errorResponse(error.networkResponse.data,HttpHeaderParser.parseCharset(error.networkResponse.headers)));
 			}
-		}){
-
-			/**
-			 * Passing some request headers
-			 * */
-			@Override
-			public Map<String, String> getHeaders() throws AuthFailureError {
-				HashMap<String, String> headers = new HashMap<>();
-				headers.put("Content-Type", "application/json;charset=utf-8");
-				return headers;
-			}
-
-		};
+		});
 
 		jsonObjReq.setRetryPolicy(new DefaultRetryPolicy(30000,
 				DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
