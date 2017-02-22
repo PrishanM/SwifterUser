@@ -85,13 +85,13 @@
 
         <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id"/>
 
-        <meta-data
-            android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyCJRX5aIStL86_8H2YjBSlkBTROIkM83fI" />
-
         <!--<meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyBFQyeiuCQh-sxOlTmjn1A47ATn7280pCQ" />-->
+            android:value="AIzaSyCJRX5aIStL86_8H2YjBSlkBTROIkM83fI" />-->
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyBFQyeiuCQh-sxOlTmjn1A47ATn7280pCQ" />
 
     </application>
 

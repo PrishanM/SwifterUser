@@ -16,7 +16,6 @@ import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
 import android.location.Location;
 import android.location.LocationManager;
-import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -160,7 +159,9 @@ public class PersonalInfoFragment extends Fragment implements OnMapReadyCallback
 
         if (!imageUrl.isEmpty()) {
 
-            imageLoader.get(imageUrl, new ImageLoader.ImageListener() {
+            int time = (int) (System.currentTimeMillis());//gets the current time in milliseconds
+            String myUrl = imageUrl+"?timestamp=" + String.valueOf(time);
+            imageLoader.get(myUrl, new ImageLoader.ImageListener() {
 
                 @Override
                 public void onErrorResponse(VolleyError error) {
@@ -353,7 +354,7 @@ public class PersonalInfoFragment extends Fragment implements OnMapReadyCallback
 
     private Bitmap profileImage(String path){
         BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inSampleSize = 2;
+        options.inSampleSize = 8;
         Bitmap realPhoto = BitmapFactory.decodeFile(path, options);
         return realPhoto;
     }
@@ -408,6 +409,7 @@ public class PersonalInfoFragment extends Fragment implements OnMapReadyCallback
                         editor.commit();
 
                         Intent intent = getActivity().getIntent();
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                         intent.putExtra("FRAGMENT",4);
                         getActivity().finish();
                         startActivity(intent);
@@ -688,32 +690,10 @@ public class PersonalInfoFragment extends Fragment implements OnMapReadyCallback
                 .title("My Address"));
     }
 
-    public int getCameraPhotoOrientation(Context context, Uri imageUri, String imagePath){
-        int rotate = 0;
-        try {
-            context.getContentResolver().notifyChange(imageUri, null);
-            File imageFile = new File(imagePath);
 
-            ExifInterface exif = new ExifInterface(imageFile.getAbsolutePath());
-            int orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
-
-            switch (orientation) {
-                case ExifInterface.ORIENTATION_ROTATE_270:
-                    rotate = 270;
-                    break;
-                case ExifInterface.ORIENTATION_ROTATE_180:
-                    rotate = 180;
-                    break;
-                case ExifInterface.ORIENTATION_ROTATE_90:
-                    rotate = 90;
-                    break;
-            }
-
-            Log.i("RotateImage", "Exif orientation: " + orientation);
-            Log.i("RotateImage", "Rotate value: " + rotate);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return rotate;
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        AppController.getInstance().getRequestQueue().getCache().clear();
     }
 }

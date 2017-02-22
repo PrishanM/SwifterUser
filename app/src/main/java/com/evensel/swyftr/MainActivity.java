@@ -68,7 +68,9 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 
         if(!imageUrl.isEmpty()){
             ImageLoader imageLoader = AppController.getInstance().getImageLoader();
-            imageLoader.get(imageUrl, new ImageLoader.ImageListener() {
+            int time = (int) (System.currentTimeMillis());//gets the current time in milliseconds
+            String myUrl = imageUrl+"?timestamp=" + String.valueOf(time);
+            imageLoader.get(myUrl, new ImageLoader.ImageListener() {
 
                 @Override
                 public void onErrorResponse(VolleyError error) {
@@ -101,7 +103,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 
     private Bitmap profileImage(String path){
         BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inSampleSize = 2;
+        options.inSampleSize = 8;
         Bitmap realPhoto = BitmapFactory.decodeFile(path, options);
         return realPhoto;
     }
@@ -192,5 +194,11 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         fragmentTransaction.replace(R.id.container_body, fragment);
         fragmentTransaction.commit();
         getSupportActionBar().setTitle(title);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        AppController.getInstance().getRequestQueue().getCache().clear();
     }
 }

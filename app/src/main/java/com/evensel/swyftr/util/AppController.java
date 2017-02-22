@@ -56,7 +56,7 @@ public class AppController extends Application {
         return this.mImageLoader;
     }
  
-    private RequestQueue getRequestQueue() {
+    public RequestQueue getRequestQueue() {
         if (mRequestQueue == null) {
             mRequestQueue = Volley.newRequestQueue(getApplicationContext());
         }
