@@ -24,6 +24,12 @@
             app:civ_border_color="@color/colorAccent"
             app:civ_border_width="2dp"/>
 
+        <ImageView
+            android:visibility="gone"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:id="@+id/imgView"/>
+
         <TextView
             android:id="@+id/name"
             android:layout_width="match_parent"
@@ -106,7 +112,6 @@
                     android:background="@drawable/tab_bar_border"
                     android:padding="@dimen/space_normal"
                     android:layout_marginLeft="@dimen/activity_horizontal_margin"
-                    android:layout_marginRight="@dimen/activity_horizontal_margin"
                     android:hint="@string/fixed_address"/>
 
                 <ImageView
@@ -114,8 +119,9 @@
                     android:layout_width="0dp"
                     android:layout_weight="0.15"
                     android:layout_height="50dp"
-                    android:src="@drawable/ic_map_icon"
-                    android:padding="4dp"
+                    android:background="@drawable/tab_bar_border"
+                    android:src="@drawable/gps"
+                    android:padding="6dp"
                     android:layout_marginRight="@dimen/activity_horizontal_margin"/>
 
 
@@ -138,7 +144,6 @@
                     android:background="@drawable/tab_bar_border"
                     android:padding="@dimen/space_normal"
                     android:layout_marginLeft="@dimen/activity_horizontal_margin"
-                    android:layout_marginRight="@dimen/activity_horizontal_margin"
                     android:hint="Office Address"/>
 
                 <ImageView
@@ -146,8 +151,9 @@
                     android:layout_width="0dp"
                     android:layout_weight="0.15"
                     android:layout_height="50dp"
-                    android:src="@drawable/ic_map_icon"
-                    android:padding="4dp"
+                    android:background="@drawable/tab_bar_border"
+                    android:src="@drawable/gps"
+                    android:padding="6dp"
                     android:layout_marginRight="@dimen/activity_horizontal_margin"/>
 
 

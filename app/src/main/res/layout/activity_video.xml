@@ -3,16 +3,26 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorAccent"
+    android:background="@android:color/black"
     android:gravity="bottom|right"
     android:padding="@dimen/activity_vertical_margin">
 
-    <TextView
+    <Button
+        android:id="@+id/txtVideo"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        style="@style/AppButtonHollowOnly"
+        android:layout_marginLeft="@dimen/space_large"
+        android:layout_marginRight="@dimen/space_large"
+        android:textColor="@color/colorAccent"
+        android:text="Skip Video"/>
+
+    <!--<TextView
         android:id="@+id/txtVideo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Skip Video"
         android:textColor="@android:color/white"
-        android:padding="@dimen/activity_horizontal_margin"/>
+        android:padding="@dimen/activity_horizontal_margin"/>-->
 
 </LinearLayout>

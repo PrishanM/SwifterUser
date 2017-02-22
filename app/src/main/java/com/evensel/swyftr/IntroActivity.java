@@ -10,7 +10,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
-import android.widget.TextView;
+import android.widget.Button;
 
 import com.evensel.swyftr.authentication.LoginActivity;
 import com.evensel.swyftr.util.AppController;
@@ -33,7 +33,7 @@ public class IntroActivity extends Activity {
         setContentView(R.layout.activity_video);
 
         context = this;
-        TextView txtVideo = (TextView)findViewById(R.id.txtVideo);
+        Button txtVideo = (Button)findViewById(R.id.txtVideo);
         startHandler();
         txtVideo.setOnClickListener(new View.OnClickListener() {
             @Override

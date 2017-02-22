@@ -13,8 +13,10 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
+import android.graphics.drawable.BitmapDrawable;
 import android.location.Location;
 import android.location.LocationManager;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -92,7 +94,7 @@ public class PersonalInfoFragment extends Fragment implements OnMapReadyCallback
     private SharedPreferences profilePref, sharedPref;
     private EditText txtFirstName, mail, mobileNumber, fixedAddress, officeAddress;
     private TextView name;
-    private ImageView imgMapFixedAddress, imgMapOfficeAddress;
+    private ImageView imgMapFixedAddress, imgMapOfficeAddress, hiddenImg;
     private Button btnSave;
     private GoogleMap googleMapFixed,googleMapOffice;
 
@@ -104,6 +106,7 @@ public class PersonalInfoFragment extends Fragment implements OnMapReadyCallback
     private FragmentManager myFragmentManager;
     private LatLng tapFixedAddress,tapOfficeAddress;
     private boolean isFixedAddress = true;
+    private ImageLoader imageLoader;
 
 
     public PersonalInfoFragment() {
@@ -136,6 +139,7 @@ public class PersonalInfoFragment extends Fragment implements OnMapReadyCallback
         name = (TextView) rootView.findViewById(R.id.name);
         imgMapFixedAddress = (ImageView) rootView.findViewById(R.id.imgFxdMap);
         imgMapOfficeAddress = (ImageView) rootView.findViewById(R.id.imgOfcMap);
+        hiddenImg = (ImageView) rootView.findViewById(R.id.imgView);
 
         txtFirstName.setText(profilePref.getString(Constants.PROFILE_NAME, ""));
         mail.setText(profilePref.getString(Constants.PROFILE_EMAIL, ""));
@@ -145,6 +149,8 @@ public class PersonalInfoFragment extends Fragment implements OnMapReadyCallback
         name.setText(profilePref.getString(Constants.PROFILE_NAME, ""));
         btnSave = (Button) rootView.findViewById(R.id.btnSave);
 
+        imageLoader = AppController.getInstance().getImageLoader();
+
         btnSave.setOnClickListener(this);
         imgMapFixedAddress.setOnClickListener(this);
         imgMapOfficeAddress.setOnClickListener(this);
@@ -153,7 +159,7 @@ public class PersonalInfoFragment extends Fragment implements OnMapReadyCallback
         String imageUri = profilePref.getString(Constants.PROFILE_PIC, "");
 
         if (!imageUrl.isEmpty()) {
-            ImageLoader imageLoader = AppController.getInstance().getImageLoader();
+
             imageLoader.get(imageUrl, new ImageLoader.ImageListener() {
 
                 @Override
@@ -163,18 +169,7 @@ public class PersonalInfoFragment extends Fragment implements OnMapReadyCallback
 
                 @Override
                 public void onResponse(ImageLoader.ImageContainer response, boolean arg1) {
-                    if (response.getBitmap() != null) {
-                        if (response.getBitmap().getWidth() > response.getBitmap().getHeight()) {
-                            Matrix matrix = new Matrix();
-                            matrix.postRotate(90);
-                            Bitmap rotatedBitmap = Bitmap.createBitmap(response.getBitmap(), 0, 0, response.getBitmap().getWidth(),
-                                    response.getBitmap().getHeight(), matrix, true);
-                            circularImageView.setImageBitmap(rotatedBitmap);
-                        } else {
-                            circularImageView.setImageBitmap(response.getBitmap());
-                        }
-
-                    }
+                    circularImageView.setImageBitmap(response.getBitmap());
                 }
             });
         } else if (!imageUri.isEmpty()) {
@@ -305,6 +300,16 @@ public class PersonalInfoFragment extends Fragment implements OnMapReadyCallback
     public void onActivityResult(int requestCode, int resultCode, final Intent data) {
         if (requestCode == CAMERA_CAPTURE_IMAGE_REQUEST_CODE) {
             if (resultCode == -1) {
+
+                //int rotation = getCameraPhotoOrientation(getActivity(),fileUri,fileUri.getPath());
+                Matrix matrix = new Matrix();
+                matrix.postRotate(AppController.getImageOrientation(fileUri.getPath()));
+                Bitmap resizedBitmap = Bitmap.createBitmap(profileImage(fileUri.getPath()), 0, 0,
+                        profileImage(fileUri.getPath()).getWidth(), profileImage(fileUri.getPath()).getHeight(), matrix, true);
+                hiddenImg.setImageBitmap(resizedBitmap);
+                hiddenImg.setDrawingCacheEnabled(true);
+                hiddenImg.buildDrawingCache();
+
                 AlertDialog.Builder builderSingle = new AlertDialog.Builder(getActivity());
                 builderSingle.setMessage("Are you sure want to upload image?");
                 builderSingle.setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -323,6 +328,8 @@ public class PersonalInfoFragment extends Fragment implements OnMapReadyCallback
             }
         }else if (requestCode == PICK_IMAGE_REQUEST){
             if (resultCode == -1) {
+
+
                 AlertDialog.Builder builderSingle = new AlertDialog.Builder(getActivity());
                 builderSingle.setMessage("Are you sure want to upload image?");
                 builderSingle.setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -358,9 +365,17 @@ public class PersonalInfoFragment extends Fragment implements OnMapReadyCallback
 
         String url = AppURL.APPLICATION_BASE_URL+AppURL.FILE_UPLOAD_URL+"?token="+token;
 
-        final Bitmap photo = profileImage(fileUri.getPath());
+        final Bitmap tmpImage;
+        if(isFromCamera){
+            BitmapDrawable drawable = (BitmapDrawable)hiddenImg.getDrawable();
+            tmpImage = drawable.getBitmap();
+        }else{
+            tmpImage = profileImage(fileUri.getPath());
+        }
+
+        //final Bitmap photo = profileImage(fileUri.getPath());
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        photo.compress(Bitmap.CompressFormat.JPEG, 70, byteArrayOutputStream);
+        tmpImage.compress(Bitmap.CompressFormat.JPEG, 70, byteArrayOutputStream);
         final byte[] byteArray = byteArrayOutputStream.toByteArray();
 
 
@@ -377,7 +392,8 @@ public class PersonalInfoFragment extends Fragment implements OnMapReadyCallback
                     if(result!=null){
                         ResponseModel responseModel = mapper.readValue(result.toString(), ResponseModel.class);
                         Notifications.showToastMessage(layout,getActivity(),responseModel.getMessage()).show();
-                        if(isFromCamera){
+                        circularImageView.setImageBitmap(tmpImage);
+                        /*if(isFromCamera){
                             Matrix matrix = new Matrix();
                             matrix.postRotate(90);
                             Bitmap resizedBitmap = Bitmap.createBitmap(photo, 0, 0,
@@ -385,7 +401,7 @@ public class PersonalInfoFragment extends Fragment implements OnMapReadyCallback
                             circularImageView.setImageBitmap(resizedBitmap);
                         }else{
                             circularImageView.setImageBitmap(photo);
-                        }
+                        }*/
                         SharedPreferences.Editor editor = profilePref.edit();
                         editor.putString(Constants.PROFILE_PIC, fileUri.getPath().toString());
                         editor.putString(Constants.PROFILE_PIC_URL, "");
@@ -670,5 +686,34 @@ public class PersonalInfoFragment extends Fragment implements OnMapReadyCallback
         map.addMarker(new MarkerOptions()
                 .position(latLng)
                 .title("My Address"));
+    }
+
+    public int getCameraPhotoOrientation(Context context, Uri imageUri, String imagePath){
+        int rotate = 0;
+        try {
+            context.getContentResolver().notifyChange(imageUri, null);
+            File imageFile = new File(imagePath);
+
+            ExifInterface exif = new ExifInterface(imageFile.getAbsolutePath());
+            int orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
+
+            switch (orientation) {
+                case ExifInterface.ORIENTATION_ROTATE_270:
+                    rotate = 270;
+                    break;
+                case ExifInterface.ORIENTATION_ROTATE_180:
+                    rotate = 180;
+                    break;
+                case ExifInterface.ORIENTATION_ROTATE_90:
+                    rotate = 90;
+                    break;
+            }
+
+            Log.i("RotateImage", "Exif orientation: " + orientation);
+            Log.i("RotateImage", "Rotate value: " + rotate);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return rotate;
     }
 }

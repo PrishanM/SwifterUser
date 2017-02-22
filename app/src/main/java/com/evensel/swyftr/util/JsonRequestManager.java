@@ -392,15 +392,15 @@ public class JsonRequestManager {
 
 	}
 
-	public void resetPasswordRequest(String url,String email,String password,
+	public void resetPasswordRequest(String url,String password,
 										 final resetPassword callback) {
 
 		//Log.d("test Request", image);
 		String finalUrl = url;
 		HashMap<String, String> params = new HashMap<>();
-		params.put("email",email);
-		params.put("password",password);
-		params.put("password_confirmation",password);
+		params.put("email","prishanmaduka@outlook.com");
+		params.put("password","Prishan123");
+		params.put("password_confirmation","Prishan123");
 		params.put("user","user");
 
 		JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST,
@@ -442,6 +442,8 @@ public class JsonRequestManager {
 				tag_json_arry);
 
 	}
+
+
 
 	/******************************************************************************************************************************************/
 
@@ -494,69 +496,7 @@ public class JsonRequestManager {
 		return responseModel;
 	}
 
-	/**
-	 * Validate reset code
-	 **/
-	public interface test{
-		void onSuccess(ResponseModel model);
 
-		void onError(String status);
-
-		void onError(ResponseModel model);
-
-
-	}
-
-	public void testRequest(String url,String email,String password,String conPassword,
-										 final test callback) {
-
-		//Log.d("test Request", image);
-		String finalUrl = "http://api.swyftr.com/api/v1/password/reset";
-		HashMap<String, String> params = new HashMap<>();
-		params.put("email","prishanmaduka@outlook.com");
-		params.put("user","user");
-		params.put("password","Prishan@1234");
-		params.put("password_confirmation","Prishan@1234");
-
-		JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST,
-				finalUrl, new JSONObject(params),
-				new Response.Listener<JSONObject>() {
-
-					@Override
-					public void onResponse(JSONObject response) {
-
-						ObjectMapper mapper = new ObjectMapper();
-
-						try {
-							if(response!=null){
-								ResponseModel responseModel = mapper.readValue(response.toString(), ResponseModel.class);
-								callback.onSuccess(responseModel);
-							}else{
-								callback.onError("Error occured");
-							}
-
-						} catch (Exception e) {
-							e.printStackTrace();
-							callback.onError("Error occured");
-						}
-					}
-				}, new Response.ErrorListener() {
-
-			@Override
-			public void onErrorResponse(VolleyError error) {
-				callback.onError(errorResponse(error.networkResponse.data,HttpHeaderParser.parseCharset(error.networkResponse.headers)));
-			}
-		});
-
-		jsonObjReq.setRetryPolicy(new DefaultRetryPolicy(30000,
-				DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-				DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-
-		// Adding request to request queue
-		AppController.getInstance().addToRequestQueue(jsonObjReq,
-				tag_json_arry);
-
-	}
 
 	/******************************************************************************************************************************************/
 
