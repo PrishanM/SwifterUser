@@ -24,6 +24,7 @@ import com.android.volley.toolbox.ImageLoader;
 import com.evensel.swyftr.authentication.LoginActivity;
 import com.evensel.swyftr.deliveries.ActiveDeliveriesFragment;
 import com.evensel.swyftr.profile.ProfileFragment;
+import com.evensel.swyftr.purchase.PurchaseFragment;
 import com.evensel.swyftr.util.AppController;
 import com.evensel.swyftr.util.Constants;
 import com.mikhaellopez.circularimageview.CircularImageView;
@@ -126,28 +127,33 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         String title = getString(R.string.app_name);
         switch (position) {
             case 0:
+                title = getString(R.string.nav_purchase);
+                fragment = new PurchaseFragment();
+
+                break;
+            case 1:
                 title = getString(R.string.nav_active_deliveries);
                 fragment = new ActiveDeliveriesFragment();
 
                 break;
-            case 1:
+            case 2:
                 title = getString(R.string.nav_delivery_history);
                 fragment = new ActiveDeliveriesFragment();
                 break;
-            case 2:
+            case 3:
                 title = getString(R.string.nav_invite_friends);
                 fragment = new ActiveDeliveriesFragment();
 
                 break;
-            case 3:
+            case 4:
                 title = getString(R.string.nav_schedule_basket);
                 fragment = new ActiveDeliveriesFragment();
                 break;
-            case 4:
+            case 5:
                 title = getString(R.string.nav_profile_settings);
                 fragment = new ProfileFragment();
                 break;
-            case 5:
+            case 6:
                 AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this).create();
                 alertDialog.setMessage("Are you sure want to logout?");
                 alertDialog.setButton("No", new DialogInterface.OnClickListener() {

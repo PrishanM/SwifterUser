@@ -2,6 +2,7 @@
     <string name="app_name">Swyftr</string>
     
     <!--nav drawer names -->
+    <string name="nav_purchase">Purchase</string>
     <string name="nav_active_deliveries">Active Deliveries</string>
     <string name="nav_delivery_history">Delivery History</string>
     <string name="nav_invite_friends">Invite Friends</string>
@@ -11,6 +12,7 @@
 
     <!-- Toolbar titles when navigation menu item is selected -->
     <string-array name="nav_item_activity_titles">
+        <item>Purchase</item>
         <item>Active Deliveries</item>
         <item>Delivery History</item>
         <item>Invite Friends</item>

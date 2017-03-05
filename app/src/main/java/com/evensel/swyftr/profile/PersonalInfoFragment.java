@@ -410,7 +410,7 @@ public class PersonalInfoFragment extends Fragment implements OnMapReadyCallback
 
                         Intent intent = getActivity().getIntent();
                         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                        intent.putExtra("FRAGMENT",4);
+                        intent.putExtra("FRAGMENT",5);
                         getActivity().finish();
                         startActivity(intent);
 

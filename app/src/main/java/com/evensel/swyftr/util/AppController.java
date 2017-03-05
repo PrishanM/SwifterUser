@@ -33,7 +33,7 @@ public class AppController extends Application {
  
     private RequestQueue mRequestQueue;
     private ImageLoader mImageLoader;
-    private static int jobId;
+    private static int selectedTab;
  
     private static AppController mInstance;
 
@@ -256,6 +256,14 @@ public class AppController extends Application {
             e.printStackTrace();
         }
         return rotate;
+    }
+
+    public static int getSelectedTab() {
+        return selectedTab;
+    }
+
+    public static void setSelectedTab(int selectedTab) {
+        AppController.selectedTab = selectedTab;
     }
 
     @Override
