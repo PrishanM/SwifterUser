@@ -26,7 +26,7 @@
                 android:layout_height="match_parent" />
 
             <com.mikhaellopez.circularimageview.CircularImageView
-                android:id="@+id/imgProfilePic"
+                android:id="@+id/imgItem"
                 android:layout_width="80dp"
                 android:layout_height="80dp"
                 app:civ_border_color="@color/colorAccent"
@@ -39,7 +39,7 @@
 
                 <ImageView
                     android:id="@+id/imgFav"
-                    android:src="@drawable/fav_check_selected"
+                    android:src="@drawable/fav_check_unselected"
                     android:layout_width="25dp"
                     android:layout_height="25dp" />
 
@@ -52,6 +52,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="@dimen/font_normal"
+            android:text="Test"
             android:gravity="center"/>
 
         <TextView
@@ -91,6 +92,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textSize="@dimen/font_normal"
+                    android:text="QTY 0"
                     android:gravity="center"/>
 
 

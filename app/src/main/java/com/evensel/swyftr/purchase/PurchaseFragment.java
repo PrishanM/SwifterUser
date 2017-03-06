@@ -76,6 +76,7 @@ public class PurchaseFragment extends Fragment implements View.OnClickListener {
         ArrayList<String> titles = new ArrayList<>();
         titles.add("Foodcity");
         titles.add("Grocerymart");
+        titles.add("Laugfs");
         searchItemPagerAdapter =
                 new SearchItemPagerAdapter(getChildFragmentManager(),titles);
         viewPager.setAdapter(searchItemPagerAdapter);

@@ -3,16 +3,11 @@ package com.evensel.swyftr.purchase;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.EditorInfo;
-import android.widget.EditText;
 import android.widget.TextView;
 
 import com.evensel.swyftr.R;
@@ -25,11 +20,13 @@ import java.util.ArrayList;
 public class SearchProductItemsFragment extends Fragment {
 
     private RecyclerView recyclerView;
-    private PurchaseItemsRecycleAdapter purchaseItemsRecycleAdapter;
+    private SearchItemsRecycleAdapter searchItemsRecycleAdapter;
 
     private ArrayList<Integer> imageList;
-    private ArrayList<String> descriptionList;
-    private EditText edtSearch;
+    private ArrayList<String> names;
+    private ArrayList<String> volumes;
+    private ArrayList<String> prices;
+    private TextView category;
 
     public SearchProductItemsFragment() {
         // Required empty public constructor
@@ -47,55 +44,57 @@ public class SearchProductItemsFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_purchase, container, false);
 
         imageList = new ArrayList<>();
-        descriptionList = new ArrayList<>();
+        prices = new ArrayList<>();
+        names = new ArrayList<>();
+        volumes = new ArrayList<>();
 
-        edtSearch = (EditText)rootView.findViewById(R.id.txtSearch);
+        category = (TextView)rootView.findViewById(R.id.txtCat);
+        category.setVisibility(View.GONE);
         recyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_view);
         recyclerView.setHasFixedSize(true);
-        StaggeredGridLayoutManager staggeredGridLayoutManager = new StaggeredGridLayoutManager(4, 1);
+        StaggeredGridLayoutManager staggeredGridLayoutManager = new StaggeredGridLayoutManager(2, 1);
         recyclerView.setLayoutManager(staggeredGridLayoutManager);
-        purchaseItemsRecycleAdapter = new PurchaseItemsRecycleAdapter(imageList,descriptionList,getActivity());
-        recyclerView.setAdapter(purchaseItemsRecycleAdapter);
+        searchItemsRecycleAdapter = new SearchItemsRecycleAdapter(imageList,names,volumes,prices,getActivity());
+        recyclerView.setAdapter(searchItemsRecycleAdapter);
 
         addFiles();
-
-        edtSearch.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                    performSearch();
-                    return true;
-                }
-                return false;
-            }
-        });
         return rootView;
-    }
-
-    private void performSearch() {
-        FragmentManager fragmentManager = getParentFragment().getFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.container_body, new SearchProductsFragment());
-        fragmentTransaction.commit();
-        //getSupportActionBar().setTitle(title);
     }
 
     private void addFiles() {
         imageList.add(R.drawable.test_rice);
         imageList.add(R.drawable.test_sauce);
         imageList.add(R.drawable.test_biscuits);
-        imageList.add(R.drawable.test_electronics);
+
+        names.add("Kist Chili Sauce");
+        names.add("Kist Tomato sauce");
+        names.add("Netro Chili Sauce");
+
+        volumes.add("350ML");
+        volumes.add("350ML");
+        volumes.add("250ML");
+
+        prices.add("LKR 500");
+        prices.add("LKR 300");
+        prices.add("LKR 500");
+
+        imageList.add(R.drawable.test_rice);
+        imageList.add(R.drawable.test_sauce);
         imageList.add(R.drawable.test_biscuits);
-        imageList.add(R.drawable.test_electronics);
 
-        descriptionList.add("Rice");
-        descriptionList.add("Sauce");
-        descriptionList.add("Biscuits");
-        descriptionList.add("Electronics");
-        descriptionList.add("Biscuits");
-        descriptionList.add("Electronics");
+        names.add("Kist Chili Sauce");
+        names.add("Kist Tomato sauce");
+        names.add("Netro Chili Sauce");
 
-        purchaseItemsRecycleAdapter.notifyDataSetChanged();
+        volumes.add("350ML");
+        volumes.add("350ML");
+        volumes.add("250ML");
+
+        prices.add("LKR 500");
+        prices.add("LKR 300");
+        prices.add("LKR 500");
+
+        searchItemsRecycleAdapter.notifyDataSetChanged();
     }
 
     @Override
