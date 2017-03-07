@@ -1,0 +1,13 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.jkcs.customerapplication.accident.CaptureImagesActivity">
+
+    <item
+        android:id="@+id/idDone"
+        android:title="Cart"
+        android:orderInCategory="100"
+        app:showAsAction="always"
+        app:actionLayout="@layout/cart_layout"/>
+
+</menu>

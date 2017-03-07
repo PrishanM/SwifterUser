@@ -16,6 +16,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
 import android.view.View;
 import android.widget.TextView;
 
@@ -206,5 +207,11 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
     protected void onDestroy() {
         super.onDestroy();
         AppController.getInstance().getRequestQueue().getCache().clear();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_other, menu);
+        return true;
     }
 }

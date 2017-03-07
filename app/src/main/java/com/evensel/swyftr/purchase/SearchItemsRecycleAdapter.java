@@ -56,15 +56,7 @@ public class SearchItemsRecycleAdapter extends  RecyclerView.Adapter<SearchItems
 
     @Override
     public void onBindViewHolder(final ImageViewHolder holder, int position) {
-        /*Bitmap thumbnailImage;
-        final String imageKey = imageList.get(position);
-        thumbnailImage = getBitmapFromMemCache(imageKey);
-        final int pos = position;
 
-        if (thumbnailImage == null){
-            BitmapWorkerTask task = new BitmapWorkerTask(holder.imageView);
-            task.execute(imageKey);
-        }*/
         holder.imgItem.setImageResource(imageList.get(position));
         holder.txtName.setText(names.get(position));
         holder.txtVolume.setText(volumes.get(position));
@@ -143,44 +135,6 @@ public class SearchItemsRecycleAdapter extends  RecyclerView.Adapter<SearchItems
             txtQuantity = (TextView) itemView.findViewById(R.id.txtQuantity);
         }
     }
-
-    /*private Bitmap getBitmapFromMemCache(String key) {
-        return mLruCache.get(key);
-    }*/
-
-    /*class BitmapWorkerTask extends AsyncTask<String, Void, Bitmap> {
-
-        private final WeakReference<ImageView> imageViewReference;
-
-        public BitmapWorkerTask(ImageView imageView) {
-            // Use a WeakReference to ensure the ImageView can be garbage collected
-            imageViewReference = new WeakReference<>(imageView);
-        }
-
-        @Override
-        protected Bitmap doInBackground(String... params) {
-            final Bitmap bitmap = getScaledImage(params[0]);
-            addBitmapToMemoryCache(String.valueOf(params[0]), bitmap);
-            return bitmap;
-        }
-
-        //  onPostExecute() sets the bitmap fetched by doInBackground();
-        @Override
-        protected void onPostExecute(Bitmap bitmap) {
-            if (imageViewReference != null && bitmap != null) {
-                final ImageView imageView = imageViewReference.get();
-                if (imageView != null) {
-                    imageView.setImageBitmap(bitmap);
-                }
-            }
-        }
-    }*/
-
-    /*private void addBitmapToMemoryCache(String key, Bitmap bitmap) {
-        if (getBitmapFromMemCache(key) == null) {
-            mLruCache.put(key, bitmap);
-        }
-    }*/
 
     /**
      *  This function will return the scaled version of original image.
