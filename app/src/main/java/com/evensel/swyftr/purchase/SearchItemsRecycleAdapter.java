@@ -37,14 +37,6 @@ public class SearchItemsRecycleAdapter extends  RecyclerView.Adapter<SearchItems
         this.context = context;
 
         Log.d("xxxxxxxx",prices.size()+"");
-        /*final int maxMemory = (int) (Runtime.getRuntime().maxMemory() / 1024);
-        final int cacheSize = maxMemory / 4;
-        mLruCache = new LruCache<String, Bitmap>(cacheSize) {
-            @Override
-            protected int sizeOf(String key, Bitmap bitmap) {
-                return bitmap.getByteCount() / 1024;
-            }
-        };*/
     }
 
     @Override

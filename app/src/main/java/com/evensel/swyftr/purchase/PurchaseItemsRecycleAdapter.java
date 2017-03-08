@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.evensel.swyftr.R;
+import com.evensel.swyftr.util.Datum;
 
 import java.util.ArrayList;
 
@@ -20,14 +21,12 @@ import java.util.ArrayList;
  */
 public class PurchaseItemsRecycleAdapter extends  RecyclerView.Adapter<PurchaseItemsRecycleAdapter.ImageViewHolder> {
 
-    private final ArrayList<Integer> imageList;
-    private final ArrayList<String> descriptionList;
+    private final ArrayList<Datum> datumArrayList;
     //private final LruCache<String, Bitmap> mLruCache;
     private Context context;
 
-    public PurchaseItemsRecycleAdapter(ArrayList<Integer> imageList,ArrayList<String> descriptionList, Context context){
-        this.imageList = imageList;
-        this.descriptionList = descriptionList;
+    public PurchaseItemsRecycleAdapter(ArrayList<Datum> dtum, Context context){
+        this.datumArrayList = dtum;
         this.context = context;
         /*final int maxMemory = (int) (Runtime.getRuntime().maxMemory() / 1024);
         final int cacheSize = maxMemory / 4;
@@ -57,8 +56,8 @@ public class PurchaseItemsRecycleAdapter extends  RecyclerView.Adapter<PurchaseI
             BitmapWorkerTask task = new BitmapWorkerTask(holder.imageView);
             task.execute(imageKey);
         }*/
-        holder.imageView.setImageResource(imageList.get(position));
-        holder.txtDescription.setText(descriptionList.get(position));
+        holder.imageView.setImageResource(R.drawable.test_rice);
+        holder.txtDescription.setText(datumArrayList.get(position).getCategoryName());
 
         holder.imageView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -73,7 +72,7 @@ public class PurchaseItemsRecycleAdapter extends  RecyclerView.Adapter<PurchaseI
 
     @Override
     public int getItemCount() {
-        return imageList.size();
+        return datumArrayList.size();
     }
 
     public class ImageViewHolder extends RecyclerView.ViewHolder {

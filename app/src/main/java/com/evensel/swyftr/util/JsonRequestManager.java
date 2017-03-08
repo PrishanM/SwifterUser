@@ -443,6 +443,63 @@ public class JsonRequestManager {
 
 	}
 
+	/******************************************************************************************************************************************/
+
+	/**
+	 * Get Category List
+	 **/
+	public interface getCategoriesRequest{
+		void onSuccess(CategoriesResponse model);
+
+		void onError(String status);
+
+		void onError(CategoriesResponse model);
+	}
+
+	public void getCategories(String url,String token,
+						  final getCategoriesRequest callback) {
+
+		url = url+"&token="+token;
+
+		JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.GET,
+				url, null,
+				new Response.Listener<JSONObject>() {
+
+					@Override
+					public void onResponse(JSONObject response) {
+						ObjectMapper mapper = new ObjectMapper();
+
+						try {
+							if(response!=null){
+								CategoriesResponse responseModel = mapper.readValue(response.toString(), CategoriesResponse.class);
+								callback.onSuccess(responseModel);
+							}else{
+								callback.onError("Error occured");
+							}
+
+						} catch (Exception e) {
+							e.printStackTrace();
+							callback.onError("Error occured");
+						}
+					}
+				}, new Response.ErrorListener() {
+
+			@Override
+			public void onErrorResponse(VolleyError error) {
+				callback.onError(errorCatResponse(error.networkResponse.data,HttpHeaderParser.parseCharset(error.networkResponse.headers)));
+			}
+		});
+
+		jsonObjReq.setRetryPolicy(new DefaultRetryPolicy(30000,
+				DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+				DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+		// Adding request to request queue
+		AppController.getInstance().addToRequestQueue(jsonObjReq,
+				tag_json_arry);
+
+	}
+
 
 
 	/******************************************************************************************************************************************/
@@ -488,6 +545,30 @@ public class JsonRequestManager {
 			JSONObject errorResponse = new JSONObject(json);
 			if(errorResponse!=null){
 				responseModel = mapper.readValue(errorResponse.toString(),LoginResponse.class);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return responseModel;
+	}
+
+	/**
+	 * Method to convert 400,401,500 error to response model class
+	 * @param bytes
+	 * @param charset
+	 * @return ResponseModel
+	 */
+	private CategoriesResponse errorCatResponse(byte[] bytes,String charset){
+		CategoriesResponse responseModel = new CategoriesResponse();
+		responseModel.setMessage("Error Occured.");
+		responseModel.setStatus("error");
+		ObjectMapper mapper = new ObjectMapper();
+		try {
+			String json = new String(bytes, charset);
+			JSONObject errorResponse = new JSONObject(json);
+			if(errorResponse!=null){
+				responseModel = mapper.readValue(errorResponse.toString(),CategoriesResponse.class);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -30,6 +30,7 @@ public class PurchaseFragment extends Fragment implements View.OnClickListener {
     private ImageView imgHome,imgLocation;
     private EditText edtSearch;
 
+
     public PurchaseFragment() {
         // Required empty public constructor
     }
@@ -48,6 +49,7 @@ public class PurchaseFragment extends Fragment implements View.OnClickListener {
         viewPager = (ViewPager)rootView.findViewById(R.id.viewpager);
         edtSearch = (EditText)rootView.findViewById(R.id.txtSearch);
         imgHome = (ImageView)rootView.findViewById(R.id.imgHome);
+
         setupViewPager();
 
         tabLayout = (TabLayout) rootView.findViewById(R.id.tabs);
@@ -94,7 +96,9 @@ public class PurchaseFragment extends Fragment implements View.OnClickListener {
         purchaseItemPagerAdapter =
                 new PurchaseItemPagerAdapter(getChildFragmentManager(),titles);
         viewPager.setAdapter(purchaseItemPagerAdapter);
+
     }
+
 
     @Override
     public void onAttach(Activity activity) {
@@ -114,4 +118,7 @@ public class PurchaseFragment extends Fragment implements View.OnClickListener {
             imgHome.setVisibility(View.GONE);
         }
     }
+
+
+
 }

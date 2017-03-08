@@ -21,6 +21,7 @@ import com.android.volley.toolbox.Volley;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 /**
  * @author prishanm 02/14/2017
@@ -34,6 +35,7 @@ public class AppController extends Application {
     private RequestQueue mRequestQueue;
     private ImageLoader mImageLoader;
     private static int selectedTab;
+    private static ArrayList<Datum> datumArrayList;
  
     private static AppController mInstance;
 
@@ -264,6 +266,14 @@ public class AppController extends Application {
 
     public static void setSelectedTab(int selectedTab) {
         AppController.selectedTab = selectedTab;
+    }
+
+    public static ArrayList<Datum> getDatumArrayList() {
+        return datumArrayList;
+    }
+
+    public static void setDatumArrayList(ArrayList<Datum> datumArrayList) {
+        AppController.datumArrayList = datumArrayList;
     }
 
     @Override
