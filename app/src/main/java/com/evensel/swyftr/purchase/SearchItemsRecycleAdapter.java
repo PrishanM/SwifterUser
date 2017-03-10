@@ -1,10 +1,11 @@
 package com.evensel.swyftr.purchase;
 
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.evensel.swyftr.R;
+import com.evensel.swyftr.util.AppController;
+import com.evensel.swyftr.util.AppURL;
+import com.evensel.swyftr.util.Constants;
+import com.evensel.swyftr.util.Datum;
+import com.evensel.swyftr.util.JsonRequestManager;
+import com.evensel.swyftr.util.ResponseModel;
 import com.mikhaellopez.circularimageview.CircularImageView;
 
 import java.util.ArrayList;
@@ -22,21 +29,16 @@ import java.util.ArrayList;
  */
 public class SearchItemsRecycleAdapter extends  RecyclerView.Adapter<SearchItemsRecycleAdapter.ImageViewHolder> {
 
-    private final ArrayList<Integer> imageList;
-    private ArrayList<String> names;
-    private ArrayList<String> volumes;
-    private ArrayList<String> prices;
-    //private final LruCache<String, Bitmap> mLruCache;
+    private ArrayList<Datum> datumArrayList;
     private Context context;
+    private ProgressDialog progress;
+    private String token;
 
-    public SearchItemsRecycleAdapter(ArrayList<Integer> imageList, ArrayList<String> names,ArrayList<String> volumes,ArrayList<String> prices, Context context){
-        this.imageList = imageList;
-        this.names = names;
-        this.volumes = volumes;
-        this.prices = prices;
+    public SearchItemsRecycleAdapter(ArrayList<Datum> datumArrayList, Context context){
+        this.datumArrayList = datumArrayList;
         this.context = context;
-
-        Log.d("xxxxxxxx",prices.size()+"");
+        SharedPreferences sharedPref = context.getSharedPreferences(Constants.LOGIN_SHARED_PREF, Context.MODE_PRIVATE);
+        token = sharedPref.getString(Constants.LOGIN_ACCESS_TOKEN, "");
     }
 
     @Override
@@ -47,13 +49,11 @@ public class SearchItemsRecycleAdapter extends  RecyclerView.Adapter<SearchItems
     }
 
     @Override
-    public void onBindViewHolder(final ImageViewHolder holder, int position) {
+    public void onBindViewHolder(final ImageViewHolder holder, final int position) {
 
-        holder.imgItem.setImageResource(imageList.get(position));
-        holder.txtName.setText(names.get(position));
-        holder.txtVolume.setText(volumes.get(position));
-        holder.txtPrice.setText(prices.get(position));
-        //holder.txtQuantity.setText(names.get(position));
+        holder.txtName.setText(datumArrayList.get(position).getProductName());
+        holder.txtVolume.setText(datumArrayList.get(position).getProductAmount()+"");
+        holder.txtPrice.setText(datumArrayList.get(position).getProductPrice()+"");
 
         holder.imgItem.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -67,15 +67,28 @@ public class SearchItemsRecycleAdapter extends  RecyclerView.Adapter<SearchItems
 
         final boolean[] favState = {false};
         final int[] qty = {0};
+
+        if(datumArrayList.get(position).getFavourite()!=null && datumArrayList.get(position).getFavourite().equals("1")){
+            holder.imgFav.setImageResource(R.drawable.fav_check_selected);
+            favState[0] = true;
+        }else{
+            holder.imgFav.setImageResource(R.drawable.fav_check_unselected);
+            favState[0] = false;
+        }
+
         holder.imgFav.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if(favState[0]){
                     holder.imgFav.setImageResource(R.drawable.fav_check_unselected);
                     favState[0] =false;
+                    favouriteProduct(datumArrayList.get(position).getId(),0);
+                    datumArrayList.get(position).setFavourite("0");
                 }else{
                     holder.imgFav.setImageResource(R.drawable.fav_check_selected);
                     favState[0] =true;
+                    favouriteProduct(datumArrayList.get(position).getId(),1);
+                    datumArrayList.get(position).setFavourite("1");
                 }
             }
         });
@@ -106,9 +119,40 @@ public class SearchItemsRecycleAdapter extends  RecyclerView.Adapter<SearchItems
         });
     }
 
+    private void favouriteProduct(int productId,int status) {
+
+        progress = ProgressDialog.show(context, null,
+                "Loading...", true);
+        JsonRequestManager.getInstance(context).favouriteProduct(AppURL.APPLICATION_BASE_URL+AppURL.PRODUCT_FAVOURITE,token,productId,status, favRequest);
+    }
+
+    //Response callback for "Get category List"
+    private final JsonRequestManager.favouriteProductRequest favRequest = new JsonRequestManager.favouriteProductRequest() {
+        @Override
+        public void onSuccess(ResponseModel model) {
+
+            if(progress!=null)
+                progress.dismiss();
+            AppController.setDatumArrayList(datumArrayList);
+            notifyDataSetChanged();
+        }
+
+        @Override
+        public void onError(String status) {
+            if(progress!=null)
+                progress.dismiss();
+        }
+
+        @Override
+        public void onError(ResponseModel model) {
+            if(progress!=null)
+                progress.dismiss();
+        }
+    };
+
     @Override
     public int getItemCount() {
-        return imageList.size();
+        return datumArrayList.size();
     }
 
     public class ImageViewHolder extends RecyclerView.ViewHolder {

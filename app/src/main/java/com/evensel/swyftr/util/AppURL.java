@@ -15,4 +15,6 @@ public class AppURL {
     public static final String VALIDATE_RESET_CODE_URL = "validate/code";
     public static final String RESET_PASSWORD_URL = "password/reset";
     public static final String GET_CATEGORY_LIST = "catlist";
+    public static final String PRODUCT_HOME_SEARCH = "products/";
+    public static final String PRODUCT_FAVOURITE = "user/favourite";
 }

@@ -3,6 +3,8 @@ package com.evensel.swyftr.purchase;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
+import android.support.v4.util.LruCache;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +15,7 @@ import android.widget.TextView;
 import com.evensel.swyftr.R;
 import com.evensel.swyftr.util.Datum;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
 
@@ -22,20 +25,20 @@ import java.util.ArrayList;
 public class PurchaseItemsRecycleAdapter extends  RecyclerView.Adapter<PurchaseItemsRecycleAdapter.ImageViewHolder> {
 
     private final ArrayList<Datum> datumArrayList;
-    //private final LruCache<String, Bitmap> mLruCache;
+    private final LruCache<String, Bitmap> mLruCache;
     private Context context;
 
     public PurchaseItemsRecycleAdapter(ArrayList<Datum> dtum, Context context){
         this.datumArrayList = dtum;
         this.context = context;
-        /*final int maxMemory = (int) (Runtime.getRuntime().maxMemory() / 1024);
+        final int maxMemory = (int) (Runtime.getRuntime().maxMemory() / 1024);
         final int cacheSize = maxMemory / 4;
         mLruCache = new LruCache<String, Bitmap>(cacheSize) {
             @Override
             protected int sizeOf(String key, Bitmap bitmap) {
                 return bitmap.getByteCount() / 1024;
             }
-        };*/
+        };
     }
 
     @Override
@@ -47,16 +50,20 @@ public class PurchaseItemsRecycleAdapter extends  RecyclerView.Adapter<PurchaseI
 
     @Override
     public void onBindViewHolder(ImageViewHolder holder, int position) {
-        /*Bitmap thumbnailImage;
-        final String imageKey = imageList.get(position);
-        thumbnailImage = getBitmapFromMemCache(imageKey);
+        Bitmap thumbnailImage = null;
+        final String imageKey = datumArrayList.get(position).getImage();
+
+        if(imageKey!=null && !imageKey.isEmpty()){
+            thumbnailImage = getBitmapFromMemCache(imageKey);
+        }
+
         final int pos = position;
 
         if (thumbnailImage == null){
             BitmapWorkerTask task = new BitmapWorkerTask(holder.imageView);
             task.execute(imageKey);
-        }*/
-        holder.imageView.setImageResource(R.drawable.test_rice);
+        }
+        holder.imageView.setImageBitmap(thumbnailImage);
         holder.txtDescription.setText(datumArrayList.get(position).getCategoryName());
 
         holder.imageView.setOnClickListener(new View.OnClickListener() {
@@ -85,11 +92,11 @@ public class PurchaseItemsRecycleAdapter extends  RecyclerView.Adapter<PurchaseI
         }
     }
 
-    /*private Bitmap getBitmapFromMemCache(String key) {
+    private Bitmap getBitmapFromMemCache(String key) {
         return mLruCache.get(key);
-    }*/
+    }
 
-    /*class BitmapWorkerTask extends AsyncTask<String, Void, Bitmap> {
+    class BitmapWorkerTask extends AsyncTask<String, Void, Bitmap> {
 
         private final WeakReference<ImageView> imageViewReference;
 
@@ -115,13 +122,13 @@ public class PurchaseItemsRecycleAdapter extends  RecyclerView.Adapter<PurchaseI
                 }
             }
         }
-    }*/
+    }
 
-    /*private void addBitmapToMemoryCache(String key, Bitmap bitmap) {
-        if (getBitmapFromMemCache(key) == null) {
+    private void addBitmapToMemoryCache(String key, Bitmap bitmap) {
+        if (getBitmapFromMemCache(key) == null && key!=null && bitmap!=null) {
             mLruCache.put(key, bitmap);
         }
-    }*/
+    }
 
     /**
      *  This function will return the scaled version of original image.

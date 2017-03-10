@@ -11,8 +11,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.evensel.swyftr.R;
-
-import java.util.ArrayList;
+import com.evensel.swyftr.util.AppController;
 
 /**
  * Created by Prishan Maduka on 2/12/2017.
@@ -21,11 +20,6 @@ public class SearchProductItemsFragment extends Fragment {
 
     private RecyclerView recyclerView;
     private SearchItemsRecycleAdapter searchItemsRecycleAdapter;
-
-    private ArrayList<Integer> imageList;
-    private ArrayList<String> names;
-    private ArrayList<String> volumes;
-    private ArrayList<String> prices;
     private TextView category;
 
     public SearchProductItemsFragment() {
@@ -43,58 +37,15 @@ public class SearchProductItemsFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_purchase, container, false);
 
-        imageList = new ArrayList<>();
-        prices = new ArrayList<>();
-        names = new ArrayList<>();
-        volumes = new ArrayList<>();
-
         category = (TextView)rootView.findViewById(R.id.txtCat);
         category.setVisibility(View.GONE);
         recyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_view);
         recyclerView.setHasFixedSize(true);
         StaggeredGridLayoutManager staggeredGridLayoutManager = new StaggeredGridLayoutManager(2, 1);
         recyclerView.setLayoutManager(staggeredGridLayoutManager);
-        searchItemsRecycleAdapter = new SearchItemsRecycleAdapter(imageList,names,volumes,prices,getActivity());
+        searchItemsRecycleAdapter = new SearchItemsRecycleAdapter(AppController.getSearchArrayList(),getActivity());
         recyclerView.setAdapter(searchItemsRecycleAdapter);
-
-        addFiles();
         return rootView;
-    }
-
-    private void addFiles() {
-        imageList.add(R.drawable.test_rice);
-        imageList.add(R.drawable.test_sauce);
-        imageList.add(R.drawable.test_biscuits);
-
-        names.add("Kist Chili Sauce");
-        names.add("Kist Tomato sauce");
-        names.add("Netro Chili Sauce");
-
-        volumes.add("350ML");
-        volumes.add("350ML");
-        volumes.add("250ML");
-
-        prices.add("LKR 500");
-        prices.add("LKR 300");
-        prices.add("LKR 500");
-
-        imageList.add(R.drawable.test_rice);
-        imageList.add(R.drawable.test_sauce);
-        imageList.add(R.drawable.test_biscuits);
-
-        names.add("Kist Chili Sauce");
-        names.add("Kist Tomato sauce");
-        names.add("Netro Chili Sauce");
-
-        volumes.add("350ML");
-        volumes.add("350ML");
-        volumes.add("250ML");
-
-        prices.add("LKR 500");
-        prices.add("LKR 300");
-        prices.add("LKR 500");
-
-        searchItemsRecycleAdapter.notifyDataSetChanged();
     }
 
     @Override

@@ -36,6 +36,7 @@ public class AppController extends Application {
     private ImageLoader mImageLoader;
     private static int selectedTab;
     private static ArrayList<Datum> datumArrayList;
+    private static ArrayList<Datum> searchArrayList;
  
     private static AppController mInstance;
 
@@ -274,6 +275,14 @@ public class AppController extends Application {
 
     public static void setDatumArrayList(ArrayList<Datum> datumArrayList) {
         AppController.datumArrayList = datumArrayList;
+    }
+
+    public static ArrayList<Datum> getSearchArrayList() {
+        return searchArrayList;
+    }
+
+    public static void setSearchArrayList(ArrayList<Datum> searchArrayList) {
+        AppController.searchArrayList = searchArrayList;
     }
 
     @Override

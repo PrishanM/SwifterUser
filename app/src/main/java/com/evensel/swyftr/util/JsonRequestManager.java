@@ -468,7 +468,6 @@ public class JsonRequestManager {
 					@Override
 					public void onResponse(JSONObject response) {
 						ObjectMapper mapper = new ObjectMapper();
-
 						try {
 							if(response!=null){
 								CategoriesResponse responseModel = mapper.readValue(response.toString(), CategoriesResponse.class);
@@ -487,6 +486,121 @@ public class JsonRequestManager {
 			@Override
 			public void onErrorResponse(VolleyError error) {
 				callback.onError(errorCatResponse(error.networkResponse.data,HttpHeaderParser.parseCharset(error.networkResponse.headers)));
+			}
+		});
+
+		jsonObjReq.setRetryPolicy(new DefaultRetryPolicy(30000,
+				DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+				DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+		// Adding request to request queue
+		AppController.getInstance().addToRequestQueue(jsonObjReq,
+				tag_json_arry);
+
+	}
+
+	/******************************************************************************************************************************************/
+
+	/**
+	 * Product Search Home
+	 **/
+	public interface productSearchHomeRequest{
+		void onSuccess(CategoriesResponse model);
+
+		void onError(String status);
+
+		void onError(CategoriesResponse model);
+	}
+
+	public void productSearchHome(String url,String token,
+							  final productSearchHomeRequest callback) {
+
+		url = url+"&token="+token;
+
+		JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.GET,
+				url, null,
+				new Response.Listener<JSONObject>() {
+
+					@Override
+					public void onResponse(JSONObject response) {
+						ObjectMapper mapper = new ObjectMapper();
+						try {
+							if(response!=null){
+								CategoriesResponse responseModel = mapper.readValue(response.toString(), CategoriesResponse.class);
+								callback.onSuccess(responseModel);
+							}else{
+								callback.onError("Error occured");
+							}
+
+						} catch (Exception e) {
+							e.printStackTrace();
+							callback.onError("Error occured");
+						}
+					}
+				}, new Response.ErrorListener() {
+
+			@Override
+			public void onErrorResponse(VolleyError error) {
+				callback.onError(errorCatResponse(error.networkResponse.data,HttpHeaderParser.parseCharset(error.networkResponse.headers)));
+			}
+		});
+
+		jsonObjReq.setRetryPolicy(new DefaultRetryPolicy(30000,
+				DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+				DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+		// Adding request to request queue
+		AppController.getInstance().addToRequestQueue(jsonObjReq,
+				tag_json_arry);
+
+	}
+
+	/******************************************************************************************************************************************/
+
+	/**
+	 * Favourite Product
+	 **/
+	public interface favouriteProductRequest{
+		void onSuccess(ResponseModel model);
+
+		void onError(String status);
+
+		void onError(ResponseModel model);
+	}
+
+	public void favouriteProduct(String url,String token,int productId,int status,
+								  final favouriteProductRequest callback) {
+
+		url = url+"&token="+token;
+		HashMap<String, Integer> params = new HashMap<>();
+		params.put("product_id",productId);
+		params.put("status",status);
+
+		JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.GET,
+				url, null,
+				new Response.Listener<JSONObject>() {
+
+					@Override
+					public void onResponse(JSONObject response) {
+						ObjectMapper mapper = new ObjectMapper();
+						try {
+							if(response!=null){
+								ResponseModel responseModel = mapper.readValue(response.toString(), ResponseModel.class);
+								callback.onSuccess(responseModel);
+							}else{
+								callback.onError("Error occured");
+							}
+
+						} catch (Exception e) {
+							e.printStackTrace();
+							callback.onError("Error occured");
+						}
+					}
+				}, new Response.ErrorListener() {
+
+			@Override
+			public void onErrorResponse(VolleyError error) {
+				callback.onError(errorResponse(error.networkResponse.data,HttpHeaderParser.parseCharset(error.networkResponse.headers)));
 			}
 		});
 
