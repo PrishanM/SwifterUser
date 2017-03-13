@@ -40,6 +40,8 @@ public class AppController extends Application {
  
     private static AppController mInstance;
 
+    public static double amount = 0;
+
     @Override
     public void onCreate() {
         super.onCreate();

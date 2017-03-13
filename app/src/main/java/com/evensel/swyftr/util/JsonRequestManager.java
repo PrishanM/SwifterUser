@@ -576,7 +576,7 @@ public class JsonRequestManager {
 		params.put("product_id",productId);
 		params.put("status",status);
 
-		JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.GET,
+		JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST,
 				url, null,
 				new Response.Listener<JSONObject>() {
 
@@ -613,6 +613,65 @@ public class JsonRequestManager {
 				tag_json_arry);
 
 	}
+
+
+
+	/******************************************************************************************************************************************/
+
+	/**
+	 * Get Category Product List
+	 **/
+	public interface categoryProductRequest{
+		void onSuccess(CategoriesResponse model);
+
+		void onError(String status);
+
+		void onError(CategoriesResponse model);
+	}
+
+	public void categoryProducts(String url,String token,
+								 final categoryProductRequest callback) {
+
+		url = url+"&token="+token;
+
+		JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.GET,
+				url, null,
+				new Response.Listener<JSONObject>() {
+
+					@Override
+					public void onResponse(JSONObject response) {
+						ObjectMapper mapper = new ObjectMapper();
+						try {
+							if(response!=null){
+								CategoriesResponse responseModel = mapper.readValue(response.toString(), CategoriesResponse.class);
+								callback.onSuccess(responseModel);
+							}else{
+								callback.onError("Error occured");
+							}
+
+						} catch (Exception e) {
+							e.printStackTrace();
+							callback.onError("Error occured");
+						}
+					}
+				}, new Response.ErrorListener() {
+
+			@Override
+			public void onErrorResponse(VolleyError error) {
+				callback.onError(errorCatResponse(error.networkResponse.data,HttpHeaderParser.parseCharset(error.networkResponse.headers)));
+			}
+		});
+
+		jsonObjReq.setRetryPolicy(new DefaultRetryPolicy(30000,
+				DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+				DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+		// Adding request to request queue
+		AppController.getInstance().addToRequestQueue(jsonObjReq,
+				tag_json_arry);
+
+	}
+
 
 
 

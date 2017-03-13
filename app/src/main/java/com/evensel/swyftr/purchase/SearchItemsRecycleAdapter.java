@@ -98,6 +98,7 @@ public class SearchItemsRecycleAdapter extends  RecyclerView.Adapter<SearchItems
             public void onClick(View view) {
                 qty[0] = qty[0] +1;
                 holder.txtQuantity.setText("QTY "+qty[0]);
+                AppController.amount = AppController.amount+datumArrayList.get(position).getProductAmount()*qty[0];
 
             }
         });
@@ -110,8 +111,10 @@ public class SearchItemsRecycleAdapter extends  RecyclerView.Adapter<SearchItems
 
                 if(qty[0]<=0){
                     holder.txtQuantity.setText("QTY 0");
+                    AppController.amount = AppController.amount+0;
                 }else{
                     holder.txtQuantity.setText("QTY "+qty[0]);
+                    AppController.amount = AppController.amount+datumArrayList.get(position).getProductAmount()*qty[0];
                 }
 
 
@@ -185,4 +188,6 @@ public class SearchItemsRecycleAdapter extends  RecyclerView.Adapter<SearchItems
 
         return bitmap;
     }
+
+
 }

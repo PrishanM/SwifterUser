@@ -132,7 +132,6 @@ public class PurchaseFragment extends Fragment implements View.OnClickListener {
     }
 
     private void searchData(String parameter){
-        AppController.setSearchArrayList(null);
         progress = ProgressDialog.show(getActivity(), null,
                 "Loading...", true);
         JsonRequestManager.getInstance(getActivity()).productSearchHome(AppURL.APPLICATION_BASE_URL+AppURL.PRODUCT_HOME_SEARCH+parameter+"?page=1",token, productSearchHomeRequest);
@@ -153,6 +152,7 @@ public class PurchaseFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         if(v.getId()==R.id.imgHome){
+            searchList.clear();
             setupViewPager();
             imgHome.setVisibility(View.GONE);
         }
