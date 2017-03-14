@@ -1,0 +1,116 @@
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="6dp"
+            android:background="@android:color/white"/>
+
+        <android.support.design.widget.TabLayout
+            android:id="@+id/tabs"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:tabMode="scrollable"
+            app:tabGravity="center"
+            android:layout_gravity="center"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:weightSum="1">
+
+            <LinearLayout
+                android:id="@+id/nav_header_container"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_alignParentTop="true"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:background="@android:color/white"
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:paddingRight="@dimen/activity_horizontal_margin"
+                android:weightSum="1">
+
+                <ImageView
+                    android:id="@+id/imgLeft"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/go_back_btn"/>
+
+                <Space
+                    android:layout_width="@dimen/space_normal"
+                    android:layout_height="match_parent" />
+
+                <EditText
+                    android:id="@+id/txtSearch"
+                    android:layout_width="120dp"
+                    android:layout_height="match_parent"
+                    android:paddingLeft="40dp"
+                    android:textSize="@dimen/font_normal"
+                    android:inputType="text"
+                    android:hint="Search Products"
+                    android:imeOptions="actionSearch"
+                    android:layout_marginTop="6dp"
+                    android:layout_marginBottom="6dp"
+                    android:background="@drawable/hollow_search_background"/>
+
+                <Space
+                    android:layout_width="@dimen/space_normal"
+                    android:layout_height="match_parent" />
+
+                <Button
+                    android:id="@+id/txtBrand"
+                    android:layout_width="100dp"
+                    android:text="Select Brand"
+                    android:gravity="center"
+                    android:textAllCaps="false"
+                    android:textColor="@color/colorAccent"
+                    android:layout_height="40dp"
+                    android:background="@drawable/button_border_only"/>
+
+                <Space
+                    android:layout_width="@dimen/space_normal"
+                    android:layout_height="match_parent" />
+
+                <Button
+                    android:id="@+id/txtType"
+                    android:layout_width="100dp"
+                    android:text="Select Type"
+                    android:gravity="center"
+                    android:textAllCaps="false"
+                    android:textColor="@color/colorAccent"
+                    android:layout_height="40dp"
+                    android:visibility="gone"
+                    android:background="@drawable/button_border_only"/>
+
+                <Space
+                    android:layout_width="@dimen/space_normal"
+                    android:layout_height="match_parent" />
+
+                <ImageView
+                    android:id="@+id/imgNext"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/go_next_btn"
+                    android:visibility="gone"/>
+
+
+            </LinearLayout>
+        </LinearLayout>
+    </android.support.design.widget.AppBarLayout>
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/viewpager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"  />
+
+</android.support.design.widget.CoordinatorLayout>

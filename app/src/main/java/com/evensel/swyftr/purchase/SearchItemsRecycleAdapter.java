@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
+import android.support.v4.util.LruCache;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,6 +23,7 @@ import com.evensel.swyftr.util.JsonRequestManager;
 import com.evensel.swyftr.util.ResponseModel;
 import com.mikhaellopez.circularimageview.CircularImageView;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
 
@@ -33,12 +36,24 @@ public class SearchItemsRecycleAdapter extends  RecyclerView.Adapter<SearchItems
     private Context context;
     private ProgressDialog progress;
     private String token;
+    private Listener listener;
+    private final LruCache<String, Bitmap> mLruCache;
 
-    public SearchItemsRecycleAdapter(ArrayList<Datum> datumArrayList, Context context){
+    public SearchItemsRecycleAdapter(ArrayList<Datum> datumArrayList, Context context,Listener listener ){
         this.datumArrayList = datumArrayList;
         this.context = context;
         SharedPreferences sharedPref = context.getSharedPreferences(Constants.LOGIN_SHARED_PREF, Context.MODE_PRIVATE);
         token = sharedPref.getString(Constants.LOGIN_ACCESS_TOKEN, "");
+        this.listener = listener;
+
+        final int maxMemory = (int) (Runtime.getRuntime().maxMemory() / 1024);
+        final int cacheSize = maxMemory / 4;
+        mLruCache = new LruCache<String, Bitmap>(cacheSize) {
+            @Override
+            protected int sizeOf(String key, Bitmap bitmap) {
+                return bitmap.getByteCount() / 1024;
+            }
+        };
     }
 
     @Override
@@ -51,17 +66,29 @@ public class SearchItemsRecycleAdapter extends  RecyclerView.Adapter<SearchItems
     @Override
     public void onBindViewHolder(final ImageViewHolder holder, final int position) {
 
+        Bitmap thumbnailImage = null;
+        final String imageKey = datumArrayList.get(position).getImage();
+
+        if(imageKey!=null && !imageKey.isEmpty()){
+            thumbnailImage = getBitmapFromMemCache(imageKey);
+        }
+
+
+
         holder.txtName.setText(datumArrayList.get(position).getProductName());
         holder.txtVolume.setText(datumArrayList.get(position).getProductAmount()+"");
         holder.txtPrice.setText(datumArrayList.get(position).getProductPrice()+"");
 
+        if (thumbnailImage == null){
+            BitmapWorkerTask task = new BitmapWorkerTask(holder.imgItem);
+            task.execute(imageKey);
+        }
+        holder.imgItem.setImageBitmap(thumbnailImage);
+
         holder.imgItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                /*Intent newActivity = new Intent(context, ImageViewerActivity.class);
-                newActivity.putStringArrayListExtra("PATHS", imageList);
-                newActivity.putExtra("POSITION", pos);
-                context.startActivity(newActivity);*/
+
             }
         });
 
@@ -98,7 +125,10 @@ public class SearchItemsRecycleAdapter extends  RecyclerView.Adapter<SearchItems
             public void onClick(View view) {
                 qty[0] = qty[0] +1;
                 holder.txtQuantity.setText("QTY "+qty[0]);
-                AppController.amount = AppController.amount+datumArrayList.get(position).getProductAmount()*qty[0];
+                AppController.setAmount(AppController.getAmount()+(datumArrayList.get(position).getProductAmount()*qty[0]));
+                if (listener != null) {
+                    listener.onOptionsMenuChangeRequested();
+                }
 
             }
         });
@@ -111,10 +141,14 @@ public class SearchItemsRecycleAdapter extends  RecyclerView.Adapter<SearchItems
 
                 if(qty[0]<=0){
                     holder.txtQuantity.setText("QTY 0");
-                    AppController.amount = AppController.amount+0;
+                    AppController.setAmount(AppController.getAmount()+0);
                 }else{
                     holder.txtQuantity.setText("QTY "+qty[0]);
-                    AppController.amount = AppController.amount+datumArrayList.get(position).getProductAmount()*qty[0];
+                    AppController.setAmount(AppController.getAmount()+(datumArrayList.get(position).getProductAmount()*qty[0]));
+                }
+
+                if (listener != null) {
+                    listener.onOptionsMenuChangeRequested();
                 }
 
 
@@ -175,6 +209,44 @@ public class SearchItemsRecycleAdapter extends  RecyclerView.Adapter<SearchItems
         }
     }
 
+    private Bitmap getBitmapFromMemCache(String key) {
+        return mLruCache.get(key);
+    }
+
+    class BitmapWorkerTask extends AsyncTask<String, Void, Bitmap> {
+
+        private final WeakReference<ImageView> imageViewReference;
+
+        public BitmapWorkerTask(ImageView imageView) {
+            // Use a WeakReference to ensure the ImageView can be garbage collected
+            imageViewReference = new WeakReference<>(imageView);
+        }
+
+        @Override
+        protected Bitmap doInBackground(String... params) {
+            final Bitmap bitmap = getScaledImage(params[0]);
+            addBitmapToMemoryCache(String.valueOf(params[0]), bitmap);
+            return bitmap;
+        }
+
+        //  onPostExecute() sets the bitmap fetched by doInBackground();
+        @Override
+        protected void onPostExecute(Bitmap bitmap) {
+            if (imageViewReference != null && bitmap != null) {
+                final ImageView imageView = imageViewReference.get();
+                if (imageView != null) {
+                    imageView.setImageBitmap(bitmap);
+                }
+            }
+        }
+    }
+
+    private void addBitmapToMemoryCache(String key, Bitmap bitmap) {
+        if (getBitmapFromMemCache(key) == null && key!=null && bitmap!=null) {
+            mLruCache.put(key, bitmap);
+        }
+    }
+
     /**
      *  This function will return the scaled version of original image.
      *  Loading original images into thumbnail is wastage of computation
@@ -187,6 +259,10 @@ public class SearchItemsRecycleAdapter extends  RecyclerView.Adapter<SearchItems
         bitmap = BitmapFactory.decodeFile(imagePath,options);
 
         return bitmap;
+    }
+
+    public interface Listener {
+        void onOptionsMenuChangeRequested();
     }
 
 

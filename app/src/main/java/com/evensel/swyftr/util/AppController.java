@@ -37,10 +37,11 @@ public class AppController extends Application {
     private static int selectedTab;
     private static ArrayList<Datum> datumArrayList;
     private static ArrayList<Datum> searchArrayList;
+    private static ArrayList<CartProduct> cartProducts;
  
     private static AppController mInstance;
 
-    public static double amount = 0;
+    private static double amount;
 
     @Override
     public void onCreate() {
@@ -279,12 +280,28 @@ public class AppController extends Application {
         AppController.datumArrayList = datumArrayList;
     }
 
+    public static double getAmount() {
+        return amount;
+    }
+
+    public static void setAmount(double amount) {
+        AppController.amount = amount;
+    }
+
     public static ArrayList<Datum> getSearchArrayList() {
         return searchArrayList;
     }
 
     public static void setSearchArrayList(ArrayList<Datum> searchArrayList) {
         AppController.searchArrayList = searchArrayList;
+    }
+
+    public static ArrayList<CartProduct> getCartProducts() {
+        return cartProducts;
+    }
+
+    public static void setCartProducts(ArrayList<CartProduct> cartProducts) {
+        AppController.cartProducts = cartProducts;
     }
 
     @Override

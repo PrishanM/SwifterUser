@@ -36,14 +36,22 @@ public class SearchProductItemsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_purchase, container, false);
-
         category = (TextView)rootView.findViewById(R.id.txtCat);
         category.setVisibility(View.GONE);
         recyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_view);
         recyclerView.setHasFixedSize(true);
         StaggeredGridLayoutManager staggeredGridLayoutManager = new StaggeredGridLayoutManager(2, 1);
         recyclerView.setLayoutManager(staggeredGridLayoutManager);
-        searchItemsRecycleAdapter = new SearchItemsRecycleAdapter(AppController.getSearchArrayList(),getActivity());
+
+        SearchItemsRecycleAdapter.Listener listener = new SearchItemsRecycleAdapter.Listener() {
+            @Override
+            public void onOptionsMenuChangeRequested() {
+                if (getActivity() != null){
+                    getActivity().invalidateOptionsMenu();
+                }
+            }
+        };
+        searchItemsRecycleAdapter = new SearchItemsRecycleAdapter(AppController.getSearchArrayList(),getActivity(),listener);
         recyclerView.setAdapter(searchItemsRecycleAdapter);
         return rootView;
     }
@@ -57,5 +65,6 @@ public class SearchProductItemsFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
     }
+
 
 }
