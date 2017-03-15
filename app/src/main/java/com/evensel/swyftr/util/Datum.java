@@ -13,6 +13,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
     "category_name",
     "category_id",
     "brand_id",
+    "brand_name",
     "product_image",
     "product_code",
     "product_amount",
@@ -37,6 +38,8 @@ public class Datum {
     private Integer categoryId;
     @JsonProperty("brand_id")
     private String brandId;
+    @JsonProperty("brand_name")
+    private String brandName;
     @JsonProperty("product_image")
     private String productImage;
     @JsonProperty("product_code")
@@ -181,6 +184,16 @@ public class Datum {
     @JsonProperty("promotional")
     public void setPromotional(String promotional) {
         this.promotional = promotional;
+    }
+
+    @JsonProperty("brand_name")
+    public String getBrandName() {
+        return brandName;
+    }
+
+    @JsonProperty("brand_name")
+    public void setBrandName(String brandName) {
+        this.brandName = brandName;
     }
 
     @JsonProperty("image")

@@ -213,7 +213,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_other, menu);
         TextView txtPrice = (TextView)menu.findItem(R.id.idDone).getActionView().findViewById(R.id.txtPrice);
-        txtPrice.setText("LKR "+AppController.getAmount());
+        txtPrice.setText(AppController.getAmount()+" LKR");
         return true;
     }
 }

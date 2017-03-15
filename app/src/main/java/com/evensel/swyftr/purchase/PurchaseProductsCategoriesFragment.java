@@ -54,6 +54,8 @@ public class PurchaseProductsCategoriesFragment extends Fragment {
             @Override
             public void onClick(View view, int position) {
                 Intent intent = new Intent(getActivity(), CategoryProduct.class);
+                intent.putExtra("ID",AppController.getDatumArrayList().get(position).getId());
+                intent.putExtra("PRODUCT",AppController.getDatumArrayList().get(position).getCategoryName());
                 getActivity().startActivity(intent);
             }
 

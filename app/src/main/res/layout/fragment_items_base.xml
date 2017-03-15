@@ -8,10 +8,30 @@
         android:layout_height="wrap_content"
         android:background="@android:color/transparent">
 
-        <View
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="6dp"
-            android:background="@android:color/white"/>
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/container_toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <include
+                    android:id="@+id/toolbar"
+                    layout="@layout/toolbar" />
+            </LinearLayout>
+
+            <FrameLayout
+                android:id="@+id/container_body"
+                android:layout_width="fill_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
+
+
+        </LinearLayout>
 
         <android.support.design.widget.TabLayout
             android:id="@+id/tabs"
@@ -23,88 +43,103 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:weightSum="1">
+            android:layout_height="50dp"
+            android:weightSum="1"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:background="@android:color/white"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:paddingLeft="@dimen/activity_horizontal_margin">
+
+            <ImageView
+                android:id="@+id/imgLeft"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/go_back_btn"/>
+
 
             <LinearLayout
-                android:id="@+id/nav_header_container"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_alignParentTop="true"
-                android:gravity="center"
-                android:orientation="horizontal"
-                android:background="@android:color/white"
-                android:paddingLeft="@dimen/activity_horizontal_margin"
-                android:paddingRight="@dimen/activity_horizontal_margin"
-                android:weightSum="1">
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
 
-                <ImageView
-                    android:id="@+id/imgLeft"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:src="@drawable/go_back_btn"/>
+                <HorizontalScrollView
+                    android:layout_width="wrap_content"
+                    android:layout_height="50dp"
+                    android:layout_gravity="center"
+                    android:scrollbars="none"
+                    android:paddingLeft="@dimen/activity_horizontal_margin"
+                    android:paddingRight="@dimen/activity_horizontal_margin">
 
-                <Space
-                    android:layout_width="@dimen/space_normal"
-                    android:layout_height="match_parent" />
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal"
+                        android:gravity="center">
 
-                <EditText
-                    android:id="@+id/txtSearch"
-                    android:layout_width="120dp"
-                    android:layout_height="match_parent"
-                    android:paddingLeft="40dp"
-                    android:textSize="@dimen/font_normal"
-                    android:inputType="text"
-                    android:hint="Search Products"
-                    android:imeOptions="actionSearch"
-                    android:layout_marginTop="6dp"
-                    android:layout_marginBottom="6dp"
-                    android:background="@drawable/hollow_search_background"/>
+                        <EditText
+                            android:id="@+id/txtSearch"
+                            android:layout_width="160dp"
+                            android:layout_height="match_parent"
+                            android:paddingLeft="40dp"
+                            android:textSize="@dimen/font_normal"
+                            android:inputType="text"
+                            android:hint="Search Products"
+                            android:imeOptions="actionSearch"
+                            android:layout_marginTop="6dp"
+                            android:layout_marginBottom="6dp"
+                            android:background="@drawable/hollow_search_background"/>
 
-                <Space
-                    android:layout_width="@dimen/space_normal"
-                    android:layout_height="match_parent" />
 
-                <Button
-                    android:id="@+id/txtBrand"
-                    android:layout_width="100dp"
-                    android:text="Select Brand"
-                    android:gravity="center"
-                    android:textAllCaps="false"
-                    android:textColor="@color/colorAccent"
-                    android:layout_height="40dp"
-                    android:background="@drawable/button_border_only"/>
+                        <Space
+                            android:layout_width="@dimen/space_normal"
+                            android:layout_height="match_parent" />
 
-                <Space
-                    android:layout_width="@dimen/space_normal"
-                    android:layout_height="match_parent" />
+                        <Button
+                            android:id="@+id/txtBrand"
+                            android:layout_width="100dp"
+                            android:text="Select Brand"
+                            android:gravity="center"
+                            android:textAllCaps="false"
+                            android:textColor="@color/colorAccent"
+                            android:layout_height="40dp"
+                            android:background="@drawable/button_border_only"/>
 
-                <Button
-                    android:id="@+id/txtType"
-                    android:layout_width="100dp"
-                    android:text="Select Type"
-                    android:gravity="center"
-                    android:textAllCaps="false"
-                    android:textColor="@color/colorAccent"
-                    android:layout_height="40dp"
-                    android:visibility="gone"
-                    android:background="@drawable/button_border_only"/>
+                        <Space
+                            android:layout_width="@dimen/space_normal"
+                            android:layout_height="match_parent" />
 
-                <Space
-                    android:layout_width="@dimen/space_normal"
-                    android:layout_height="match_parent" />
+                        <Button
+                            android:id="@+id/txtType"
+                            android:layout_width="100dp"
+                            android:text="Select Type"
+                            android:gravity="center"
+                            android:textAllCaps="false"
+                            android:textColor="@color/colorAccent"
+                            android:layout_height="40dp"
+                            android:background="@drawable/button_border_only"/>
 
-                <ImageView
-                    android:id="@+id/imgNext"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:src="@drawable/go_next_btn"
-                    android:visibility="gone"/>
+
+                    </LinearLayout>
+
+
+                </HorizontalScrollView>
 
 
             </LinearLayout>
+
+
+            <ImageView
+                android:id="@+id/imgNext"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/go_next_btn"/>
+
+
+
+
         </LinearLayout>
+
     </android.support.design.widget.AppBarLayout>
 
     <android.support.v4.view.ViewPager

@@ -125,7 +125,7 @@ public class SearchItemsRecycleAdapter extends  RecyclerView.Adapter<SearchItems
             public void onClick(View view) {
                 qty[0] = qty[0] +1;
                 holder.txtQuantity.setText("QTY "+qty[0]);
-                AppController.setAmount(AppController.getAmount()+(datumArrayList.get(position).getProductAmount()*qty[0]));
+                AppController.setAmount(AppController.getAmount()+datumArrayList.get(position).getProductPrice());
                 if (listener != null) {
                     listener.onOptionsMenuChangeRequested();
                 }
@@ -136,17 +136,13 @@ public class SearchItemsRecycleAdapter extends  RecyclerView.Adapter<SearchItems
         holder.imgMinus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(qty[0]!=0)
+                if(qty[0]>0){
                     qty[0] = qty[0] -1;
-
-                if(qty[0]<=0){
-                    holder.txtQuantity.setText("QTY 0");
-                    AppController.setAmount(AppController.getAmount()+0);
-                }else{
+                    AppController.setAmount(AppController.getAmount()-datumArrayList.get(position).getProductPrice());
                     holder.txtQuantity.setText("QTY "+qty[0]);
-                    AppController.setAmount(AppController.getAmount()+(datumArrayList.get(position).getProductAmount()*qty[0]));
+                }else{
+                    holder.txtQuantity.setText("QTY 0");
                 }
-
                 if (listener != null) {
                     listener.onOptionsMenuChangeRequested();
                 }
