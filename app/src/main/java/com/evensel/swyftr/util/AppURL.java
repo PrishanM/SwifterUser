@@ -19,4 +19,5 @@ public class AppURL {
     public static final String PRODUCT_FAVOURITE = "user/favourite";
     public static final String CATEGORY_PRODUCTS_URL = "categoryproduct/";
     public static final String CATEGORY_BRANDS_URL = "categorybrand/";
+    public static final String CATEGORY_SEARCH_URL = "category/";
 }

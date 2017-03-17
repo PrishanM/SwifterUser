@@ -84,7 +84,8 @@ public class CategoryProduct extends AppCompatActivity implements View.OnClickLi
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                    //searchData(edtSearch.getText().toString());
+                    if(!edtSearch.getText().toString().isEmpty())
+                        searchData(edtSearch.getText().toString());
                     return true;
                 }
                 return false;
@@ -97,6 +98,17 @@ public class CategoryProduct extends AppCompatActivity implements View.OnClickLi
 
         addFiles();
 
+    }
+
+    private void searchData(String s) {
+        progress = ProgressDialog.show(this, null,
+                "Loading...", true);
+        String url = "";
+        if(btnBrand.getText().toString().equalsIgnoreCase("Select Brand"))
+            url = AppURL.APPLICATION_BASE_URL+AppURL.CATEGORY_SEARCH_URL+getIntent().getIntExtra("ID",1)+"/"+s+"?page=1";
+        else
+            url = AppURL.APPLICATION_BASE_URL+AppURL.CATEGORY_SEARCH_URL+getIntent().getIntExtra("ID",1)+"/"+brandId+"/"+s+"?page=1";
+        JsonRequestManager.getInstance(this).categoryBasedSearch(url,token, categorySearchRequest);
     }
 
     @Override
@@ -252,4 +264,43 @@ public class CategoryProduct extends AppCompatActivity implements View.OnClickLi
             }
         });
     }
+
+    //Response callback for "Get category List"
+    private final JsonRequestManager.categoryBasedSearchRequest categorySearchRequest = new JsonRequestManager.categoryBasedSearchRequest() {
+        @Override
+        public void onSuccess(CategoriesResponse model) {
+
+            if(progress!=null)
+                progress.dismiss();
+            datumArrayList.clear();
+
+            if(model.getStatus().equalsIgnoreCase("success")){
+                for(Datum datum :model.getDetails().getData()){
+                    datumArrayList.add(datum);
+                }
+                AppController.setSearchArrayList(datumArrayList);
+                setupViewPager();
+                if(model.getDetails().getNextPageUrl()!=null)
+                    getNextList(model.getDetails().getNextPageUrl());
+            }else{
+                Notifications.showToastMessage(layout,context,model.getMessage()).show();
+            }
+        }
+
+        @Override
+        public void onError(String status) {
+            if(progress!=null)
+                progress.dismiss();
+            Notifications.showToastMessage(layout,context,status).show();
+            datumArrayList.clear();
+        }
+
+        @Override
+        public void onError(CategoriesResponse model) {
+            if(progress!=null)
+                progress.dismiss();
+            Notifications.showToastMessage(layout,context,model.getMessage()).show();
+            datumArrayList.clear();
+        }
+    };
 }

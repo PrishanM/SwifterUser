@@ -575,9 +575,8 @@ public class JsonRequestManager {
 		HashMap<String, Integer> params = new HashMap<>();
 		params.put("product_id",productId);
 		params.put("status",status);
-
 		JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST,
-				url, null,
+				url, new JSONObject(params),
 				new Response.Listener<JSONObject>() {
 
 					@Override
@@ -726,7 +725,126 @@ public class JsonRequestManager {
 
 	}
 
+	/******************************************************************************************************************************************/
 
+	/**
+	 * Get Category base product search list
+	 **/
+	public interface categoryBasedSearchRequest{
+		void onSuccess(CategoriesResponse model);
+
+		void onError(String status);
+
+		void onError(CategoriesResponse model);
+	}
+
+	public void categoryBasedSearch(String url,String token,
+							 final categoryBasedSearchRequest callback) {
+
+		url = url+"&token="+token;
+
+		JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.GET,
+				url, null,
+				new Response.Listener<JSONObject>() {
+
+					@Override
+					public void onResponse(JSONObject response) {
+						ObjectMapper mapper = new ObjectMapper();
+						try {
+							if(response!=null){
+								CategoriesResponse responseModel = mapper.readValue(response.toString(), CategoriesResponse.class);
+								callback.onSuccess(responseModel);
+							}else{
+								callback.onError("Error occured");
+							}
+
+						} catch (Exception e) {
+							e.printStackTrace();
+							callback.onError("Error occured");
+						}
+					}
+				}, new Response.ErrorListener() {
+
+			@Override
+			public void onErrorResponse(VolleyError error) {
+				callback.onError(errorCatResponse(error.networkResponse.data,HttpHeaderParser.parseCharset(error.networkResponse.headers)));
+			}
+		});
+
+		jsonObjReq.setRetryPolicy(new DefaultRetryPolicy(30000,
+				DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+				DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+		// Adding request to request queue
+		AppController.getInstance().addToRequestQueue(jsonObjReq,
+				tag_json_arry);
+
+	}
+
+
+
+	/******************************************************************************************************************************************/
+
+	/**
+	 * Social Login
+	 **/
+	public interface socialLogin{
+		void onSuccess(LoginResponse model);
+
+		void onError(String status);
+
+		void onError(LoginResponse model);
+
+
+	}
+
+	public void socialLoginRequest(String url,String token,String media,
+								   final socialLogin callback) {
+
+		//Log.d("test Request", image);
+		String finalUrl = url+"?token="+token;
+		HashMap<String, String> params = new HashMap<>();
+		params.put("media",media);
+
+		JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST,
+				finalUrl, new JSONObject(params),
+				new Response.Listener<JSONObject>() {
+
+					@Override
+					public void onResponse(JSONObject response) {
+
+						ObjectMapper mapper = new ObjectMapper();
+
+						try {
+							if(response!=null){
+								LoginResponse responseModel = mapper.readValue(response.toString(), LoginResponse.class);
+								callback.onSuccess(responseModel);
+							}else{
+								callback.onError("Error occured");
+							}
+
+						} catch (Exception e) {
+							e.printStackTrace();
+							callback.onError("Error occured");
+						}
+					}
+				}, new Response.ErrorListener() {
+
+			@Override
+			public void onErrorResponse(VolleyError error) {
+				callback.onError(errorLoginResponse(error.networkResponse.data,HttpHeaderParser.parseCharset(error.networkResponse.headers)));
+			}
+		});
+
+		jsonObjReq.setRetryPolicy(new DefaultRetryPolicy(30000,
+				DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+				DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+		// Adding request to request queue
+		AppController.getInstance().addToRequestQueue(jsonObjReq,
+				tag_json_arry);
+
+	}
 
 
 	/******************************************************************************************************************************************/
@@ -807,67 +925,6 @@ public class JsonRequestManager {
 
 
 	/******************************************************************************************************************************************/
-
-	/**
-	 * Social Login
-	 **/
-	public interface socialLogin{
-		void onSuccess(LoginResponse model);
-
-		void onError(String status);
-
-		void onError(LoginResponse model);
-
-
-	}
-
-	public void socialLoginRequest(String url,String token,String media,
-									 final socialLogin callback) {
-
-		//Log.d("test Request", image);
-		String finalUrl = url+"?token="+token;
-		HashMap<String, String> params = new HashMap<>();
-		params.put("media",media);
-
-		JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST,
-				finalUrl, new JSONObject(params),
-				new Response.Listener<JSONObject>() {
-
-					@Override
-					public void onResponse(JSONObject response) {
-
-						ObjectMapper mapper = new ObjectMapper();
-
-						try {
-							if(response!=null){
-								LoginResponse responseModel = mapper.readValue(response.toString(), LoginResponse.class);
-								callback.onSuccess(responseModel);
-							}else{
-								callback.onError("Error occured");
-							}
-
-						} catch (Exception e) {
-							e.printStackTrace();
-							callback.onError("Error occured");
-						}
-					}
-				}, new Response.ErrorListener() {
-
-			@Override
-			public void onErrorResponse(VolleyError error) {
-				callback.onError(errorLoginResponse(error.networkResponse.data,HttpHeaderParser.parseCharset(error.networkResponse.headers)));
-			}
-		});
-
-		jsonObjReq.setRetryPolicy(new DefaultRetryPolicy(30000,
-				DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-				DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-
-		// Adding request to request queue
-		AppController.getInstance().addToRequestQueue(jsonObjReq,
-				tag_json_arry);
-
-	}
 
 
 }
