@@ -4,12 +4,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/black"
-    android:gravity="bottom|right"
+    android:gravity="bottom|center_horizontal"
     android:padding="@dimen/activity_vertical_margin">
 
     <Button
         android:id="@+id/txtVideo"
-        android:layout_width="wrap_content"
+        android:layout_width="200dp"
         android:layout_height="50dp"
         style="@style/AppButtonHollowOnly"
         android:layout_marginLeft="@dimen/space_large"

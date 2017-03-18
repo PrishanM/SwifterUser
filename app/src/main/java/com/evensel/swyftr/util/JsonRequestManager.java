@@ -571,10 +571,10 @@ public class JsonRequestManager {
 	public void favouriteProduct(String url,String token,int productId,int status,
 								  final favouriteProductRequest callback) {
 
-		url = url+"&token="+token;
-		HashMap<String, Integer> params = new HashMap<>();
-		params.put("product_id",productId);
-		params.put("status",status);
+		url = url+"?token="+token;
+		HashMap<String, String> params = new HashMap<>();
+		params.put("product_id",String.valueOf(productId));
+		params.put("status",String.valueOf(status));
 		JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST,
 				url, new JSONObject(params),
 				new Response.Listener<JSONObject>() {
@@ -833,6 +833,63 @@ public class JsonRequestManager {
 			@Override
 			public void onErrorResponse(VolleyError error) {
 				callback.onError(errorLoginResponse(error.networkResponse.data,HttpHeaderParser.parseCharset(error.networkResponse.headers)));
+			}
+		});
+
+		jsonObjReq.setRetryPolicy(new DefaultRetryPolicy(30000,
+				DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+				DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+		// Adding request to request queue
+		AppController.getInstance().addToRequestQueue(jsonObjReq,
+				tag_json_arry);
+
+	}
+
+
+	/******************************************************************************************************************************************/
+
+	/**
+	 * Update Location
+	 **/
+	public interface updateLocationRequest{
+		void onSuccess(LocationResponseModel model);
+
+		void onError(String status);
+	}
+
+	public void updateLocation(String url,String token,double longitude,double latitude,
+								 final updateLocationRequest callback) {
+
+		url = url+"?token="+token;
+		HashMap<String, Double> params = new HashMap<>();
+		params.put("lon",longitude);
+		params.put("lat",latitude);
+		JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST,
+				url, new JSONObject(params),
+				new Response.Listener<JSONObject>() {
+
+					@Override
+					public void onResponse(JSONObject response) {
+						ObjectMapper mapper = new ObjectMapper();
+						try {
+							if(response!=null){
+								LocationResponseModel responseModel = mapper.readValue(response.toString(), LocationResponseModel.class);
+								callback.onSuccess(responseModel);
+							}else{
+								callback.onError("Error occured");
+							}
+
+						} catch (Exception e) {
+							e.printStackTrace();
+							callback.onError("Error occured");
+						}
+					}
+				}, new Response.ErrorListener() {
+
+			@Override
+			public void onErrorResponse(VolleyError error) {
+				callback.onError("Error occured");
 			}
 		});
 

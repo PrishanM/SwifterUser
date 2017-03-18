@@ -2,6 +2,7 @@ package com.evensel.swyftr.purchase;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
@@ -14,6 +15,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
@@ -24,6 +26,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.evensel.swyftr.MainActivity;
 import com.evensel.swyftr.R;
 import com.evensel.swyftr.util.AppController;
 import com.evensel.swyftr.util.AppURL;
@@ -114,8 +117,19 @@ public class CategoryProduct extends AppCompatActivity implements View.OnClickLi
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_other, menu);
+        final MenuItem item = menu.findItem(R.id.idDone);
         TextView txtPrice = (TextView)menu.findItem(R.id.idDone).getActionView().findViewById(R.id.txtPrice);
         txtPrice.setText("LKR "+ AppController.getAmount());
+
+        item.getActionView().setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(CategoryProduct.this, CartStepOneActivity.class);
+                startActivity(intent);
+            }
+        });
+
         return true;
     }
 

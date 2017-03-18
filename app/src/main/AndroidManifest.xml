@@ -94,6 +94,17 @@
 
         </activity>
 
+        <activity
+            android:theme="@style/AppTheme.NoActionBar"
+            android:name=".purchase.CartStepOneActivity"
+            android:screenOrientation="portrait" >
+
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".purchase.CartStepOneActivity" />
+
+        </activity>
+
         <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id"/>
 
         <!--<meta-data

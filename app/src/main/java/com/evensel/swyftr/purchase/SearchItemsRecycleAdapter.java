@@ -130,6 +130,16 @@ public class SearchItemsRecycleAdapter extends  RecyclerView.Adapter<SearchItems
                     listener.onOptionsMenuChangeRequested();
                 }
 
+                if(!AppController.cartProducts.contains(datumArrayList.get(position))){
+                    AppController.cartProducts.add(datumArrayList.get(position));
+                }
+
+                if(AppController.cartQuantity.containsKey(datumArrayList.get(position).getId())){
+                    AppController.cartQuantity.put(datumArrayList.get(position).getId(), AppController.getCartQuantity().get(datumArrayList.get(position).getId()) + 1);
+                }else{
+                    AppController.cartQuantity.put(datumArrayList.get(position).getId(),1);
+                }
+
             }
         });
 
@@ -140,12 +150,23 @@ public class SearchItemsRecycleAdapter extends  RecyclerView.Adapter<SearchItems
                     qty[0] = qty[0] -1;
                     AppController.setAmount(AppController.getAmount()-datumArrayList.get(position).getProductPrice());
                     holder.txtQuantity.setText("QTY "+qty[0]);
+
+                    if(!AppController.cartProducts.contains(datumArrayList.get(position))){
+                        AppController.cartProducts.add(datumArrayList.get(position));
+                    }
+
+                    if(AppController.cartQuantity.containsKey(datumArrayList.get(position).getId())){
+                        AppController.cartQuantity.put(datumArrayList.get(position).getId(), AppController.getCartQuantity().get(datumArrayList.get(position).getId()) - 1);
+                    }
+
+
                 }else{
                     holder.txtQuantity.setText("QTY 0");
                 }
                 if (listener != null) {
                     listener.onOptionsMenuChangeRequested();
                 }
+
 
 
             }

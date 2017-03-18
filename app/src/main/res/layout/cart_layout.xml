@@ -20,6 +20,6 @@
         android:layout_height="25dp"
         android:contentDescription="@null"
         android:scaleType="centerInside"
-        android:src="@drawable/ic_cart" />
+        android:src="@drawable/ic_cart_white" />
 
 </LinearLayout>

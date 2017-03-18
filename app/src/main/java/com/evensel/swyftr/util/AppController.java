@@ -22,6 +22,7 @@ import com.android.volley.toolbox.Volley;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * @author prishanm 02/14/2017
@@ -37,7 +38,8 @@ public class AppController extends Application {
     private static int selectedTab;
     private static ArrayList<Datum> datumArrayList;
     private static ArrayList<Datum> searchArrayList;
-    private static ArrayList<CartProduct> cartProducts;
+    public static ArrayList<Datum> cartProducts = new ArrayList<>();
+    public static HashMap<Integer,Integer> cartQuantity = new HashMap<>();
  
     private static AppController mInstance;
 
@@ -296,11 +298,11 @@ public class AppController extends Application {
         AppController.searchArrayList = searchArrayList;
     }
 
-    public static ArrayList<CartProduct> getCartProducts() {
+    public static ArrayList<Datum> getCartProducts() {
         return cartProducts;
     }
 
-    public static void setCartProducts(ArrayList<CartProduct> cartProducts) {
+    public static void setCartProducts(ArrayList<Datum> cartProducts) {
         AppController.cartProducts = cartProducts;
     }
 
@@ -310,4 +312,11 @@ public class AppController extends Application {
         MultiDex.install(this);
     }
 
+    public static HashMap<Integer, Integer> getCartQuantity() {
+        return cartQuantity;
+    }
+
+    public static void setCartQuantity(HashMap<Integer, Integer> cartQuantity) {
+        AppController.cartQuantity = cartQuantity;
+    }
 }

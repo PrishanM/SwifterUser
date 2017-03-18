@@ -90,6 +90,92 @@
 
 
             </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/nav_header_location"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_alignParentTop="true"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:background="@android:color/white"
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:paddingRight="@dimen/activity_horizontal_margin"
+                android:weightSum="1"
+                android:visibility="gone">
+
+                <ImageView
+                    android:id="@+id/imgBack"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:src="@drawable/go_back_btn"/>
+
+                <Space
+                    android:layout_width="@dimen/space_normal"
+                    android:layout_height="match_parent" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:weightSum="1">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="0.5"
+                        android:gravity="center_vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Current Location"
+                            android:textColor="@android:color/black"
+                            android:textSize="@dimen/font_large"/>
+
+                        <Space
+                            android:layout_width="10dp"
+                            android:layout_height="match_parent" />
+
+                        <TextView
+                            android:id="@+id/txtChange"
+                            android:layout_width="80dp"
+                            android:text="Change"
+                            android:gravity="center"
+                            android:textAllCaps="false"
+                            android:textColor="@color/colorAccent"
+                            android:layout_height="match_parent"
+                            android:layout_marginTop="1dp"
+                            android:background="@drawable/button_border_only"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="0.5"
+                        android:gravity="center_vertical">
+
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:src="@drawable/location_ico"/>
+
+                        <TextView
+                            android:id="@+id/txtAddress"
+                            android:layout_width="wrap_content"
+                            android:gravity="center"
+                            android:textAllCaps="false"
+                            android:layout_height="match_parent"/>
+
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
+
+            </LinearLayout>
         </LinearLayout>
     </android.support.design.widget.AppBarLayout>
 

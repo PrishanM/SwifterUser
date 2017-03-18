@@ -17,6 +17,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
@@ -25,6 +26,7 @@ import com.android.volley.toolbox.ImageLoader;
 import com.evensel.swyftr.authentication.LoginActivity;
 import com.evensel.swyftr.deliveries.ActiveDeliveriesFragment;
 import com.evensel.swyftr.profile.ProfileFragment;
+import com.evensel.swyftr.purchase.CartStepOneActivity;
 import com.evensel.swyftr.purchase.PurchaseFragment;
 import com.evensel.swyftr.util.AppController;
 import com.evensel.swyftr.util.Constants;
@@ -212,8 +214,19 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_other, menu);
+        final MenuItem item = menu.findItem(R.id.idDone);
         TextView txtPrice = (TextView)menu.findItem(R.id.idDone).getActionView().findViewById(R.id.txtPrice);
         txtPrice.setText(AppController.getAmount()+" LKR");
+
+        item.getActionView().setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, CartStepOneActivity.class);
+                startActivity(intent);
+            }
+        });
+
         return true;
     }
 }

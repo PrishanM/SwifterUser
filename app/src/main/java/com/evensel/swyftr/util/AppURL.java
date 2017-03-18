@@ -20,4 +20,5 @@ public class AppURL {
     public static final String CATEGORY_PRODUCTS_URL = "categoryproduct/";
     public static final String CATEGORY_BRANDS_URL = "categorybrand/";
     public static final String CATEGORY_SEARCH_URL = "category/";
+    public static final String UPDATE_LOCATION = "user/location";
 }
