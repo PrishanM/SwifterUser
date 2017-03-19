@@ -1,0 +1,365 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background_image"
+    android:weightSum="1">
+
+    <LinearLayout
+        android:id="@+id/container_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <include
+            android:id="@+id/toolbar"
+            layout="@layout/toolbar" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:weightSum="1"
+        android:orientation="horizontal"
+        android:background="@android:color/white"
+        android:gravity="center_vertical"
+        android:padding="@dimen/activity_horizontal_margin">
+        
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/location_btn"/>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:gravity="center_vertical"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_weight="1"
+            android:paddingLeft="4dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:gravity="center_vertical"
+                android:textColor="@android:color/black"
+                android:textSize="@dimen/font_xlarge"
+                android:text="Delivery Address"
+                android:layout_height="wrap_content"/>
+
+            <TextView
+                android:id="@+id/txtAddress"
+                android:layout_width="match_parent"
+                android:gravity="center_vertical"
+                android:textSize="@dimen/font_normal"
+                android:text="295, Stanley Tilakaratne Mw, Nugegoda"
+                android:layout_height="wrap_content"/>
+
+
+        </LinearLayout>
+
+
+
+
+    </LinearLayout>
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/space_normal" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="@android:color/white"
+        android:orientation="vertical"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:gravity="center">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Food City"
+            android:textSize="@dimen/font_xxlarge"
+            android:textColor="@android:color/black"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="1">
+
+            <TextView
+                android:id="@+id/txtETA"
+                android:layout_width="0dp"
+                android:layout_weight="0.3"
+                android:layout_height="wrap_content"
+                android:text="ETA 40min"
+                android:textSize="@dimen/font_large"/>
+
+            <TextView
+                android:id="@+id/txtDC"
+                android:layout_width="0dp"
+                android:layout_weight="0.7"
+                android:layout_height="wrap_content"
+                android:text="Delivery charges : 230 LKR"
+                android:gravity="right"
+                android:textSize="@dimen/font_large"/>
+
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/colorHint"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="@dimen/activity_horizontal_margin"
+                    android:paddingRight="@dimen/activity_horizontal_margin"
+                    android:paddingTop="@dimen/activity_horizontal_margin"
+                    android:weightSum="1"
+                    android:orientation="horizontal"
+                    android:background="@android:color/white">
+
+                    <Button
+                        android:id="@+id/btnNow"
+                        android:layout_width="0dp"
+                        android:layout_weight="0.5"
+                        android:layout_height="50dp"
+                        android:text="Deliver Now"
+                        android:textColor="@android:color/white"
+                        android:background="@drawable/cornered_button_left"/>
+
+                    <Button
+                        android:id="@+id/btnSchedule"
+                        android:layout_width="0dp"
+                        android:layout_weight="0.5"
+                        android:layout_height="50dp"
+                        android:text="Scheduled"
+                        android:textColor="@color/colorAccent"
+                        android:background="@drawable/cornered_button_right"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/layoutNow"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/activity_horizontal_margin"
+                    android:weightSum="1"
+                    android:orientation="horizontal"
+                    android:background="@android:color/white">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.5"
+                        android:gravity="center">
+
+                        <ImageView
+                            android:id="@+id/btnStandard"
+                            android:layout_width="100dp"
+                            android:layout_height="100dp"
+                            android:layout_gravity="left"
+                            android:src="@drawable/standard_selected_btn"/>
+
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.5"
+                        android:gravity="center">
+
+                        <ImageView
+                            android:id="@+id/btnPremium"
+                            android:layout_width="100dp"
+                            android:layout_gravity="right"
+                            android:layout_height="100dp"
+                            android:src="@drawable/premium_btn"/>
+
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/layoutDateTime"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/activity_horizontal_margin"
+                    android:weightSum="1"
+                    android:orientation="horizontal"
+                    android:gravity="center"
+                    android:background="@android:color/white"
+                    android:visibility="gone">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.5"
+                        android:orientation="vertical">
+
+                        <Button
+                            android:id="@+id/btnDatePick"
+                            android:layout_width="120dp"
+                            android:layout_height="50dp"
+                            style="@style/AppButtonHollowOnly"
+                            android:layout_marginLeft="@dimen/space_large"
+                            android:layout_marginRight="@dimen/space_large"
+                            android:textColor="@color/colorAccent"
+                            android:text="Select Date"/>
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:paddingTop="@dimen/space_normal"
+                            android:gravity="center"
+                            android:id="@+id/txtDate"/>
+
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.5"
+                        android:orientation="vertical">
+
+                        <Button
+                            android:id="@+id/btnTimePick"
+                            android:layout_width="120dp"
+                            android:layout_height="50dp"
+                            style="@style/AppButtonHollowOnly"
+                            android:layout_marginLeft="@dimen/space_large"
+                            android:layout_marginRight="@dimen/space_large"
+                            android:textColor="@color/colorAccent"
+                            android:text="Select Time"/>
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:paddingTop="@dimen/space_normal"
+                            android:gravity="center"
+                            android:id="@+id/txtTime"/>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/colorHint"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/activity_horizontal_margin"
+                    android:weightSum="1"
+                    android:orientation="horizontal"
+                    android:gravity="center"
+                    android:background="@android:color/white">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@android:color/black"
+                        android:text="Will you receive package in person?"
+                        android:layout_marginRight="@dimen/space_normal"/>
+
+                    <Switch
+                        android:id="@+id/switchPersonal"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+
+                </LinearLayout>
+
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/space_large" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/space_normal"
+                    android:weightSum="1"
+                    android:orientation="horizontal"
+                    android:gravity="center"
+                    android:background="@android:color/white">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@android:color/black"
+                        android:text="Read Terms &amp; Conditions | Accept"
+                        android:layout_marginRight="@dimen/space_normal"/>
+
+                    <ImageView
+                        android:id="@+id/checkAccept"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:src="@drawable/check_box"/>
+
+
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/txtTotal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/space_normal"
+                    android:gravity="center"
+                    android:background="@android:color/white"
+                    android:text="Total : 2320 LKR"
+                    android:textSize="@dimen/font_xxlarge"
+                    android:textColor="@android:color/black"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:padding="@dimen/space_normal"
+                    android:background="@android:color/white">
+
+                    <Button
+                        android:id="@+id/btnCheckout"
+                        android:layout_width="200dp"
+                        android:layout_height="50dp"
+                        android:background="@drawable/checkout_btn"
+                        android:layout_marginLeft="@dimen/space_large"
+                        android:layout_marginRight="@dimen/space_large"/>
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+
+        </ScrollView>
+
+
+    </LinearLayout>
+
+</LinearLayout>

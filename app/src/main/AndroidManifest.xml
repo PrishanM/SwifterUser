@@ -101,6 +101,17 @@
 
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity" />
+
+        </activity>
+
+        <activity
+            android:theme="@style/AppTheme.NoActionBar"
+            android:name=".deliveries.DeliveryOptionsActivity"
+            android:screenOrientation="portrait" >
+
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
                 android:value=".purchase.CartStepOneActivity" />
 
         </activity>

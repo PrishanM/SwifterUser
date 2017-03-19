@@ -33,7 +33,11 @@
             android:src="@drawable/ic_cart"/>
 
         <TextView
+            android:id="@+id/txtTotalProductCount"
             android:layout_width="0dp"
+            android:gravity="center_vertical"
+            android:textColor="@android:color/black"
+            android:textSize="@dimen/font_large"
             android:layout_height="match_parent"
             android:layout_weight="1"/>
 
@@ -44,20 +48,42 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/space_normal" />
 
-    <ListView
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="@android:color/white"
+        android:orientation="vertical"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:gravity="center">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Food City"
+            android:textSize="@dimen/font_xxlarge"
+            android:textColor="@android:color/black"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="ETA 40min"
+            android:textSize="@dimen/font_large"/>
+
+    </LinearLayout>
+
+    <com.baoyz.swipemenulistview.SwipeMenuListView
         android:id="@+id/listProducts"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="0.8">
-
-
-    </ListView>
+        android:layout_weight="1"/>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0.2"
-        android:gravity="center">
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:paddingTop="@dimen/space_normal"
+        android:paddingBottom="@dimen/space_normal">
 
         <Button
             android:id="@+id/btnProceed"
