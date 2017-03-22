@@ -60,7 +60,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Food City"
+            android:text="Wine World"
             android:textSize="@dimen/font_xxlarge"
             android:textColor="@android:color/black"/>
 
@@ -71,6 +71,10 @@
             android:textSize="@dimen/font_large"/>
 
     </LinearLayout>
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/space_normal" />
 
     <com.baoyz.swipemenulistview.SwipeMenuListView
         android:id="@+id/listProducts"

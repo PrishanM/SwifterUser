@@ -26,7 +26,6 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.evensel.swyftr.MainActivity;
 import com.evensel.swyftr.R;
 import com.evensel.swyftr.util.AppController;
 import com.evensel.swyftr.util.AppURL;
@@ -136,7 +135,7 @@ public class CategoryProduct extends AppCompatActivity implements View.OnClickLi
     private void setupViewPager() {
         viewPager.setAdapter(null);
         ArrayList<String> titles = new ArrayList<>();
-        titles.add("Foodcity");
+        titles.add("Wine World");
 
         searchItemPagerAdapter =
                 new SearchItemPagerAdapter(getSupportFragmentManager(),titles);

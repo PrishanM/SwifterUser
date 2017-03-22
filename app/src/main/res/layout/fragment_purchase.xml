@@ -5,69 +5,6 @@
     android:gravity="center"
     android:weightSum="1">
 
-    <!--<LinearLayout
-        android:id="@+id/nav_header_container"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_alignParentTop="true"
-        android:gravity="center"
-        android:orientation="horizontal"
-        android:background="@android:color/white"
-        android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:paddingRight="@dimen/activity_horizontal_margin"
-        android:weightSum="1">
-
-        <ImageView
-            android:id="@+id/imgHome"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:src="@drawable/location_btn"/>
-
-        <Space
-            android:layout_width="@dimen/space_normal"
-            android:layout_height="match_parent" />
-
-        <EditText
-            android:id="@+id/txtSearch"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:paddingLeft="40dp"
-            android:textSize="@dimen/font_normal"
-            android:inputType="text"
-            android:hint="Search Products"
-            android:imeOptions="actionSearch"
-            android:layout_marginTop="6dp"
-            android:layout_marginBottom="6dp"
-            android:background="@drawable/hollow_search_background"/>
-
-        <Space
-            android:layout_width="@dimen/space_normal"
-            android:layout_height="match_parent" />
-
-        <ImageView
-            android:id="@+id/imgLocation"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:src="@drawable/location_btn"/>
-
-        <Space
-            android:layout_width="@dimen/space_normal"
-            android:layout_height="match_parent" />
-
-        <TextView
-            android:id="@+id/txtETA"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:gravity="center"
-            android:textColor="@color/colorAccent"
-            android:text="ETA\n15min"
-            android:textSize="@dimen/space_normal"
-            android:background="@drawable/empty_circle"/>
-
-
-    </LinearLayout>-->
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -86,12 +23,12 @@
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recycler_view"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="horizontal"
             android:layout_gravity="center"
-            android:paddingLeft="@dimen/activity_horizontal_margin"
-            android:paddingRight="@dimen/activity_horizontal_margin"/>
+            android:paddingLeft="@dimen/space_normal"
+            android:paddingRight="@dimen/space_normal"/>
 
 
     </LinearLayout>

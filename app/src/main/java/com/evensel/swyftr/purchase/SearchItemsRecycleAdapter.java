@@ -1,5 +1,6 @@
 package com.evensel.swyftr.purchase;
 
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -11,6 +12,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -79,6 +82,16 @@ public class SearchItemsRecycleAdapter extends  RecyclerView.Adapter<SearchItems
         holder.txtVolume.setText(datumArrayList.get(position).getProductAmount()+"");
         holder.txtPrice.setText(datumArrayList.get(position).getProductPrice()+"");
 
+        if(datumArrayList.get(position).getPromotional()!=null){
+            if(datumArrayList.get(position).getPromotional().equalsIgnoreCase("0")){
+                holder.imgPromo.setVisibility(View.GONE);
+            }else{
+                holder.imgPromo.setVisibility(View.VISIBLE);
+            }
+        }else{
+            holder.imgPromo.setVisibility(View.GONE);
+        }
+
         if (thumbnailImage == null){
             BitmapWorkerTask task = new BitmapWorkerTask(holder.imgItem);
             task.execute(imageKey);
@@ -89,6 +102,22 @@ public class SearchItemsRecycleAdapter extends  RecyclerView.Adapter<SearchItems
             @Override
             public void onClick(View v) {
 
+                final Dialog dialog1 = new Dialog(context);
+                dialog1.requestWindowFeature(Window.FEATURE_NO_TITLE);
+
+                dialog1.setContentView(R.layout.custom_product_details);
+                dialog1.show();
+                Button btnOk = (Button)dialog1.findViewById(R.id.btnDone);
+                TextView productName = (TextView)dialog1.findViewById(R.id.txtProductName);
+                TextView description = (TextView)dialog1.findViewById(R.id.txtDescription);
+                productName.setText(""+datumArrayList.get(position).getProductName());
+                //description.setText();
+                btnOk.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog1.dismiss();
+                    }
+                });
             }
         });
 
@@ -210,12 +239,13 @@ public class SearchItemsRecycleAdapter extends  RecyclerView.Adapter<SearchItems
     }
 
     public class ImageViewHolder extends RecyclerView.ViewHolder {
-        public final ImageView imgFav,imgPlus,imgMinus;
+        public final ImageView imgFav,imgPlus,imgMinus,imgPromo;
         public final CircularImageView imgItem;
         public final TextView txtName,txtVolume,txtPrice,txtQuantity;
         public ImageViewHolder(View itemView) {
             super(itemView);
             imgFav = (ImageView)itemView.findViewById(R.id.imgFav);
+            imgPromo = (ImageView)itemView.findViewById(R.id.imgPromo);
             imgPlus = (ImageView)itemView.findViewById(R.id.imgPlus);
             imgMinus = (ImageView)itemView.findViewById(R.id.imgMinus);
             imgItem = (CircularImageView) itemView.findViewById(R.id.imgItem);

@@ -1,6 +1,7 @@
 package com.evensel.swyftr.util;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
@@ -632,6 +633,9 @@ public class JsonRequestManager {
 								 final categoryProductRequest callback) {
 
 		url = url+"&token="+token;
+
+		Log.d("XXXXXXXXXXXX",url);
+
 
 		JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.GET,
 				url, null,

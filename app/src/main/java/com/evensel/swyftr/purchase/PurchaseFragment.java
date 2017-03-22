@@ -144,7 +144,7 @@ public class PurchaseFragment extends Fragment implements OnMapReadyCallback,Vie
         viewPager.getCurrentItem();
         viewPager.setAdapter(null);
         ArrayList<String> titles = new ArrayList<>();
-        titles.add("Foodcity");
+        titles.add("Wine World");
         /*titles.add("Grocerymart");
         titles.add("Laugfs");*/
         searchItemPagerAdapter =
@@ -157,7 +157,7 @@ public class PurchaseFragment extends Fragment implements OnMapReadyCallback,Vie
     private void setupViewPager() {
 
         ArrayList<String> titles = new ArrayList<>();
-        titles.add("Foodcity");
+        titles.add("Wine World");
         /*titles.add("Grocerymart");
         titles.add("Laugfs");*/
 

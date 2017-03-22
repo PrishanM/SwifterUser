@@ -21,9 +21,18 @@
             android:layout_weight="1"
             android:gravity="center">
 
-            <Space
+            <LinearLayout
                 android:layout_width="25dp"
-                android:layout_height="match_parent" />
+                android:layout_height="match_parent"
+                android:gravity="top">
+
+                <ImageView
+                    android:id="@+id/imgPromo"
+                    android:src="@drawable/promo_star"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp" />
+
+            </LinearLayout>
 
             <com.mikhaellopez.circularimageview.CircularImageView
                 android:id="@+id/imgItem"
@@ -40,8 +49,8 @@
                 <ImageView
                     android:id="@+id/imgFav"
                     android:src="@drawable/fav_check_unselected"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp" />
+                    android:layout_width="20dp"
+                    android:layout_height="20dp" />
 
             </LinearLayout>
 
@@ -69,8 +78,8 @@
             
             <ImageView
                 android:id="@+id/imgMinus"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
                 android:src="@drawable/btn_minus"/>
 
             <LinearLayout
@@ -99,8 +108,8 @@
 
             <ImageView
                 android:id="@+id/imgPlus"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
                 android:src="@drawable/btn_plus"/>
 
 

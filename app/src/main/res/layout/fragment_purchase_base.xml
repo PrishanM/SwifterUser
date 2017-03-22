@@ -8,11 +8,6 @@
         android:layout_height="wrap_content"
         android:background="@android:color/transparent">
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="6dp"
-            android:background="@android:color/white"/>
-
         <android.support.design.widget.TabLayout
             android:id="@+id/tabs"
             android:layout_width="wrap_content"
@@ -106,8 +101,8 @@
 
                 <ImageView
                     android:id="@+id/imgBack"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
                     android:src="@drawable/go_back_btn"/>
 
                 <Space
@@ -141,13 +136,12 @@
                         <TextView
                             android:id="@+id/txtChange"
                             android:layout_width="80dp"
-                            android:text="Change"
                             android:gravity="center"
                             android:textAllCaps="false"
                             android:textColor="@color/colorAccent"
                             android:layout_height="match_parent"
                             android:layout_marginTop="1dp"
-                            android:background="@drawable/button_border_only"/>
+                            android:background="@drawable/change_add_btn"/>
 
                     </LinearLayout>
 
