@@ -92,6 +92,13 @@ public class SearchItemsRecycleAdapter extends  RecyclerView.Adapter<SearchItems
             holder.imgPromo.setVisibility(View.GONE);
         }
 
+
+        if(datumArrayList.get(position).getStockThreshold()<=10){
+            holder.txtStocked.setVisibility(View.VISIBLE);
+        }else{
+            holder.txtStocked.setVisibility(View.GONE);
+        }
+
         if (thumbnailImage == null){
             BitmapWorkerTask task = new BitmapWorkerTask(holder.imgItem);
             task.execute(imageKey);
@@ -241,7 +248,7 @@ public class SearchItemsRecycleAdapter extends  RecyclerView.Adapter<SearchItems
     public class ImageViewHolder extends RecyclerView.ViewHolder {
         public final ImageView imgFav,imgPlus,imgMinus,imgPromo;
         public final CircularImageView imgItem;
-        public final TextView txtName,txtVolume,txtPrice,txtQuantity;
+        public final TextView txtName,txtVolume,txtPrice,txtQuantity,txtStocked;
         public ImageViewHolder(View itemView) {
             super(itemView);
             imgFav = (ImageView)itemView.findViewById(R.id.imgFav);
@@ -249,6 +256,7 @@ public class SearchItemsRecycleAdapter extends  RecyclerView.Adapter<SearchItems
             imgPlus = (ImageView)itemView.findViewById(R.id.imgPlus);
             imgMinus = (ImageView)itemView.findViewById(R.id.imgMinus);
             imgItem = (CircularImageView) itemView.findViewById(R.id.imgItem);
+            txtStocked = (TextView)itemView.findViewById(R.id.txtStocked);
             txtName = (TextView) itemView.findViewById(R.id.txtName);
             txtVolume = (TextView) itemView.findViewById(R.id.txtVolume);
             txtPrice = (TextView) itemView.findViewById(R.id.txtPrice);

@@ -149,14 +149,19 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 
                 break;
             case 4:
+                title = getString(R.string.nav_favourites);
+                fragment = new ActiveDeliveriesFragment();
+
+                break;
+            case 5:
                 title = getString(R.string.nav_schedule_basket);
                 fragment = new ActiveDeliveriesFragment();
                 break;
-            case 5:
+            case 6:
                 title = getString(R.string.nav_profile_settings);
                 fragment = new ProfileFragment();
                 break;
-            case 6:
+            case 7:
                 AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this).create();
                 alertDialog.setMessage("Are you sure want to logout?");
                 alertDialog.setButton("No", new DialogInterface.OnClickListener() {

@@ -27,6 +27,7 @@
         android:padding="@dimen/activity_horizontal_margin">
         
         <ImageView
+            android:id="@+id/imgLocation"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:src="@drawable/location_btn"/>
@@ -234,6 +235,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:paddingTop="@dimen/space_normal"
+                            android:textStyle="bold"
                             android:gravity="center"
                             android:id="@+id/txtDate"/>
 
@@ -260,6 +262,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:paddingTop="@dimen/space_normal"
+                            android:textStyle="bold"
                             android:gravity="center"
                             android:id="@+id/txtTime"/>
 
@@ -347,7 +350,7 @@
                         android:id="@+id/btnCheckout"
                         android:layout_width="200dp"
                         android:layout_height="50dp"
-                        android:background="@drawable/checkout_btn"
+                        android:background="@drawable/proceed_btn"
                         android:layout_marginLeft="@dimen/space_large"
                         android:layout_marginRight="@dimen/space_large"/>
 

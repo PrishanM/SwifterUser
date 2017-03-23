@@ -34,12 +34,34 @@
 
             </LinearLayout>
 
-            <com.mikhaellopez.circularimageview.CircularImageView
+            <FrameLayout
+                android:layout_width="80dp"
+                android:layout_height="80dp">
+
+                <com.mikhaellopez.circularimageview.CircularImageView
+                    android:id="@+id/imgItem"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    app:civ_border_color="@color/colorAccent"
+                    app:civ_border_width="2dp"/>
+
+                <TextView
+                    android:id="@+id/txtStocked"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:text="Stocked Out"
+                    android:visibility="gone"/>
+
+            </FrameLayout>
+
+            <!--<com.mikhaellopez.circularimageview.CircularImageView
                 android:id="@+id/imgItem"
                 android:layout_width="80dp"
                 android:layout_height="80dp"
                 app:civ_border_color="@color/colorAccent"
-                app:civ_border_width="2dp"/>
+                app:civ_border_width="2dp"/>-->
 
             <LinearLayout
                 android:layout_width="25dp"
