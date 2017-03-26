@@ -12,7 +12,6 @@
         android:text="0.0 LKR"
         android:textSize="10sp"
         android:textColor="@android:color/white"
-        android:background="@drawable/cornered_button_white"
         android:gravity="center"/>
 
     <ImageView

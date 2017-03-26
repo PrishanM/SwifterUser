@@ -8,19 +8,20 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <LinearLayout
-        android:layout_width="70dp"
-        android:layout_height="70dp"
+        android:layout_width="60dp"
+        android:layout_height="80dp"
         android:weightSum="1"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:gravity="center">
 
         <ImageView
             android:id="@+id/imgView"
-            android:layout_width="70dp"
-            android:layout_height="50dp"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
             android:scaleType="centerCrop" />
 
         <TextView
-            android:layout_width="70dp"
+            android:layout_width="60dp"
             android:layout_height="20dp"
             android:id="@+id/txtDescription"
             android:text="Test Product"

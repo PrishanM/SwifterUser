@@ -105,8 +105,55 @@ public class DeliveryOptionsActivity extends AppCompatActivity implements View.O
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if(b){
                     isPersonal=true;
+
                 }else{
                     isPersonal = false;
+                    final boolean[] chkAccepted = {false};
+
+                    final Dialog dialogFriend = new Dialog(DeliveryOptionsActivity.this);
+                    dialogFriend.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                    dialogFriend.setContentView(R.layout.custom_friend_receieve_dialog);
+                    dialogFriend.show();
+
+                    dialogFriend.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                        @Override
+                        public void onDismiss(DialogInterface dialog) {
+
+                        }
+                    });
+
+                    final ImageView checkBox = (ImageView)dialogFriend.findViewById(R.id.checkBtn);
+                    Button btnOk = (Button)dialogFriend.findViewById(R.id.btnDone);
+                    Button btnCancel = (Button)dialogFriend.findViewById(R.id.btnCancel);
+                    btnOk.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            dialogFriend.dismiss();
+                    /*progress = ProgressDialog.show(DeliveryOptionsActivity.this, null,
+                            "Loading...", true);*/
+                            //JsonRequestManager.getInstance(DeliveryOptionsActivity.this).updateLocation(AppURL.APPLICATION_BASE_URL+AppURL.UPDATE_LOCATION,token,parameterLatLang.longitude,parameterLatLang.latitude, locationResponseCallback);
+                        }
+                    });
+
+                    btnCancel.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            dialogFriend.dismiss();
+                        }
+                    });
+
+                    checkBox.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            if(chkAccepted[0]){
+                                chkAccepted[0] = false;
+                                checkBox.setImageResource(R.drawable.check_box);
+                            }else{
+                                chkAccepted[0] = true;
+                                checkBox.setImageResource(R.drawable.check_box_selected);
+                            }
+                        }
+                    });
                 }
             }
         });

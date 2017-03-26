@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/cornered_dialog">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center_horizontal">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="FRIEND RECEIVE"
+            android:textColor="@android:color/black"
+            android:textSize="@dimen/font_xxxlarge"
+            android:gravity="center"
+            android:paddingTop="@dimen/space_normal"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Let your friend to collect yourparcel behalf of you"
+            android:layout_margin="@dimen/space_normal"
+            android:textColor="@android:color/black"
+            android:textSize="@dimen/font_large"
+            android:gravity="center"
+            android:paddingBottom="@dimen/space_normal"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/colorViewTransparent"/>
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/space_normal" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:background="@android:color/white"
+            android:padding="@dimen/activity_horizontal_margin"
+            android:gravity="center_vertical"
+            android:weightSum="1">
+
+            <EditText
+                android:id="@+id/txtFriendName"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:hint="Friend Name"
+                android:layout_marginLeft="@dimen/space_normal"
+                android:textSize="@dimen/font_xlarge"/>
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
+            android:background="@color/colorHint"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:background="@android:color/white"
+            android:padding="@dimen/activity_horizontal_margin"
+            android:gravity="center_vertical"
+            android:weightSum="1">
+
+            <EditText
+                android:id="@+id/txtNIC"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:hint="NIC"
+                android:layout_marginLeft="@dimen/space_normal"
+                android:textSize="@dimen/font_xlarge"/>
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
+            android:background="@color/colorHint"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:background="@android:color/white"
+            android:padding="@dimen/activity_horizontal_margin"
+            android:gravity="center_vertical"
+            android:weightSum="1">
+
+            <EditText
+                android:id="@+id/txtContact"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:hint="Contact Number"
+                android:inputType="phone"
+                android:layout_marginLeft="@dimen/space_normal"
+                android:textSize="@dimen/font_xlarge"/>
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
+            android:background="@color/colorHint"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:background="@android:color/white"
+            android:padding="@dimen/activity_horizontal_margin"
+            android:gravity="center"
+            android:weightSum="1">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/black"
+                android:text="Read Terms &amp; Conditions | Accept"
+                android:layout_marginRight="@dimen/space_normal"/>
+
+            <ImageView
+                android:id="@+id/checkBtn"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/check_box"/>
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/colorViewTransparent"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="1"
+            android:gravity="right">
+
+            <Button
+                android:id="@+id/btnCancel"
+                android:layout_width="0dp"
+                android:layout_weight="0.5"
+                android:layout_height="50dp"
+                android:text="Cancel"
+                android:textColor="@color/colorAccent"
+                android:background="@android:color/white"/>
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:background="@color/colorViewTransparent"/>
+
+            <Button
+                android:id="@+id/btnDone"
+                android:layout_width="0dp"
+                android:layout_weight="0.5"
+                android:layout_height="50dp"
+                android:text="OK"
+                android:textColor="@color/colorAccent"
+                android:background="@android:color/white"/>
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+</RelativeLayout>
