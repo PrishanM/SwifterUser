@@ -221,7 +221,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         getMenuInflater().inflate(R.menu.menu_other, menu);
         final MenuItem item = menu.findItem(R.id.idDone);
         TextView txtPrice = (TextView)menu.findItem(R.id.idDone).getActionView().findViewById(R.id.txtPrice);
-        txtPrice.setText(AppController.getAmount()+" LKR");
+        txtPrice.setText(String.format("%,.2f", AppController.getAmount() )+" LKR");
 
         item.getActionView().setOnClickListener(new View.OnClickListener() {
 

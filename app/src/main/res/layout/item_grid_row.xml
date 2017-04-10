@@ -56,13 +56,6 @@
 
             </FrameLayout>
 
-            <!--<com.mikhaellopez.circularimageview.CircularImageView
-                android:id="@+id/imgItem"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
-                app:civ_border_color="@color/colorAccent"
-                app:civ_border_width="2dp"/>-->
-
             <LinearLayout
                 android:layout_width="25dp"
                 android:layout_height="match_parent"
@@ -86,7 +79,7 @@
             android:gravity="center"/>
 
         <TextView
-            android:id="@+id/txtVolume"
+            android:id="@+id/txtPrice"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="@dimen/font_normal"
@@ -110,19 +103,13 @@
                 android:orientation="vertical"
                 android:gravity="center">
 
-                <TextView
-                    android:id="@+id/txtPrice"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textSize="@dimen/font_normal"
-                    android:gravity="center"/>
-
-                <TextView
+                <EditText
                     android:id="@+id/txtQuantity"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textSize="@dimen/font_normal"
-                    android:text="QTY 0"
+                    android:hint="QTY"
+                    android:inputType="number"
                     android:gravity="center"/>
 
 

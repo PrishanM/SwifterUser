@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -79,7 +80,6 @@ public class SearchItemsRecycleAdapter extends  RecyclerView.Adapter<SearchItems
 
 
         holder.txtName.setText(datumArrayList.get(position).getProductName());
-        holder.txtVolume.setText(datumArrayList.get(position).getProductAmount()+"");
         holder.txtPrice.setText(datumArrayList.get(position).getProductPrice()+"");
 
         if(datumArrayList.get(position).getPromotional()!=null){
@@ -160,7 +160,7 @@ public class SearchItemsRecycleAdapter extends  RecyclerView.Adapter<SearchItems
             @Override
             public void onClick(View view) {
                 qty[0] = qty[0] +1;
-                holder.txtQuantity.setText("QTY "+qty[0]);
+                holder.txtQuantity.setText(""+qty[0]);
                 AppController.setAmount(AppController.getAmount()+datumArrayList.get(position).getProductPrice());
                 if (listener != null) {
                     listener.onOptionsMenuChangeRequested();
@@ -185,7 +185,7 @@ public class SearchItemsRecycleAdapter extends  RecyclerView.Adapter<SearchItems
                 if(qty[0]>0){
                     qty[0] = qty[0] -1;
                     AppController.setAmount(AppController.getAmount()-datumArrayList.get(position).getProductPrice());
-                    holder.txtQuantity.setText("QTY "+qty[0]);
+                    holder.txtQuantity.setText(""+qty[0]);
 
                     if(!AppController.cartProducts.contains(datumArrayList.get(position))){
                         AppController.cartProducts.add(datumArrayList.get(position));
@@ -197,7 +197,7 @@ public class SearchItemsRecycleAdapter extends  RecyclerView.Adapter<SearchItems
 
 
                 }else{
-                    holder.txtQuantity.setText("QTY 0");
+                    holder.txtQuantity.setText("0");
                 }
                 if (listener != null) {
                     listener.onOptionsMenuChangeRequested();
@@ -207,6 +207,23 @@ public class SearchItemsRecycleAdapter extends  RecyclerView.Adapter<SearchItems
 
             }
         });
+
+        /*holder.txtQuantity.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                AppController.setAmount(AppController.getAmount()+datumArrayList.get(position).getProductPrice()*Integer.parseInt(holder.txtQuantity.getText().toString()));
+            }
+        });*/
     }
 
     private void favouriteProduct(int productId,int status) {
@@ -248,7 +265,8 @@ public class SearchItemsRecycleAdapter extends  RecyclerView.Adapter<SearchItems
     public class ImageViewHolder extends RecyclerView.ViewHolder {
         public final ImageView imgFav,imgPlus,imgMinus,imgPromo;
         public final CircularImageView imgItem;
-        public final TextView txtName,txtVolume,txtPrice,txtQuantity,txtStocked;
+        public final EditText txtQuantity;
+        public final TextView txtName,txtPrice,txtStocked;
         public ImageViewHolder(View itemView) {
             super(itemView);
             imgFav = (ImageView)itemView.findViewById(R.id.imgFav);
@@ -258,9 +276,8 @@ public class SearchItemsRecycleAdapter extends  RecyclerView.Adapter<SearchItems
             imgItem = (CircularImageView) itemView.findViewById(R.id.imgItem);
             txtStocked = (TextView)itemView.findViewById(R.id.txtStocked);
             txtName = (TextView) itemView.findViewById(R.id.txtName);
-            txtVolume = (TextView) itemView.findViewById(R.id.txtVolume);
             txtPrice = (TextView) itemView.findViewById(R.id.txtPrice);
-            txtQuantity = (TextView) itemView.findViewById(R.id.txtQuantity);
+            txtQuantity = (EditText) itemView.findViewById(R.id.txtQuantity);
         }
     }
 
