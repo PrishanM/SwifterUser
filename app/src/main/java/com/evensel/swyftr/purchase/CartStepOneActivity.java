@@ -71,6 +71,14 @@ public class CartStepOneActivity extends AppCompatActivity {
                 deleteItem.setIcon(R.drawable.ic_delete);
                 // add to menu
                 menu.addMenuItem(deleteItem);
+
+
+                SwipeMenuItem favItem = new SwipeMenuItem(
+                        getApplicationContext());
+                favItem.setBackground(new ColorDrawable(Color.rgb(255, 255, 255)));
+                favItem.setWidth(120);
+                favItem.setIcon(R.drawable.fav_check_unselected);
+                menu.addMenuItem(favItem);
             }
         };
 
